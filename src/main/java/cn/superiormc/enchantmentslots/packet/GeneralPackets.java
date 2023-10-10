@@ -1,2 +1,21 @@
-package cn.superiormc.enchantmentslots.packet;public class GeneralPackets {
+package cn.superiormc.enchantmentslots.packet;
+
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketAdapter;
+
+public class GeneralPackets {
+
+    protected PacketAdapter packetAdapter;
+
+    public GeneralPackets() {
+        initPacketAdapter();
+        registerListener();
+    }
+    protected void registerListener() {
+        ProtocolLibrary.getProtocolManager().addPacketListener(packetAdapter);
+
+    }
+    protected void initPacketAdapter(){
+        return;
+    }
 }
