@@ -36,6 +36,7 @@ add-slot-items:
     add-slots: 1
   B:
     material: PAPER
+    custom-model-data: 5
     name: '&dExtra Enchantment Slot &7(+5)'
     lore:
       - '&fDrag this item into your item to use!'
