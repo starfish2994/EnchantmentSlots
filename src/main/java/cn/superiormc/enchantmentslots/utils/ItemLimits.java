@@ -9,24 +9,28 @@ import org.bukkit.persistence.PersistentDataType;
 
 public class ItemLimits {
 
-    private static final NamespacedKey ENCHANTMENT_SLOTS_KEY = new NamespacedKey(EnchantmentSlots.instance, "enchantment_slots");
+    public static final NamespacedKey ENCHANTMENT_SLOTS_KEY = new NamespacedKey(EnchantmentSlots.instance, "enchantment_slots");
 
     public static int getMaxEnchantments(ItemStack item) {
-        if (!ConfigReader.getAutoAddSlotsLimit()) {
-            return ConfigReader.getDefaultLimits();
+        if (item.getType().isAir()) {
+            return 0;
+        }
+        if (!item.hasItemMeta()) {
+            ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
+            item.setItemMeta(tempMeta);
         }
         ItemMeta meta = item.getItemMeta();
-        if (meta == null) {
-            meta = Bukkit.getItemFactory().getItemMeta(item.getType());
-        }
         if (!meta.getPersistentDataContainer().has(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER)) {
-            meta.getPersistentDataContainer().set(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER, ConfigReader.getDefaultLimits());
-            item.setItemMeta(meta);
+            return 0;
         }
         return meta.getPersistentDataContainer().get(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER);
     }
 
     public static void setMaxEnchantments(ItemStack item, int maxEnchantments) {
+        if (!item.hasItemMeta()) {
+            ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
+            item.setItemMeta(tempMeta);
+        }
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER, maxEnchantments);
         item.setItemMeta(meta);

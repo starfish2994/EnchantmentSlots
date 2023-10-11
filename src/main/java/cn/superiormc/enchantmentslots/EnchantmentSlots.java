@@ -18,11 +18,6 @@ import java.util.*;
 public final class EnchantmentSlots extends JavaPlugin {
 
     public static JavaPlugin instance;
-
-    public static Map<ItemStack, ItemStack> getSavedItem = new HashMap<>();
-
-    public static List<ItemStack> getCheckingItem = new ArrayList<>();
-
     @Override
     public void onEnable() {
         instance = this;
