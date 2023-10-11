@@ -7,13 +7,12 @@ import org.bukkit.command.CommandSender;
 
 public class SubReload {
 
-    public static void SubReloadCommand(CommandSender sender)
-    {
-        if(sender.hasPermission("enchantmentslots.admin")) {
+    public static void SubReloadCommand(CommandSender sender) {
+        if (sender.hasPermission("enchantmentslots.admin")) {
             EnchantmentSlots.instance.reloadConfig();
             sender.sendMessage(ConfigReader.getMessages("plugin-reloaded"));
         }
-        else{
+        else {
             sender.sendMessage(ConfigReader.getMessages("error-miss-permission"));
         }
     }

@@ -1,0 +1,11 @@
+name: EnchantmentSlots
+version: '${project.version}'
+main: cn.superiormc.enchantmentslots.EnchantmentSlots
+api-version: 1.13
+depend: [ProtocolLib]
+commands:
+  enchantmentslots:
+    aliases:
+      - "es"
+    usage: "/enchantmentslots"
+    description: "EnchantmentSlots Main Command."

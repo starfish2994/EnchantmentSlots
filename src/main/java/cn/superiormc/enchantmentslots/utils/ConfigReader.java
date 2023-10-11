@@ -7,7 +7,9 @@ public class ConfigReader {
     public static boolean getDebug() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.debug");
     }
-
+    public static boolean getCloseInventory() {
+        return EnchantmentSlots.instance.getConfig().getBoolean("close-inventory-if-reached-limit", true);
+    }
     public static boolean getEnchantItemTrigger() {
         return EnchantmentSlots.instance.getConfig().getBoolean("trigger.EnchantItemEvent.enabled", true);
     }

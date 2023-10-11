@@ -4,9 +4,8 @@ import cn.superiormc.enchantmentslots.commands.MainCommand;
 import cn.superiormc.enchantmentslots.commands.MainTab;
 import cn.superiormc.enchantmentslots.events.PlayerClick;
 import cn.superiormc.enchantmentslots.events.PlayerEnchant;
-import cn.superiormc.enchantmentslots.packet.SetSlots;
-import cn.superiormc.enchantmentslots.packet.WindowClick;
-import cn.superiormc.enchantmentslots.packet.WindowItem;
+import cn.superiormc.enchantmentslots.events.PlayerInventory;
+import cn.superiormc.enchantmentslots.packet.*;
 import cn.superiormc.enchantmentslots.utils.ConfigReader;
 import com.comphenix.protocol.ProtocolLibrary;
 import org.bukkit.Bukkit;
@@ -41,6 +40,7 @@ public final class EnchantmentSlots extends JavaPlugin {
         if (ConfigReader.getInventoryClickTrigger()) {
             Bukkit.getPluginManager().registerEvents(new PlayerClick(), this);
         }
+        Bukkit.getPluginManager().registerEvents(new PlayerInventory(), this);
     }
 
     public void registerCommands() {
@@ -50,6 +50,7 @@ public final class EnchantmentSlots extends JavaPlugin {
 
     public void registerPackets() {
         new SetSlots();
+        new SetCreativeSlots();
         new WindowItem();
         new WindowClick();
     }

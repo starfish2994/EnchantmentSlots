@@ -14,6 +14,7 @@ import org.bukkit.persistence.PersistentDataType;
 public class PlayerEnchant implements Listener {
     @EventHandler
     public void onEnchantItem(EnchantItemEvent event) {
+        Player player = event.getEnchanter();
         ItemStack item = event.getItem();
         if (!item.hasItemMeta()) {
             ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
@@ -29,6 +30,10 @@ public class PlayerEnchant implements Listener {
         int maxEnchantments = ItemLimits.getMaxEnchantments(item);
         if (event.getEnchantsToAdd().size() + item.getEnchantments().size() > maxEnchantments) {
             event.setCancelled(true);
+            if (ConfigReader.getCloseInventory()) {
+                player.closeInventory();
+            }
+            player.sendMessage(ConfigReader.getMessages("slots-limit-reached"));
         }
     }
 }

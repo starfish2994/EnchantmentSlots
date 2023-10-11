@@ -12,11 +12,11 @@ public class ItemLimits {
     public static final NamespacedKey ENCHANTMENT_SLOTS_KEY = new NamespacedKey(EnchantmentSlots.instance, "enchantment_slots");
 
     public static int getMaxEnchantments(ItemStack item) {
-        if (item.getType().isAir()) {
-            return 0;
-        }
         if (!item.hasItemMeta()) {
             ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
+            if (tempMeta == null) {
+                return 0;
+            }
             item.setItemMeta(tempMeta);
         }
         ItemMeta meta = item.getItemMeta();

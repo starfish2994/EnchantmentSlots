@@ -9,20 +9,35 @@ import java.util.List;
 
 public class MainTab implements TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (args.length == 1)
-        {
-            if(sender.hasPermission("enchantmentslots.admin")) {
-                List<String> strings = new ArrayList();
+        List<String> strings = new ArrayList();
+        if (args.length == 1) {
+            strings.add("help");
+            if (sender.hasPermission("enchantmentslots.reload")) {
                 strings.add("reload");
-                strings.add("help");
-                return strings;
             }
-            else{
-                List<String> strings = new ArrayList();
-                strings.add("help");
-                return strings;
+            if (sender.hasPermission("enchantmentslots.setslots")) {
+                strings.add("setslots");
+            }
+            if (sender.hasPermission("enchantmentslots.giveslots")) {
+                strings.add("giveslots");
             }
         }
-        return null;
+        else if (args.length == 2) {
+            if (args[1].equals("setslots")) {
+                if (sender.hasPermission("enchantmentslots.setslots")) {
+                    strings.add("1");
+                    strings.add("5");
+                    strings.add("10");
+                }
+            }
+            else if (args[1].equals("giveslots")) {
+                if (sender.hasPermission("enchantmentslots.giveslots")) {
+                    strings.add("1");
+                    strings.add("5");
+                    strings.add("10");
+                }
+            }
+        }
+        return strings;
     }
 }

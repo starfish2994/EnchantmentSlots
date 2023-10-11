@@ -13,23 +13,23 @@ public class MainCommand implements CommandExecutor {
             sender.sendMessage(ConfigReader.getMessages("error-args"));
             return false;
         } else {
-            sendCommandArg(sender, command, label, args);
+            sendCommandArg(sender, args);
             return true;
         }
     }
 
-    public void sendCommandArg(CommandSender sender, Command command, String label, String[] args){
+    public void sendCommandArg(CommandSender sender, String[] args){
         if (args[0].equals("help")) {
             SubHelp.SubHelpCommand(sender);
-        }
-        else if (args[0].equals("list")) {
-            //SubList.SubListCommand(sender);
         }
         else if (args[0].equals("reload")) {
             SubReload.SubReloadCommand(sender);
         }
-        else if (args[0].equals("save")) {
-            //SubSave.SubSaveCommand(sender, args);
+        else if (args[0].equals("setslots")) {
+            SubSetSlots.SubSetSlotsCommand(sender, args);
+        }
+        else if (args[0].equals("giveslots")) {
+            SubGiveSlots.SubGiveSlotsCommand(sender, args);
         }
         else
         {

@@ -12,30 +12,22 @@ import com.comphenix.protocol.reflect.StructureModifier;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
-public class WindowClick extends GeneralPackets{
+public class Test extends GeneralPackets{
 
     // 客户端发给服务端
-    public WindowClick() {
+    public Test() {
         super();
     }
 
     @Override
     protected void initPacketAdapter() {
-        packetAdapter = new PacketAdapter(EnchantmentSlots.instance, ListenerPriority.NORMAL, PacketType.Play.Client.WINDOW_CLICK) {
+        packetAdapter = new PacketAdapter(EnchantmentSlots.instance, ListenerPriority.NORMAL, PacketType.values()) {
             @Override
             public void onPacketReceiving(PacketEvent event) {
                 if (ConfigReader.getDebug()) {
                     Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §f" +
-                            "Found WindowsClick packet.");
+                            "Found " + event.getPacketType().name() + " packet.");
                 }
-                PacketContainer packet = event.getPacket();
-                StructureModifier<ItemStack> itemStackStructureModifier = packet.getItemModifier();
-                ItemStack clientItemStack = itemStackStructureModifier.read(0);
-                if (clientItemStack.getType().isAir()) {
-                    return;
-                }
-                ItemStack serverItemStack = ItemModify.clientToServer(clientItemStack);
-                itemStackStructureModifier.write(0, serverItemStack);
             }
         };
     }
