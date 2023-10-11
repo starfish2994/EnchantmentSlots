@@ -31,7 +31,7 @@ add-slot-items:
 
 # Messages
 messages:
-  add-lore: "&7Enchantment Slots: %amount%"
+  add-lore: "&#ff3300Enchantment Slots: %amount%"
   plugin-reloaded: "&#98FB98[EnchantmentSlots] &fPlugin reloaded!"
   help-main: |
     &#98FB98&lEnchantmentSlots &7Made by @PQguanfang
@@ -52,4 +52,4 @@ messages:
   error-miss-permission: "&#98FB98[EnchantmentSlots] &cYou don't have permission to use this command!"
   error-in-game: "&#98FB98[EnchantmentSlots] &cYou have to use this command in game!"
   error-no-item: "&#98FB98[EnchantmentSlots] &cCan not get item in your main hand!"
-  player-not-found: "&#98FB98[UltimateShop] &cWe can't find player %player%!"
+  player-not-found: "&#98FB98[EnchantmentSlots] &cWe can't find player %player%!"
