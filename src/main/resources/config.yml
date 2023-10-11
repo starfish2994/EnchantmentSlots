@@ -1,18 +1,30 @@
 # EnchantmentSlots by @PQguanfang
 #
-# READ THE WIKI: enchantmentslots.superiormc.cn
+# READ THE WIKI: simple.superiormc.cn/
 
 # Settings
 settings:
   debug: false
-  auto-add-slots-limit: true
-  default-slots: 5
+  add-lore:
+    display-value: "&#ff3300Enchantment Slots: %amount%"
+    # One word without color code only.
+    check-value: "Slots"
+    auto-add-trigger:
+      Packet:
+        enabled: true
+      EnchantItemEvent:
+        enabled: false
+      InventoryClickEvent:
+        enabled: false
+  default-slots:
+    default: 5
+    vip: 10
+  default-slots-conditions:
+    vip:
+      - 'permission: group.vip'
   close-inventory-if-reached-limit: true
-  trigger:
-    EnchantItemEvent:
-      enabled: true
-    InventoryClickEvent:
-      enabled: true
+  remove-illegal-extra-enchant: true
+  black-creative-mode-player: true
 
 add-slot-items:
   A:
@@ -30,7 +42,6 @@ add-slot-items:
 
 # Messages
 messages:
-  add-lore: "&#ff3300Enchantment Slots: %amount%"
   plugin-reloaded: "&#98FB98[EnchantmentSlots] &fPlugin reloaded!"
   help-main: |
     &#98FB98&lEnchantmentSlots &7Made by @PQguanfang

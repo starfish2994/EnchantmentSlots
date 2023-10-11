@@ -2,6 +2,7 @@ package cn.superiormc.enchantmentslots.events;
 
 import cn.superiormc.enchantmentslots.utils.ConfigReader;
 import cn.superiormc.enchantmentslots.utils.ItemLimits;
+import cn.superiormc.enchantmentslots.utils.ItemModify;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,20 +26,7 @@ public class PlayerClick implements Listener {
             Player player = (Player)event.getWhoClicked();
             AnvilInventory inventory = (AnvilInventory) event.getInventory();
             ItemStack item = inventory.getItem(0);
-            if (item == null) {
-                return;
-            }
-            if (!item.hasItemMeta()) {
-                ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
-                item.setItemMeta(tempMeta);
-            }
-            ItemMeta meta = item.getItemMeta();
-            if (ConfigReader.getAutoAddSlotsLimit()) {
-                meta.getPersistentDataContainer().set(ItemLimits.ENCHANTMENT_SLOTS_KEY,
-                        PersistentDataType.INTEGER,
-                        ConfigReader.getDefaultLimits());
-                item.setItemMeta(meta);
-            }
+            ItemModify.addLore(player, item, false);
             ItemStack result = inventory.getItem(2);
             if (result != null) {
                 int maxEnchantments = ItemLimits.getMaxEnchantments(result);

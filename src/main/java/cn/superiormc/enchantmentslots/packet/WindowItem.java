@@ -11,7 +11,10 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.reflect.StructureModifier;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +35,12 @@ public class WindowItem extends GeneralPackets{
                     Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §f" +
                             "Found WindowsItem packet.");
                 }
+                if (event.getPlayer() == null) {
+                    return;
+                }
+                if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
+                    return;
+                }
                 PacketContainer packet = event.getPacket();
                 StructureModifier<List<ItemStack>> itemStackStructureModifier = packet.getItemListModifier();
                 List<ItemStack> serverItemStack = itemStackStructureModifier.read(0);
@@ -41,6 +50,23 @@ public class WindowItem extends GeneralPackets{
                         clientItemStack.add(itemStack);
                         continue;
                     }
+                    int maxEnchantments = ItemLimits.getMaxEnchantments(itemStack);
+                    if (itemStack.getEnchantments().size() > 0 &&
+                            itemStack.getEnchantments().size() >= maxEnchantments) {
+                        if (ConfigReader.getRemoveExtraEnchants()) {
+                            int removeAmount = itemStack.getEnchantments().size() - maxEnchantments;
+                            for (Enchantment enchant : itemStack.getEnchantments().keySet()) {
+                                if (removeAmount <= 0) {
+                                    break;
+                                }
+                                ItemMeta meta = itemStack.getItemMeta();
+                                meta.removeEnchant(enchant);
+                                itemStack.setItemMeta(meta);
+                                removeAmount--;
+                            }
+                        }
+                    }
+                    ItemModify.addLore(event.getPlayer(), itemStack, true);
                     clientItemStack.add(ItemModify.serverToClient(itemStack));
                 }
                 // client 是加过 Lore 的，server 是没加过的！
