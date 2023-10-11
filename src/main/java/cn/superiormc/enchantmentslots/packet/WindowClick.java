@@ -35,7 +35,7 @@ public class WindowClick extends GeneralPackets{
                 if (event.getPlayer() == null) {
                     return;
                 }
-                if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
+                if (ConfigReader.getBlackCreativeMode() && event.getPlayer().getGameMode() == GameMode.CREATIVE) {
                     return;
                 }
                 PacketContainer packet = event.getPacket();

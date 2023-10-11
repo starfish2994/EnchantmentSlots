@@ -23,6 +23,9 @@ public class ConfigReader {
     public static boolean getRemoveExtraEnchants() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.remove-illegal-extra-enchant", true);
     }
+    public static boolean getBlackCreativeMode() {
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.black-creative-mode", true);
+    }
     public static boolean getEnchantItemTrigger() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.auto-add-trigger.EnchantItemEvent.enabled", true);
     }

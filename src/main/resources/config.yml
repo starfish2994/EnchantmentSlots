@@ -16,6 +16,7 @@ settings:
         enabled: false
       InventoryClickEvent:
         enabled: false
+    black-creative-mode: false
   default-slots:
     default: 5
     vip: 10
