@@ -21,21 +21,6 @@ public class PlayerClick implements Listener {
                 int maxEnchantments = ItemLimits.getMaxEnchantments(result);
                 if (result.getEnchantments().size() > maxEnchantments) {
                     event.setCancelled(true);
-                    Player player = (Player) event.getWhoClicked();
-                }
-            }
-        }
-
-        if (event.getInventory() instanceof EnchantingInventory) {
-            ItemStack item = event.getCursor();
-            EnchantingInventory inventory = (EnchantingInventory) event.getInventory();
-            ItemStack lapis = inventory.getItem(1);
-            if (item != null && lapis != null && lapis.getType() == Material.LAPIS_LAZULI) {
-                int maxEnchantments = ItemLimits.getMaxEnchantments(item);
-                // 检查物品是否已经有超过指定数量的附魔
-                if (item.getEnchantments().size() >= maxEnchantments) {
-                    event.setCancelled(true);
-                    Player player = (Player) event.getWhoClicked();
                 }
             }
         }
