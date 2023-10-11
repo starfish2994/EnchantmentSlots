@@ -2,6 +2,7 @@ package cn.superiormc.enchantmentslots.utils;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -75,6 +76,9 @@ public class ItemModify {
             return;
         }
         if (item == null) {
+            return;
+        }
+        if (item.getType() == Material.ENCHANTED_BOOK) {
             return;
         }
         if (ItemLimits.getMaxEnchantments(item) != 0) {

@@ -27,10 +27,10 @@ public class ConfigReader {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.black-creative-mode", true);
     }
     public static boolean getEnchantItemTrigger() {
-        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.auto-add-trigger.EnchantItemEvent.enabled", true);
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.trigger.EnchantItemEvent.enabled", true);
     }
     public static boolean getInventoryClickTrigger() {
-        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.auto-add-trigger.InventoryClickEvent.enabled", true);
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.trigger.InventoryClickEvent.enabled", true);
     }
     public static boolean getAutoAddSlotsLimit() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.auto-add-trigger.Packet.enabled", true);
