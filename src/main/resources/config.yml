@@ -11,7 +11,7 @@ settings:
     check-value: "Slots"
     trigger:
       Packet:
-        enabled: true
+        enabled: false
       EnchantItemEvent:
         enabled: true
       InventoryClickEvent:

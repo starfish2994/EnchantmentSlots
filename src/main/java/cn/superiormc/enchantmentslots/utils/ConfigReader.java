@@ -55,7 +55,7 @@ public class ConfigReader {
         Set<String> groupNameSet = conditionSection.getKeys(false);
         List<Integer> result = new ArrayList<>();
         for (String groupName : groupNameSet) {
-            if (Condition.getBoolean(player, section.getStringList(groupName))) {
+            if (Condition.getBoolean(player, conditionSection.getStringList(groupName))) {
                 result.add(section.getInt(groupName));
             }
             else {
