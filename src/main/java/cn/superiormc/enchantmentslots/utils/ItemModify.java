@@ -5,16 +5,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.superiormc.enchantmentslots.utils.ItemLimits;
+
 public class ItemModify {
 
-    public static ItemStack serverToClient(ItemStack serverItemStack) {
-        if (ItemLimits.getMaxEnchantments(serverItemStack) == 0) {
+    public static ItemStack serverToClient(Player player, ItemStack serverItemStack) {
+        if (ItemLimits.getMaxEnchantments(player, serverItemStack) == 0) {
             return serverItemStack;
         }
         ItemStack clientItemStack = serverItemStack.clone();
@@ -28,7 +31,7 @@ public class ItemModify {
             lore = itemMeta.getLore();
         }
         lore.add(ColorParser.parse(ConfigReader.getDisplayLore()
-                .replace("%amount%", String.valueOf(ItemLimits.getMaxEnchantments(serverItemStack)))));
+                .replace("%amount%", String.valueOf(ItemLimits.getMaxEnchantments(player, serverItemStack)))));
         itemMeta.setLore(lore);
         if (ConfigReader.getDebug()) {
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fAdded lore: " + lore + ".");
@@ -37,8 +40,8 @@ public class ItemModify {
         return clientItemStack;
     }
 
-    public static ItemStack clientToServer(ItemStack clientItemStack) {
-        if (ItemLimits.getMaxEnchantments(clientItemStack) == 0) {
+    public static ItemStack clientToServer(Player player, ItemStack clientItemStack) {
+        if (ItemLimits.getMaxEnchantments(player, clientItemStack) == 0) {
             return clientItemStack;
         }
         ItemStack serverItemStack = clientItemStack.clone();
@@ -81,7 +84,7 @@ public class ItemModify {
         if (item.getType() == Material.ENCHANTED_BOOK) {
             return;
         }
-        if (ItemLimits.getMaxEnchantments(item) != 0) {
+        if (ItemLimits.getMaxEnchantments(player, item) == 0) {
             return;
         }
         if (!item.hasItemMeta()) {
@@ -89,7 +92,7 @@ public class ItemModify {
             item.setItemMeta(tempMeta);
         }
         ItemMeta meta = item.getItemMeta();
-        if (ConfigReader.getAutoAddSlotsLimit()) {
+        if (ItemLimits.canEnchant(item)) {
             meta.getPersistentDataContainer().set(ItemLimits.ENCHANTMENT_SLOTS_KEY,
                     PersistentDataType.INTEGER,
                     ConfigReader.getDefaultLimits(player));

@@ -29,7 +29,7 @@ public class PlayerClick implements Listener {
             ItemModify.addLore(player, item, false);
             ItemStack result = inventory.getItem(2);
             if (result != null) {
-                int maxEnchantments = ItemLimits.getMaxEnchantments(result);
+                int maxEnchantments = ItemLimits.getMaxEnchantments(player, result);
                 if (result.getEnchantments().size() > maxEnchantments) {
                     event.setCancelled(true);
                     if (ConfigReader.getCloseInventory()) {

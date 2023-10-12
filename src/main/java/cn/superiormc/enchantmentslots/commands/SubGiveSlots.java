@@ -43,12 +43,12 @@ public class SubGiveSlots {
                 return;
             }
             if (args.length == 1) {
-                ItemLimits.setMaxEnchantments(target, ItemLimits.getMaxEnchantments(target) + 1);
+                ItemLimits.setMaxEnchantments(target, ItemLimits.getMaxEnchantments(((Player) sender), target) + 1);
                 sender.sendMessage(ConfigReader.getMessages("success-set")
-                        .replace("%amount%", String.valueOf(ItemLimits.getMaxEnchantments(target) + 1)));
+                        .replace("%amount%", String.valueOf(ItemLimits.getMaxEnchantments(((Player) sender), target) + 1)));
                 return;
             }
-            ItemLimits.setMaxEnchantments(target, ItemLimits.getMaxEnchantments(target) + Integer.parseInt(args[1]));
+            ItemLimits.setMaxEnchantments(target, ItemLimits.getMaxEnchantments(((Player) sender), target) + Integer.parseInt(args[1]));
             sender.sendMessage(ConfigReader.getMessages("success-set").replace("%amount%", args[1]));
         } else {
             sender.sendMessage(ConfigReader.getMessages("help-main"));

@@ -42,7 +42,7 @@ public class PlayerInventory implements Listener {
         if (value == 0) {
             return;
         }
-        int baseValue = ItemLimits.getMaxEnchantments(targetItem);
+        int baseValue = ItemLimits.getMaxEnchantments(player, targetItem);
         if (baseValue == 0) {
             return;
         }

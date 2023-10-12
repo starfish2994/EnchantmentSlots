@@ -42,7 +42,7 @@ public class SetSlots extends GeneralPackets{
                 if (serverItemStack.getType().isAir()) {
                     return;
                 }
-                int maxEnchantments = ItemLimits.getMaxEnchantments(serverItemStack);
+                int maxEnchantments = ItemLimits.getMaxEnchantments(event.getPlayer(), serverItemStack);
                 if (packet.getIntegers().read(0) == 0 && serverItemStack.getEnchantments().size() > 0 &&
                         serverItemStack.getEnchantments().size() >= maxEnchantments) {
                     if (ConfigReader.getRemoveExtraEnchants() && serverItemStack.hasItemMeta()) {
@@ -59,7 +59,7 @@ public class SetSlots extends GeneralPackets{
                     }
                 }
                 ItemModify.addLore(event.getPlayer(), serverItemStack, true);
-                ItemStack clientItemStack = ItemModify.serverToClient(serverItemStack);
+                ItemStack clientItemStack = ItemModify.serverToClient(event.getPlayer(), serverItemStack);
                 // client 是加过 Lore 的，server 是没加过的！
                 itemStackStructureModifier.write(0, clientItemStack);
             }

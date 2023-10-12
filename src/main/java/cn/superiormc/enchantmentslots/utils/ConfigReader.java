@@ -33,7 +33,13 @@ public class ConfigReader {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.trigger.InventoryClickEvent.enabled", true);
     }
     public static boolean getAutoAddSlotsLimit() {
-        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.auto-add-trigger.Packet.enabled", true);
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.trigger.Packet.enabled", true);
+    }
+    public static boolean getAutoAddSlotsAutoCheck() {
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.trigger.Packet.auto-check", true);
+    }
+    public static List<String> getAutoAddSlotsItems() {
+        return EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.trigger.Packet.whitelist-items");
     }
     public static String getDisplayLore() {
         return EnchantmentSlots.instance.getConfig().getString("settings.add-lore.display-value");

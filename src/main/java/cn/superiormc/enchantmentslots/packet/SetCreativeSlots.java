@@ -37,7 +37,7 @@ public class SetCreativeSlots extends GeneralPackets{
                 if (clientItemStack.getType().isAir()) {
                     return;
                 }
-                int maxEnchantments = ItemLimits.getMaxEnchantments(clientItemStack);
+                int maxEnchantments = ItemLimits.getMaxEnchantments(event.getPlayer(), clientItemStack);
                 if (clientItemStack.getEnchantments().size() > 0 &&
                         clientItemStack.getEnchantments().size() >= maxEnchantments) {
                     if (ConfigReader.getRemoveExtraEnchants()) {
@@ -53,7 +53,7 @@ public class SetCreativeSlots extends GeneralPackets{
                         }
                     }
                 }
-                ItemStack serverItemStack = ItemModify.clientToServer(clientItemStack);
+                ItemStack serverItemStack = ItemModify.clientToServer(event.getPlayer(), clientItemStack);
                 itemStackStructureModifier.write(0, serverItemStack);
             }
         };

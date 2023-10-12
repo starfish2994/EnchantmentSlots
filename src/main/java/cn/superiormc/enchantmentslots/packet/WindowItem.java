@@ -50,7 +50,7 @@ public class WindowItem extends GeneralPackets{
                         clientItemStack.add(itemStack);
                         continue;
                     }
-                    int maxEnchantments = ItemLimits.getMaxEnchantments(itemStack);
+                    int maxEnchantments = ItemLimits.getMaxEnchantments(event.getPlayer(), itemStack);
                     if (itemStack.getEnchantments().size() > 0 &&
                             itemStack.getEnchantments().size() >= maxEnchantments) {
                         if (ConfigReader.getRemoveExtraEnchants()) {
@@ -67,7 +67,7 @@ public class WindowItem extends GeneralPackets{
                         }
                     }
                     ItemModify.addLore(event.getPlayer(), itemStack, true);
-                    clientItemStack.add(ItemModify.serverToClient(itemStack));
+                    clientItemStack.add(ItemModify.serverToClient(event.getPlayer(), itemStack));
                 }
                 // client 是加过 Lore 的，server 是没加过的！
                 itemStackStructureModifier.write(0, clientItemStack);

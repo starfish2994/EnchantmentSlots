@@ -18,7 +18,7 @@ public class PlayerEnchant implements Listener {
         Player player = event.getEnchanter();
         ItemStack item = event.getItem();
         ItemModify.addLore(player, item, false);
-        int maxEnchantments = ItemLimits.getMaxEnchantments(item);
+        int maxEnchantments = ItemLimits.getMaxEnchantments(player, item);
         if (event.getEnchantsToAdd().size() + item.getEnchantments().size() > maxEnchantments) {
             event.setCancelled(true);
             if (ConfigReader.getCloseInventory()) {
