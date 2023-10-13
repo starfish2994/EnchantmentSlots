@@ -32,6 +32,10 @@ public class SubGiveSlots {
                 }
                 item.setAmount(amount);
                 player.getInventory().addItem(item);
+                sender.sendMessage(ConfigReader.getMessages("give-extra-slot-item").
+                        replace("%player%", player.getName()).
+                        replace("%item%", args[1]).
+                        replace("%amount%", String.valueOf(amount)));
                 return;
             }
             if (!(sender instanceof Player)){

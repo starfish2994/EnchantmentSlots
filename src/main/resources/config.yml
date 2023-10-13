@@ -82,6 +82,8 @@ settings:
   default-slots:
     default: 5
     vip: 10
+  # Only work for extra slot items.
+  # Remove this section if you don't want this feature.
   max-slots:
     default: 10
     vip: 15
@@ -125,10 +127,11 @@ messages:
     &f/es help &7- View help.
     &f/es reload &7- Reload the plugin.
     &f/es giveslots <itemID> <player> &7- Give extra slot item to specified player.
-  success-add: "§x§9§8§F§B§9§8[EnchantmentSlots] §aAdd %amount% extra main hand item enchantment slot!"
-  success-set: "§x§9§8§F§B§9§8[EnchantmentSlots] §aSet main hand item enchantment slot to %amount%!"
-  slots-limit-reached: "§x§9§8§F§B§9§8[EnchantmentSlots] §cYour item has reached its enchantment limits!"
-  max-slots-reached: "§x§9§8§F§B§9§8[EnchantmentSlots] §cYour item can not have more enchantment slots!"
+  give-extra-slot-item: "&#98FB98[EnchantmentSlots] &aGave %player% extra slot item %item% x%amount%"
+  success-add: "&#98FB98[EnchantmentSlots] &aAdd %amount% extra main hand item enchantment slot!"
+  success-set: "&#98FB98[EnchantmentSlots] &aSet main hand item enchantment slot to %amount%!"
+  slots-limit-reached: "&#98FB98[EnchantmentSlots] &cYour item has reached its enchantment limits!"
+  max-slots-reached: "&#98FB98[EnchantmentSlots] &cYour item can not have more enchantment slots!"
   error-args: "&#98FB98[EnchantmentSlots] &cWrong command usage, if you need help, use /es help!"
   error-miss-permission: "&#98FB98[EnchantmentSlots] &cYou don't have permission to use this command!"
   error-in-game: "&#98FB98[EnchantmentSlots] &cYou have to use this command in game!"

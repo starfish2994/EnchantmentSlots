@@ -12,7 +12,6 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.superiormc.enchantmentslots.utils.ItemLimits;
 
 public class ItemModify {
 
@@ -84,7 +83,7 @@ public class ItemModify {
         if (item.getType() == Material.ENCHANTED_BOOK) {
             return;
         }
-        if (ItemLimits.getMaxEnchantments(player, item) == 0) {
+        if (ItemLimits.getMaxEnchantments(player, item) != 0) {
             return;
         }
         if (!item.hasItemMeta()) {
