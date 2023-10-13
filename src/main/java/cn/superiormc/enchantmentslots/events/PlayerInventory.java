@@ -47,7 +47,7 @@ public class PlayerInventory implements Listener {
             return;
         }
         int maxValue = ConfigReader.getMaxLimits(player);
-        if (maxValue != -1 && baseValue >= maxValue) {
+        if (maxValue != -1 && baseValue + value >= maxValue) {
             player.sendMessage(ConfigReader.getMessages("max-slots-reached"));
             return;
         }
