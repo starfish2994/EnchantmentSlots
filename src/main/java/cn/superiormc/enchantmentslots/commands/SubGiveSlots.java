@@ -32,6 +32,7 @@ public class SubGiveSlots {
                 }
                 item.setAmount(amount);
                 player.getInventory().addItem(item);
+                return;
             }
             if (!(sender instanceof Player)){
                 sender.sendMessage(ConfigReader.getMessages("error-in-game"));
