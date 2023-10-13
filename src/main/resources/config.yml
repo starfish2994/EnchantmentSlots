@@ -82,7 +82,10 @@ settings:
   default-slots:
     default: 5
     vip: 10
-  default-slots-conditions:
+  max-slots:
+    default: 10
+    vip: 15
+  slots-conditions:
     vip:
       - 'permission: group.vip'
   close-inventory-if-reached-limit: true
@@ -125,6 +128,7 @@ messages:
   success-add: "§x§9§8§F§B§9§8[EnchantmentSlots] §aAdd %amount% extra main hand item enchantment slot!"
   success-set: "§x§9§8§F§B§9§8[EnchantmentSlots] §aSet main hand item enchantment slot to %amount%!"
   slots-limit-reached: "§x§9§8§F§B§9§8[EnchantmentSlots] §cYour item has reached its enchantment limits!"
+  max-slots-reached: "§x§9§8§F§B§9§8[EnchantmentSlots] §cYour item can not have more enchantment slots!"
   error-args: "&#98FB98[EnchantmentSlots] &cWrong command usage, if you need help, use /es help!"
   error-miss-permission: "&#98FB98[EnchantmentSlots] &cYou don't have permission to use this command!"
   error-in-game: "&#98FB98[EnchantmentSlots] &cYou have to use this command in game!"

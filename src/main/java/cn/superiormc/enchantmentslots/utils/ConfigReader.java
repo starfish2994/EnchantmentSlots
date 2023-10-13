@@ -51,12 +51,12 @@ public class ConfigReader {
         ConfigurationSection section = EnchantmentSlots.instance.getConfig().
                 getConfigurationSection("settings.default-slots");
         ConfigurationSection conditionSection = EnchantmentSlots.instance.getConfig().
-                getConfigurationSection("settings.default-slots-conditions");
+                getConfigurationSection("settings.slots-conditions");
         if (section == null) {
             return 5;
         }
         if (conditionSection == null) {
-            return section.getInt("settings.default-slots.default", 5);
+            return section.getInt("default", 5);
         }
         Set<String> groupNameSet = conditionSection.getKeys(false);
         List<Integer> result = new ArrayList<>();
@@ -66,12 +66,40 @@ public class ConfigReader {
             }
             else {
                 if (section.getInt("default") != 0) {
-                    result.add(section.getInt("default"));
+                    result.add(section.getInt("default"), 5);
                 }
             }
         }
         if (result.size() == 0) {
             result.add(5);
+        }
+        return Collections.max(result);
+    }
+    public static int getMaxLimits(Player player) {
+        ConfigurationSection section = EnchantmentSlots.instance.getConfig().
+                getConfigurationSection("settings.max-slots");
+        ConfigurationSection conditionSection = EnchantmentSlots.instance.getConfig().
+                getConfigurationSection("settings.slots-conditions");
+        if (section == null) {
+            return -1;
+        }
+        if (conditionSection == null) {
+            return section.getInt("default", -1);
+        }
+        Set<String> groupNameSet = conditionSection.getKeys(false);
+        List<Integer> result = new ArrayList<>();
+        for (String groupName : groupNameSet) {
+            if (Condition.getBoolean(player, conditionSection.getStringList(groupName))) {
+                result.add(section.getInt(groupName));
+            }
+            else {
+                if (section.getInt("default") != 0) {
+                    result.add(section.getInt("default", -1));
+                }
+            }
+        }
+        if (result.size() == 0) {
+            result.add(-1);
         }
         return Collections.max(result);
     }
