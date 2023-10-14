@@ -6,6 +6,10 @@
 settings:
   debug: false
   add-lore:
+    # Does not support other packed-based item, enchants plugins.
+    # Like EcoEnchants, EcoItems.
+    # They will always put their lore at first location and EnchantmentSlots can do anything about it.
+    at-first-or-last: false
     display-value: "&#ff3300Enchantment Slots: %amount%"
     # One word without color code only.
     check-value: "Slots"

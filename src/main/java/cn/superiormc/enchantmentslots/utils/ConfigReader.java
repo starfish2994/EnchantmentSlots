@@ -23,6 +23,9 @@ public class ConfigReader {
     public static boolean getRemoveExtraEnchants() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.remove-illegal-extra-enchant", true);
     }
+    public static boolean getAtFirstOrLast() {
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.at-first-or-last", false);
+    }
     public static boolean getBlackCreativeMode() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.black-creative-mode", true);
     }
@@ -41,8 +44,8 @@ public class ConfigReader {
     public static List<String> getAutoAddSlotsItems() {
         return EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.trigger.Packet.whitelist-items");
     }
-    public static String getDisplayLore() {
-        return EnchantmentSlots.instance.getConfig().getString("settings.add-lore.display-value");
+    public static List<String> getDisplayLore() {
+        return EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.display-value");
     }
     public static String getDisplayLoreContains() {
         return EnchantmentSlots.instance.getConfig().getString("settings.add-lore.check-value");

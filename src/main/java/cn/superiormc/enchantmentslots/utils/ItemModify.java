@@ -2,8 +2,11 @@ package cn.superiormc.enchantmentslots.utils;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -26,11 +29,23 @@ public class ItemModify {
         }
         ItemMeta itemMeta = clientItemStack.getItemMeta();
         List<String> lore = new ArrayList<>();
-        if (itemMeta.hasLore()) {
-            lore = itemMeta.getLore();
+        if (ConfigReader.getAtFirstOrLast()) {
+            for (String line : ConfigReader.getDisplayLore()) {
+                lore.add(ColorParser.parse(line)
+                        .replace("%amount%", String.valueOf(ItemLimits.getMaxEnchantments(player, serverItemStack))));
+
+            }
         }
-        lore.add(ColorParser.parse(ConfigReader.getDisplayLore()
-                .replace("%amount%", String.valueOf(ItemLimits.getMaxEnchantments(player, serverItemStack)))));
+        if (itemMeta.hasLore()) {
+            lore.addAll(itemMeta.getLore());
+        }
+        if (!ConfigReader.getAtFirstOrLast()) {
+            for (String line : ConfigReader.getDisplayLore()) {
+                lore.add(ColorParser.parse(line)
+                        .replace("%amount%", String.valueOf(ItemLimits.getMaxEnchantments(player, serverItemStack))));
+
+            }
+        }
         itemMeta.setLore(lore);
         if (ConfigReader.getDebug()) {
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fAdded lore: " + lore + ".");
@@ -56,9 +71,6 @@ public class ItemModify {
             for (String str : lore) {
                 if (!str.contains(ConfigReader.getDisplayLoreContains())) {
                     newLore.add(str);
-                    if (ConfigReader.getDebug()) {
-                        Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fRemoved lore:" + str);
-                    }
                 }
             }
             lore = newLore;
