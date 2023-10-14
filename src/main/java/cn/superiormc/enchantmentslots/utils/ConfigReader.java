@@ -69,7 +69,7 @@ public class ConfigReader {
             }
             else {
                 if (section.getInt("default") != 0) {
-                    result.add(section.getInt("default"), 5);
+                    result.add(section.getInt("default", 5));
                 }
             }
         }
