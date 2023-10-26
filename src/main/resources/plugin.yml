@@ -3,6 +3,9 @@ version: '${project.version}'
 main: cn.superiormc.enchantmentslots.EnchantmentSlots
 api-version: 1.13
 depend: [ProtocolLib]
+softdepend:
+  - EcoEnchants
+  - ExcellentEnchants
 commands:
   enchantmentslots:
     aliases:

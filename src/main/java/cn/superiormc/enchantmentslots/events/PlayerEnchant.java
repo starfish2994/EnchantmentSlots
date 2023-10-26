@@ -3,14 +3,11 @@ package cn.superiormc.enchantmentslots.events;
 import cn.superiormc.enchantmentslots.utils.ConfigReader;
 import cn.superiormc.enchantmentslots.utils.ItemLimits;
 import cn.superiormc.enchantmentslots.utils.ItemModify;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 
 public class PlayerEnchant implements Listener {
     @EventHandler

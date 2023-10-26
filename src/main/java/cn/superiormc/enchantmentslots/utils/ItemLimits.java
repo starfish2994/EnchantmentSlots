@@ -34,6 +34,24 @@ public class ItemLimits {
         return meta.getPersistentDataContainer().get(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER);
     }
 
+    public static int getRealMaxEnchantments(Player player, ItemStack item) {
+        if (ConfigReader.getAutoAddSlotsLimit()) {
+            return getMaxEnchantments(player, item);
+        }
+        if (!item.hasItemMeta()) {
+            ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
+            if (tempMeta == null) {
+                return 0;
+            }
+            item.setItemMeta(tempMeta);
+        }
+        ItemMeta meta = item.getItemMeta();
+        if (!meta.getPersistentDataContainer().has(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER)) {
+            return 0;
+        }
+        return meta.getPersistentDataContainer().get(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER);
+    }
+
     public static void setMaxEnchantments(ItemStack item, int maxEnchantments) {
         if (!item.hasItemMeta()) {
             ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());

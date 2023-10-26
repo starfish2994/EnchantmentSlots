@@ -6,7 +6,7 @@
 
     <groupId>cn.superiormc</groupId>
     <artifactId>EnchantmentSlots</artifactId>
-    <version>1.1.2</version>
+    <version>1.2.0</version>
     <packaging>jar</packaging>
 
     <name>EnchantmentSlots</name>
@@ -119,6 +119,27 @@
             <artifactId>placeholderapi</artifactId>
             <version>2.11.2</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.willfp</groupId>
+            <artifactId>EcoEnchants</artifactId>
+            <version>10.39.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/EcoEnchants v10.39.2.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>su.nexmedia</groupId>
+            <artifactId>NexEngine</artifactId>
+            <version>2.2.8</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/NexEngine.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>su.nightexpress</groupId>
+            <artifactId>ExcellentEnchant</artifactId>
+            <version>3.6.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ExcellentEnchants-3.6.2.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

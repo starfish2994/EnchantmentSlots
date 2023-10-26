@@ -8,11 +8,21 @@ settings:
   add-lore:
     # Does not support other packed-based item, enchants plugins.
     # Like EcoEnchants, EcoItems.
-    # They will always put their lore at first location and EnchantmentSlots can do anything about it.
+    # They will always put their lore at first location and EnchantmentSlots can do nothing about it.
     at-first-or-last: false
-    display-value: "&#ff3300Enchantment Slots: %amount%"
-    # One word without color code only.
-    check-value: "Slots"
+    # Do not change this option when server started!
+    # Only change this if your server has stopped!
+    display-value:
+      - "{enchants}"
+      - "{empty_slots}"
+      - "&#ff3300Enchantment Slots: {amount}"
+    # Do not change this option when server started!
+    # Only change this if your server has stopped!
+    placeholder:
+      enchants:
+        format: '&6  {enchant_name}'
+      empty-slots:
+        format: '&7  --- Empty Slot ---'
     trigger:
       Packet:
         enabled: false
@@ -112,6 +122,53 @@ add-slot-items:
     lore:
       - '&fDrag this item into your item to use!'
     add-slots: 5
+
+# Enchant Name
+enchant-name:
+  # Default providing vanilla enchantments here.
+  # For third enchantment plugins:
+  # Plugin will auto get enchantment display name that provided by EcoEnchants and ExcellentEnchants
+  # If you are not using the 2 plugins, please using "Enchantment Key: Enchantment Display Name" format
+  # Like:
+  # an_other_enchantment: 'This is just an example here!'
+  protection: 'Protection'
+  fire_protection: 'Fire Protection'
+  feather_falling: 'Feather Falling'
+  blast_protection: 'Blast Protection'
+  projectile_protection: 'Projectile Protection'
+  respiration: 'Respiration'
+  aqua_affinity: 'Aqua Affinity'
+  thorns: 'Thorns'
+  depth_strider: 'Depth Strider'
+  frost_walker: 'Frost Walker'
+  binding_curse: 'Binding Curse'
+  sharpness: 'Sharpness'
+  smite: 'Smite'
+  bane_of_arthropods: 'Bane of Arthropods'
+  knockback: 'Knockback'
+  fire_aspect: 'Fire Aspect'
+  looting: 'Looting'
+  sweeping: 'Sweeping'
+  efficiency: 'Efficiency'
+  silk_touch: 'Silk Touch'
+  unbreaking: 'Unbreaking'
+  fortune: 'Fortune'
+  power: 'Power'
+  punch: 'Punch'
+  flame: 'Flame'
+  infinity: 'Infinity'
+  luck_of_the_sea: 'Luck of the Sea'
+  lure: 'Lure'
+  loyalty: 'Loyalty'
+  impaling: 'Impaling'
+  riptide: 'Riptide'
+  channeling: 'Channeling'
+  multishot: 'Multishot'
+  quick_charge: 'Quick Charge'
+  piercing: 'Piercing'
+  mending: 'Mending'
+  vanishing_curse: 'Vanishing Curse'
+  soul_speed: 'Soul Speed'
 
 # Messages
 messages:

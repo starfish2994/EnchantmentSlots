@@ -2,6 +2,7 @@ package cn.superiormc.enchantmentslots.utils;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -14,8 +15,8 @@ public class ConfigReader {
     public static boolean getDebug() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.debug", false);
     }
-    public static boolean getOtherWay() {
-        return EnchantmentSlots.instance.getConfig().getBoolean("settings.cancel-add-enchant-by-other-ways", true);
+    public static String getEnchantmentName(Enchantment enchantment) {
+        return EnchantmentSlots.instance.getConfig().getString("enchant-name." + enchantment.getKey().getKey(), enchantment.getKey().getKey());
     }
     public static boolean getCloseInventory() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.close-inventory-if-reached-limit", true);
@@ -25,6 +26,14 @@ public class ConfigReader {
     }
     public static boolean getAtFirstOrLast() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.at-first-or-last", false);
+    }
+    public static String getEnchantPlaceholder() {
+        return EnchantmentSlots.instance.getConfig().getString("settings.add-lore.placeholder.enchants.format",
+                "&6  {enchant_name}");
+    }
+    public static String getEmptySlotPlaceholder() {
+        return EnchantmentSlots.instance.getConfig().getString("settings.add-lore.placeholder.empty-slots.format",
+                "&7  --- Empty Slot ---");
     }
     public static boolean getBlackCreativeMode() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.black-creative-mode", true);
