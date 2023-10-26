@@ -125,7 +125,11 @@ public class ItemModify {
                                 replace("{amount}", "(\\d+)"), Pattern.CASE_INSENSITIVE);
                         Matcher matcher1 = pattern1.matcher(str);
                         if (matcher1.find()) {
-                            continue bigfor;
+                            for (Enchantment enchantment : serverItemStack.getEnchantments().keySet()) {
+                                if (matcher1.group().equals(getEnchantName(enchantment))) {
+                                    continue bigfor;
+                                }
+                            }
                         }
                     }
                 }
