@@ -53,7 +53,9 @@ public class ItemModify {
                     continue;
                 }
                 lore.add(ColorParser.parse(line)
-                        .replace("{amount}", String.valueOf(ItemLimits.getMaxEnchantments(player, serverItemStack))));
+                        .replace("{slot_amount}", String.valueOf(ItemLimits.getMaxEnchantments(player, serverItemStack))
+                        .replace("{enchant_amount}", String.valueOf(clientItemStack.getEnchantments().size()))));
+
             }
         }
         if (itemMeta.hasLore()) {
@@ -79,7 +81,8 @@ public class ItemModify {
                     continue;
                 }
                 lore.add(ColorParser.parse(line)
-                        .replace("{amount}", String.valueOf(ItemLimits.getMaxEnchantments(player, serverItemStack))));
+                        .replace("{slot_amount}", String.valueOf(ItemLimits.getMaxEnchantments(player, serverItemStack)))
+                        .replace("{enchant_amount}", String.valueOf(clientItemStack.getEnchantments().size())));
 
             }
         }
@@ -121,8 +124,9 @@ public class ItemModify {
                 for (String configStr : ConfigReader.getDisplayLore()) {
                     if (!configStr.equals("{enchants}") && !configStr.equals("{empty_slots}")) {
                         itemMeta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
-                        Pattern pattern1 = Pattern.compile(ColorParser.parse(configStr).
-                                replace("{amount}", "(\\d+)"), Pattern.CASE_INSENSITIVE);
+                        Pattern pattern1 = Pattern.compile(ColorParser.parse(configStr)
+                                .replace("{slot_amount}", "(\\d+)")
+                                .replace("{enchant_amount", "(\\d+)"), Pattern.CASE_INSENSITIVE);
                         Matcher matcher1 = pattern1.matcher(str);
                         if (matcher1.find()) {
                             for (Enchantment enchantment : serverItemStack.getEnchantments().keySet()) {
@@ -166,13 +170,13 @@ public class ItemModify {
         if (ItemLimits.canEnchant(item)) {
             meta.getPersistentDataContainer().set(ItemLimits.ENCHANTMENT_SLOTS_KEY,
                     PersistentDataType.INTEGER,
-                    ConfigReader.getDefaultLimits(player));
+                    ConfigReader.getDefaultLimits(player, item));
             item.setItemMeta(meta);
         }
     }
 
     public static String getEnchantName(Enchantment enchantment) {
-        if (Bukkit.getPluginManager().isPluginEnabled("EcoEnchants")) {
+        if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("EcoEnchants")) {
             EcoEnchant ecoEnchant = EcoEnchants.getByKey(enchantment.getKey());
             if (ConfigReader.getDebug()) {
                 Bukkit.getConsoleSender().sendMessage(EcoEnchants.keySet() + "");
@@ -180,7 +184,7 @@ public class ItemModify {
             if (ecoEnchant != null) {
                 return ecoEnchant.getDisplayName();
             }
-        } else if (Bukkit.getPluginManager().isPluginEnabled("ExcellentEnchants")) {
+        } else if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("ExcellentEnchants")) {
             ExcellentEnchant excellentEnchant = EnchantRegistry.getByKey(enchantment.getKey());
             if (ConfigReader.getDebug()) {
                 Bukkit.getConsoleSender().sendMessage(EnchantRegistry.REGISTRY_MAP.keySet() + "");

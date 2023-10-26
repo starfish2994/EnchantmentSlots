@@ -1,9 +1,13 @@
 package cn.superiormc.enchantmentslots.utils;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
+import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,12 +60,14 @@ public class ConfigReader {
     public static List<String> getDisplayLore() {
         return EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.display-value");
     }
-    public static String getDisplayLoreContains() {
-        return EnchantmentSlots.instance.getConfig().getString("settings.add-lore.check-value");
-    }
-    public static int getDefaultLimits(Player player) {
+    public static int getDefaultLimits(Player player, ItemStack itemStack) {
         ConfigurationSection section = EnchantmentSlots.instance.getConfig().
-                getConfigurationSection("settings.default-slots");
+                getConfigurationSection("settings.default-slots-by-item." +
+                        CheckValidHook.checkValid(itemStack));
+        if (section == null) {
+            section = EnchantmentSlots.instance.getConfig().
+                    getConfigurationSection("settings.default-slots");
+        }
         ConfigurationSection conditionSection = EnchantmentSlots.instance.getConfig().
                 getConfigurationSection("settings.slots-conditions");
         if (section == null) {
@@ -87,9 +93,14 @@ public class ConfigReader {
         }
         return Collections.max(result);
     }
-    public static int getMaxLimits(Player player) {
+    public static int getMaxLimits(Player player, ItemStack itemStack) {
         ConfigurationSection section = EnchantmentSlots.instance.getConfig().
-                getConfigurationSection("settings.max-slots");
+                getConfigurationSection("settings.max-slots-by-item." +
+                        CheckValidHook.checkValid(itemStack));
+        if (section == null) {
+            section = EnchantmentSlots.instance.getConfig().
+                    getConfigurationSection("settings.max-slots");
+        }
         ConfigurationSection conditionSection = EnchantmentSlots.instance.getConfig().
                 getConfigurationSection("settings.slots-conditions");
         if (section == null) {

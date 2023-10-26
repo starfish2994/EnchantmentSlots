@@ -25,7 +25,7 @@ public class ItemLimits {
         ItemMeta meta = item.getItemMeta();
         if (!meta.getPersistentDataContainer().has(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER)) {
             if (canEnchant(item)) {
-                return ConfigReader.getDefaultLimits(player);
+                return ConfigReader.getDefaultLimits(player, item);
             }
             else {
                 return 0;

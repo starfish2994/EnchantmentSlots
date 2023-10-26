@@ -6,6 +6,13 @@ depend: [ProtocolLib]
 softdepend:
   - EcoEnchants
   - ExcellentEnchants
+  - EcoItems
+  - EcoArmor
+  - MythicMobs
+  - MMOItems
+  - NeigeItems
+  - ItemsAdder
+  - Oraxen
 commands:
   enchantmentslots:
     aliases:
