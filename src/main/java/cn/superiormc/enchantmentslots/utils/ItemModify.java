@@ -126,7 +126,7 @@ public class ItemModify {
                                 ConfigReader.getEnchantPlaceholder()).
                         replace("{enchant_name}", "(.*)").
                         replace("{enchant_level}", "(\\d+)").
-                        replace("{enchant_level_raman}", "(.*)"),
+                        replace("{enchant_level_roman}", "(.*)"),
                         Pattern.CASE_INSENSITIVE);
                 Matcher matcher2 = pattern2.matcher(str);
                 if (matcher2.find()) {

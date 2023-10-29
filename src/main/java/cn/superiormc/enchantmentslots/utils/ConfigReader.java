@@ -110,6 +110,8 @@ public class ConfigReader {
         ConfigurationSection conditionSection = EnchantmentSlots.instance.getConfig().
                 getConfigurationSection("settings.slots-conditions");
         if (section == null) {
+            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §cError: " +
+                    "Can not found default-slots section, default set to 5!");
             return 5;
         }
         if (conditionSection == null) {

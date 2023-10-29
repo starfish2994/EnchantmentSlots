@@ -109,6 +109,7 @@ settings:
       InventoryClickEvent:
         enabled: true
     black-creative-mode: false
+    black-item-has-lore: false
   default-slots:
     default: 5
     vip: 10
@@ -134,8 +135,6 @@ settings:
       - 'permission: group.vip'
   close-inventory-if-reached-limit: true
   remove-illegal-extra-enchant: true
-  black-creative-mode-player: true
-  black-item-has-lore: false
 
 add-slot-items:
   A:
