@@ -105,6 +105,8 @@ settings:
           - golden_boots
           - diamond_boots
           - netherite_boots
+          - book
+          - enchanted_book
       EnchantItemEvent:
         enabled: true
       InventoryClickEvent:
