@@ -1,6 +1,7 @@
 package cn.superiormc.enchantmentslots.hooks;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
+import cn.superiormc.enchantmentslots.utils.ConfigReader;
 import com.willfp.eco.core.items.Items;
 import com.willfp.ecoarmor.sets.ArmorSet;
 import com.willfp.ecoarmor.sets.ArmorSlot;
@@ -9,8 +10,10 @@ import com.willfp.ecoitems.items.EcoItem;
 import com.willfp.ecoitems.items.ItemUtilsKt;
 import dev.lone.itemsadder.api.CustomStack;
 import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.lib.api.item.NBTItem;
 import io.th0rgal.oraxen.api.OraxenItems;
 import net.Indyuce.mmoitems.MMOItems;
+import net.Indyuce.mmoitems.api.ItemTier;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import pers.neige.neigeitems.manager.ItemManager;
@@ -33,6 +36,12 @@ public class CheckValidHook {
         if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("MMOItems")) {
             String tempVal1 = MMOItems.getID(itemStack);
             if (tempVal1 != null) {
+                if (ConfigReader.getUseTiers()) {
+                    ItemTier tempVal2 = ItemTier.ofItem(NBTItem.get(itemStack));
+                    if (tempVal2 != null) {
+                        return tempVal2.getId();
+                    }
+                }
                 return tempVal1;
             }
         }

@@ -28,6 +28,9 @@ public class ConfigReader {
     public static boolean getRemoveExtraEnchants() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.remove-illegal-extra-enchant", true);
     }
+    public static boolean getUseTiers() {
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.use-tier-identify-slots", false);
+    }
     public static boolean getRegisterRemoveLore() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.register-remove-lore", false);
     }

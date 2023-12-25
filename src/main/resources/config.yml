@@ -8,7 +8,7 @@ settings:
   add-lore:
     # Whether we remove display lore when packet send to server.
     # This will make item more safe, no lead to lore dupe.
-    # However maybe have problems with other plugins.
+    # However, maybe have problems with other plugins.
     register-remove-lore: true
     # Does not support other packed-based item, enchants plugins.
     # Like EcoEnchants, EcoItems.
@@ -139,6 +139,9 @@ settings:
   slots-conditions:
     vip:
       - 'permission: group.vip'
+  # Weather use item tier instead of item ID to identify item slots.
+  # If this item plugin don't have tier, will still use Item ID as identify.
+  use-tier-identify-slots: false
   close-inventory-if-reached-limit: true
   remove-illegal-extra-enchant: true
 
