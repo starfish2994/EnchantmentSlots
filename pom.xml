@@ -103,6 +103,14 @@
             <name>Lumine Releases</name>
             <url>https://mvn.lumine.io/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>phoenix</id>
+            <url>https://nexus.phoenixdevt.fr/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>auxilor</id>
+            <url>https://repo.auxilor.io/repository/maven-public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -111,13 +119,6 @@
             <artifactId>spigot-api</artifactId>
             <version>1.19.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.lumine</groupId>
-            <artifactId>MythicLib</artifactId>
-            <version>1.6.1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/MythicLib-1.6.1.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
@@ -137,18 +138,29 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.willfp</groupId>
+            <groupId>com.willfp...</groupId>
             <artifactId>EcoEnchants</artifactId>
-            <version>11.0.3</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/EcoEnchants v11.0.3.jar</systemPath>
+            <version>11.1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.willfp.1</groupId>
+            <groupId>com.willfp</groupId>
             <artifactId>EcoEnchants</artifactId>
-            <version>10.39.2</version>
+            <version>10.50.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>su.nightexpress</groupId>
+            <artifactId>ExcellentEnchant</artifactId>
+            <version>3.6.4</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/EcoEnchants v10.39.2.jar</systemPath>
+            <systemPath>${project.basedir}/lib/ExcellentEnchants-3.6.4.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>net.Indyuce</groupId>
+            <artifactId>MMOItems-API</artifactId>
+            <version>6.9.5-20231202.120258-16</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>su.nexmedia</groupId>
@@ -158,18 +170,10 @@
             <systemPath>${project.basedir}/lib/NexEngine.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>su.nightexpress</groupId>
-            <artifactId>ExcellentEnchant</artifactId>
-            <version>3.6.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/ExcellentEnchants-3.6.2.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>net.Indyuce</groupId>
-            <artifactId>MMOItems</artifactId>
-            <version>6.9.4</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/MMOItems-6.9.4.jar</systemPath>
+            <groupId>io.lumine</groupId>
+            <artifactId>MythicLib-dist</artifactId>
+            <version>1.6.2-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.LoneDev6</groupId>
@@ -178,46 +182,46 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>io.lumine</groupId>
+            <groupId>io.lumine.xikage</groupId>
             <artifactId>MythicMobs</artifactId>
             <version>4.11.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/MythicMobs-4.11.0-004.jar</systemPath>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.willfp</groupId>
             <artifactId>EcoItems</artifactId>
             <version>5.10.4</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/EcoItems v5.10.4.jar</systemPath>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.willfp</groupId>
             <artifactId>EcoArmor</artifactId>
-            <version>7.145.4</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/EcoArmor v7.145.4.jar</systemPath>
+            <version>8.51.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.willfp</groupId>
             <artifactId>libreforge</artifactId>
-            <version>4.25.4</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/libreforge-4.25.4-shadow.jar</systemPath>
+            <version>4.51.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.willfp</groupId>
             <artifactId>eco</artifactId>
             <version>6.65.4</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/eco-6.65.4-all.jar</systemPath>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.oraxen</groupId>
             <artifactId>oraxen</artifactId>
-            <version>1.152.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/oraxen-1.152.2.jar</systemPath>
+            <version>1.161.0</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.lumine</groupId>
@@ -226,11 +230,10 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>pers.neigi</groupId>
-            <artifactId>NeigiItems</artifactId>
-            <version>1.15.49</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/NeigeItems-1.15.49-api.jar</systemPath>
+            <groupId>com.github.ankhorg</groupId>
+            <artifactId>NeigeItems-Kotlin</artifactId>
+            <version>1.16.8</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
