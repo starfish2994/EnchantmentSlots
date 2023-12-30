@@ -3,18 +3,16 @@ package cn.superiormc.enchantmentslots.events;
 import cn.superiormc.enchantmentslots.utils.ConfigReader;
 import cn.superiormc.enchantmentslots.utils.ExtraSlotsItem;
 import cn.superiormc.enchantmentslots.utils.ItemLimits;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 public class PlayerInventory implements Listener {
 
     @EventHandler
-    public void onInventoryDrag (InventoryClickEvent event) {
+    public void onInventoryDrag(InventoryClickEvent event) {
         if (event.getInventory() instanceof org.bukkit.inventory.PlayerInventory) {
             return;
         }
