@@ -9,9 +9,9 @@ settings:
   #   - eco (Recommend use if you are using EcoItems, EcoEnchants...)
   #   - ProtocolLib (Classic and stable choice)
   use-listener-plugin: ProtocolLib
-  # If you are using ExcellEnchantments, set this option to LOWEST, and change ExcellentEnchantments config.yml
+  # If you are using ExcellentEnchantments, set this option to LOWEST, and change ExcellentEnchantments config.yml
   # Display.Mode option value from 1 to 2.
-  # ProtolcolLib Support value:
+  # ProtocolLib Support value:
   #    LOWEST(0),
   #    LOW(1),
   #    NORMAL(2),
@@ -28,9 +28,8 @@ settings:
   packet-listener-priority: HIGHEST
   add-lore:
     # Does not support other packed-based item, enchants plugins.
-    # Like EcoEnchants, EcoItems.
+    # Like EcoEnchants, EcoItems. (You can also try eco as use-listener-plugin, then change packet-listener-priority)
     # They will always put their lore at first location and EnchantmentSlots can do nothing about it.
-    # So you need to disable packed-based option above if you want to set this option.
     at-first-or-last: false
     # Do not change this option when server started!
     # Only change this if your server has stopped!
