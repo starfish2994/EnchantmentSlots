@@ -161,6 +161,7 @@ settings:
   # If this item plugin don't have tier, will still use Item ID as identify.
   use-tier-identify-slots: false
   close-inventory-if-reached-limit: true
+  # This option support ProtocolLib only.
   remove-illegal-extra-enchant: true
 
 add-slot-items:
