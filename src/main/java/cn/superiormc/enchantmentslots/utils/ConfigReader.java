@@ -2,14 +2,14 @@ package cn.superiormc.enchantmentslots.utils;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
+import cn.superiormc.enchantmentslots.protolcol.GeneralProtolcol;
 import com.comphenix.protocol.events.ListenerPriority;
+import com.willfp.eco.core.display.DisplayPriority;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,13 +24,6 @@ public class ConfigReader {
     public static String getEnchantmentName(Enchantment enchantment) {
         return EnchantmentSlots.instance.getConfig().getString("enchant-name." + enchantment.getKey().getKey(), enchantment.getKey().getKey());
     }
-    public static boolean getAddHideEnchantsFlag(ItemMeta meta) {
-        if (!EnchantmentSlots.instance.getConfig().getBoolean("" +
-                "settings.add-hide-enchants-flag", false)) {
-            return meta.hasItemFlag(ItemFlag.HIDE_ENCHANTS);
-        }
-        return true;
-    }
     public static boolean getCloseInventory() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.close-inventory-if-reached-limit", true);
     }
@@ -39,9 +32,6 @@ public class ConfigReader {
     }
     public static boolean getUseTiers() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.use-tier-identify-slots", false);
-    }
-    public static boolean getRegisterRemoveLore() {
-        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.register-remove-lore", false);
     }
     public static boolean getAtFirstOrLast() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.at-first-or-last", false);
@@ -146,7 +136,7 @@ public class ConfigReader {
                 }
             }
         }
-        if (result.size() == 0) {
+        if (result.isEmpty()) {
             result.add(5);
         }
         return Collections.max(result);
@@ -179,7 +169,7 @@ public class ConfigReader {
                 }
             }
         }
-        if (result.size() == 0) {
+        if (result.isEmpty()) {
             result.add(-1);
         }
         return Collections.max(result);
@@ -187,12 +177,12 @@ public class ConfigReader {
     public static String getMessages(String key) {
         return ColorParser.parse(EnchantmentSlots.instance.getConfig().getString("messages." + key));
     }
-    public static ListenerPriority getPriority(Boolean serverOrClient) {
-        if (serverOrClient) {
-            return ListenerPriority.valueOf(EnchantmentSlots.instance.getConfig().getString(
-                    "packet-listener-priority." + "client-to-server", "LOWEST").toUpperCase());
-        }
+    public static ListenerPriority getPriority() {
         return ListenerPriority.valueOf(EnchantmentSlots.instance.getConfig().getString(
-                "packet-listener-priority." + "server-to-client", "MONITOR").toUpperCase());
+                "packet-listener-priority", "MONITOR").toUpperCase());
+    }
+    public static DisplayPriority getEcoPriority() {
+        return DisplayPriority.valueOf(EnchantmentSlots.instance.getConfig().getString(
+                "packet-listener-priority", "HIGHEST").toUpperCase());
     }
 }

@@ -1,4 +1,4 @@
-package cn.superiormc.enchantmentslots.packet;
+package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;

@@ -5,23 +5,28 @@
 # Settings
 settings:
   debug: false
-  packet-listener-priority:
-    # If you are using ExcellEnchantments, set this option to LOWEST, and change ExcellentEnchantments config.yml
-    # Display.Mode option value from 1 to 2.
-    # Support value:
-    #    LOWEST(0),
-    #    LOW(1),
-    #    NORMAL(2),
-    #    HIGH(3),
-    #    HIGHEST(4),
-    #    MONITOR(5)
-    server-to-client: MONITOR
-    client-to-server: LOWEST
+  # Support plugin:
+  #   - eco (Recommend use if you are using EcoItems, EcoEnchants...)
+  #   - ProtocolLib (Classic and stable choice)
+  use-listener-plugin: ProtocolLib
+  # If you are using ExcellEnchantments, set this option to LOWEST, and change ExcellentEnchantments config.yml
+  # Display.Mode option value from 1 to 2.
+  # ProtolcolLib Support value:
+  #    LOWEST(0),
+  #    LOW(1),
+  #    NORMAL(2),
+  #    HIGH(3),
+  #    HIGHEST(4),
+  #    MONITOR(5)
+  # eco Support value:
+  #    CUSTOM(250),
+  #    LOWEST(100),
+  #    LOW(200),
+  #    HIGH(300),
+  #    HIGHEST(400)
+  # The value after the value just a number help you know it's level, do not type them in option.
+  packet-listener-priority: HIGHEST
   add-lore:
-    # Whether we remove display lore when packet send to server.
-    # This will make item more safe, no lead to lore dupe.
-    # However, maybe have problems with other plugins.
-    register-remove-lore: true
     # Does not support other packed-based item, enchants plugins.
     # Like EcoEnchants, EcoItems.
     # They will always put their lore at first location and EnchantmentSlots can do nothing about it.
@@ -37,6 +42,7 @@ settings:
       - "&#ff3300Enchantment Slots: {enchant_amount}/{slot_amount}"
       - "{enchants}"
       - "{empty_slots}"
+    # This option support ProtocolLib only.
     black-creative-mode: true
     black-item-has-lore: false
     black-items:

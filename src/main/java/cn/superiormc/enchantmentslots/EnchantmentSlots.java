@@ -5,11 +5,10 @@ import cn.superiormc.enchantmentslots.commands.MainTab;
 import cn.superiormc.enchantmentslots.events.PlayerClick;
 import cn.superiormc.enchantmentslots.events.PlayerEnchant;
 import cn.superiormc.enchantmentslots.events.PlayerInventory;
-import cn.superiormc.enchantmentslots.packet.*;
+import cn.superiormc.enchantmentslots.protolcol.GeneralProtolcol;
 import cn.superiormc.enchantmentslots.utils.ConfigReader;
 import com.comphenix.protocol.ProtocolLibrary;
 import org.bukkit.Bukkit;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
@@ -49,9 +48,6 @@ public final class EnchantmentSlots extends JavaPlugin {
     }
 
     public void registerPackets() {
-        new SetCreativeSlots();
-        new WindowClick();
-        new SetSlots();
-        new WindowItem();
+        GeneralProtolcol.init();
     }
 }

@@ -2,7 +2,7 @@ name: EnchantmentSlots
 version: '${project.version}'
 main: cn.superiormc.enchantmentslots.EnchantmentSlots
 api-version: 1.13
-depend: [ProtocolLib]
+depend:
 softdepend:
   - EcoEnchants
   - ExcellentEnchants
@@ -13,7 +13,8 @@ softdepend:
   - NeigeItems
   - ItemsAdder
   - Oraxen
-  - Reforges
+  - ProtocolLib
+  - eco
 commands:
   enchantmentslots:
     aliases:

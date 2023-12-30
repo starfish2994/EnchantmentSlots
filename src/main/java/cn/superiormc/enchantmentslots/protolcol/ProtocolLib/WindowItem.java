@@ -1,26 +1,22 @@
-package cn.superiormc.enchantmentslots.packet;
+package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.utils.ConfigReader;
-import cn.superiormc.enchantmentslots.utils.ItemLimits;
 import cn.superiormc.enchantmentslots.utils.ItemModify;
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.reflect.StructureModifier;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 
 // 服务端发给客户端
-public class WindowItem extends GeneralPackets{
+public class WindowItem extends GeneralPackets {
 
     public WindowItem() {
         super();
@@ -28,7 +24,7 @@ public class WindowItem extends GeneralPackets{
 
     @Override
     protected void initPacketAdapter() {
-        packetAdapter = new PacketAdapter(EnchantmentSlots.instance, ConfigReader.getPriority(false), PacketType.Play.Server.WINDOW_ITEMS) {
+        packetAdapter = new PacketAdapter(EnchantmentSlots.instance, ConfigReader.getPriority(), PacketType.Play.Server.WINDOW_ITEMS) {
             @Override
             public void onPacketSending(PacketEvent event) {
                 if (ConfigReader.getDebug()) {
@@ -49,21 +45,6 @@ public class WindowItem extends GeneralPackets{
                     if (itemStack.getType().isAir()) {
                         clientItemStack.add(itemStack);
                         continue;
-                    }
-                    int maxEnchantments = ItemLimits.getMaxEnchantments(event.getPlayer(), itemStack);
-                    if (itemStack.getEnchantments().size() >= maxEnchantments) {
-                        if (ConfigReader.getRemoveExtraEnchants()) {
-                            int removeAmount = itemStack.getEnchantments().size() - maxEnchantments;
-                            for (Enchantment enchant : itemStack.getEnchantments().keySet()) {
-                                if (removeAmount <= 0) {
-                                    break;
-                                }
-                                ItemMeta meta = itemStack.getItemMeta();
-                                meta.removeEnchant(enchant);
-                                itemStack.setItemMeta(meta);
-                                removeAmount--;
-                            }
-                        }
                     }
                     ItemModify.addLore(event.getPlayer(), itemStack, true);
                     clientItemStack.add(ItemModify.serverToClient(event.getPlayer(), itemStack));
