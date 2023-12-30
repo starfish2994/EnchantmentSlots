@@ -58,10 +58,10 @@ settings:
     # This is when will plugin try add lore?
     trigger:
       # This means all items that can be enchanted will auto add lore.
-      # Recommend not enable it because it will lead to item in third-plugin item will also be added the lore.
+      # Recommend not enable it because it will lead to item in third-plugin GUI will also be added the lore.
       Packet:
         enabled: false
-        # Will try auto check whether it is an enchantable item.
+        # Will try auto check whether the item can be enchanted.
         # Recommend not use it. If not enable, will use whitelist-items instead.
         auto-check: false
         whitelist-items:
