@@ -36,18 +36,21 @@ public class ItemModify {
         }
         ItemMeta itemMeta = itemStack.getItemMeta();
         List<String> lore = new ArrayList<>();
-        if (ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack) &&
-                !itemMeta.hasItemFlag(ItemFlag.HIDE_ENCHANTS)) {
+        if (ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack)) {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
-                        lore.add(ColorParser.parse(
+                        String value = ColorParser.parse(
                                 ConfigReader.getEnchantPlaceholder().
                                         replace("{enchant_name}", getEnchantName(enchantment)).
                                         replace("{enchant_level}", String.valueOf(
                                                 itemStack.getEnchantments().get(enchantment))).
                                         replace("{enchant_level_roman}", NumberUtil.convertToRoman(
-                                                itemStack.getEnchantments().get(enchantment)))));
+                                                itemStack.getEnchantments().get(enchantment))));
+                        if (GeneralProtolcol.plugin.equals("eco")) {
+                            value = "§z" + value;
+                        }
+                        lore.add(value);
                     }
                     itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     continue;
@@ -55,7 +58,11 @@ public class ItemModify {
                 if (line.equals("{empty_slots}")) {
                     int i = ItemLimits.getMaxEnchantments(player, itemStack) - itemStack.getEnchantments().size();
                     while (i > 0) {
-                        lore.add(ColorParser.parse(ConfigReader.getEmptySlotPlaceholder()));
+                        String value = ColorParser.parse(ConfigReader.getEmptySlotPlaceholder());
+                        if (GeneralProtolcol.plugin.equals("eco")) {
+                            value = "§z" + value;
+                        }
+                        lore.add(value);
                         i--;
                     }
                     continue;
@@ -73,18 +80,21 @@ public class ItemModify {
             List<String> tempLore = itemMeta.getLore();
             lore.addAll(ConfigReader.editDisplayLore(tempLore, itemStack, player));
         }
-        if (!ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack) &&
-                !itemMeta.hasItemFlag(ItemFlag.HIDE_ENCHANTS)) {
+        if (!ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack)) {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
-                        lore.add(ColorParser.parse(
+                        String value = ColorParser.parse(
                                 ConfigReader.getEnchantPlaceholder().
                                         replace("{enchant_name}", getEnchantName(enchantment)).
                                         replace("{enchant_level}", String.valueOf(
-                                        itemStack.getEnchantments().get(enchantment))).
+                                                itemStack.getEnchantments().get(enchantment))).
                                         replace("{enchant_level_roman}", NumberUtil.convertToRoman(
-                                                itemStack.getEnchantments().get(enchantment)))));
+                                                itemStack.getEnchantments().get(enchantment))));
+                        if (GeneralProtolcol.plugin.equals("eco")) {
+                            value = "§z" + value;
+                        }
+                        lore.add(value);
                     }
                     itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     continue;
@@ -92,7 +102,11 @@ public class ItemModify {
                 if (line.equals("{empty_slots}")) {
                     int i = ItemLimits.getMaxEnchantments(player, itemStack) - itemStack.getEnchantments().size();
                     while (i > 0) {
-                        lore.add(ColorParser.parse(ConfigReader.getEmptySlotPlaceholder()));
+                        String value = ColorParser.parse(ConfigReader.getEmptySlotPlaceholder());
+                        if (GeneralProtolcol.plugin.equals("eco")) {
+                            value = "§z" + value;
+                        }
+                        lore.add(value);
                         i--;
                     }
                     continue;

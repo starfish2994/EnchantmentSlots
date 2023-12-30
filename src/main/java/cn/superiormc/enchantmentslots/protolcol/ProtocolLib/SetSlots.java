@@ -46,10 +46,20 @@ public class SetSlots extends GeneralPackets {
                 // client 是加过 Lore 的，server 是没加过的！
                 itemStackStructureModifier.write(0, clientItemStack);
                 if (ConfigReader.getRemoveExtraEnchants()) {
-                    if (slot < 0 || slot > 36) {
+                    if (slot < 5 || slot > 44) {
                         return;
                     }
-                    ItemStack tempItemStack = event.getPlayer().getInventory().getItem(slot);
+                    int spigotSlot = slot;
+                    if (slot >= 36) {
+                        spigotSlot = slot - 36;
+                    } else if (slot <= 8) {
+                        spigotSlot = slot + 31;
+                    }
+                    if (ConfigReader.getDebug()) {
+                        Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §f" +
+                                "Packet Slot ID: " + slot + " , spigot Slot ID: " + spigotSlot + ".");
+                    }
+                    ItemStack tempItemStack = event.getPlayer().getInventory().getItem(spigotSlot);
                     if (tempItemStack == null || tempItemStack.getType().isAir()) {
                         return;
                     }
