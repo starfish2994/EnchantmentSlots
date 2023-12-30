@@ -22,7 +22,7 @@ public class SetSlots extends GeneralPackets{
     }
     @Override
     protected void initPacketAdapter(){
-        packetAdapter = new PacketAdapter(EnchantmentSlots.instance, ListenerPriority.MONITOR, PacketType.Play.Server.SET_SLOT) {
+        packetAdapter = new PacketAdapter(EnchantmentSlots.instance, ConfigReader.getPriority(false), PacketType.Play.Server.SET_SLOT) {
             @Override
             public void onPacketSending(PacketEvent event) {
                 if (ConfigReader.getDebug()) {

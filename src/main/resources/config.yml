@@ -5,6 +5,18 @@
 # Settings
 settings:
   debug: false
+  packet-listener-priority:
+    # If you are using ExcellEnchantments, set this option to LOWEST, and change ExcellentEnchantments config.yml
+    # Display.Mode option value from 1 to 2.
+    # Support value:
+    #    LOWEST(0),
+    #    LOW(1),
+    #    NORMAL(2),
+    #    HIGH(3),
+    #    HIGHEST(4),
+    #    MONITOR(5)
+    server-to-client: MONITOR
+    client-to-server: LOWEST
   add-lore:
     # Whether we remove display lore when packet send to server.
     # This will make item more safe, no lead to lore dupe.

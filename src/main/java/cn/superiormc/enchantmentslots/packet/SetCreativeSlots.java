@@ -24,7 +24,7 @@ public class SetCreativeSlots extends GeneralPackets{
 
     @Override
     protected void initPacketAdapter() {
-        packetAdapter = new PacketAdapter(EnchantmentSlots.instance, ListenerPriority.LOWEST, PacketType.Play.Client.SET_CREATIVE_SLOT) {
+        packetAdapter = new PacketAdapter(EnchantmentSlots.instance, ConfigReader.getPriority(true), PacketType.Play.Client.SET_CREATIVE_SLOT) {
             @Override
             public void onPacketReceiving(PacketEvent event) {
                 if (ConfigReader.getDebug()) {

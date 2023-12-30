@@ -2,6 +2,7 @@ package cn.superiormc.enchantmentslots.utils;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
+import com.comphenix.protocol.events.ListenerPriority;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
@@ -177,5 +178,13 @@ public class ConfigReader {
     }
     public static String getMessages(String key) {
         return ColorParser.parse(EnchantmentSlots.instance.getConfig().getString("messages." + key));
+    }
+    public static ListenerPriority getPriority(Boolean serverOrClient) {
+        if (serverOrClient) {
+            return ListenerPriority.valueOf(EnchantmentSlots.instance.getConfig().getString(
+                    "packet-listener-priority." + "client-to-server", "LOWEST").toUpperCase());
+        }
+        return ListenerPriority.valueOf(EnchantmentSlots.instance.getConfig().getString(
+                "packet-listener-priority." + "server-to-client", "MONITOR").toUpperCase());
     }
 }
