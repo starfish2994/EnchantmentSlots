@@ -38,8 +38,7 @@ public class SetCreativeSlots extends GeneralPackets{
                     return;
                 }
                 int maxEnchantments = ItemLimits.getMaxEnchantments(event.getPlayer(), clientItemStack);
-                if (clientItemStack.getEnchantments().size() > 0 &&
-                        clientItemStack.getEnchantments().size() >= maxEnchantments) {
+                if (clientItemStack.getEnchantments().size() >= maxEnchantments) {
                     if (ConfigReader.getRemoveExtraEnchants()) {
                         int removeAmount = clientItemStack.getEnchantments().size() - maxEnchantments;
                         for (Enchantment enchant : clientItemStack.getEnchantments().keySet()) {
@@ -50,6 +49,7 @@ public class SetCreativeSlots extends GeneralPackets{
                             meta.removeEnchant(enchant);
                             clientItemStack.setItemMeta(meta);
                             removeAmount--;
+                            Bukkit.getConsoleSender().sendMessage("删掉附魔");
                         }
                     }
                 }

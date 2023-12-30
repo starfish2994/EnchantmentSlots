@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -22,6 +23,13 @@ public class ConfigReader {
     }
     public static String getEnchantmentName(Enchantment enchantment) {
         return EnchantmentSlots.instance.getConfig().getString("enchant-name." + enchantment.getKey().getKey(), enchantment.getKey().getKey());
+    }
+    public static boolean getAddHideEnchantsFlag(ItemMeta meta) {
+        if (!EnchantmentSlots.instance.getConfig().getBoolean("" +
+                "settings.add-hide-enchants-flag", false)) {
+            return meta.hasItemFlag(ItemFlag.HIDE_ENCHANTS);
+        }
+        return true;
     }
     public static boolean getCloseInventory() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.close-inventory-if-reached-limit", true);

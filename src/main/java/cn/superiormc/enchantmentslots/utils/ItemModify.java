@@ -34,7 +34,7 @@ public class ItemModify {
         ItemMeta itemMeta = clientItemStack.getItemMeta();
         List<String> lore = new ArrayList<>();
         if (ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(clientItemStack) &&
-            !itemMeta.hasItemFlag(ItemFlag.HIDE_ENCHANTS)) {
+            ConfigReader.getAddHideEnchantsFlag(itemMeta)) {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : clientItemStack.getEnchantments().keySet()) {
@@ -68,7 +68,7 @@ public class ItemModify {
             lore.addAll(ConfigReader.editDisplayLore(tempLore, clientItemStack, player));
         }
         if (!ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(clientItemStack) &&
-                !itemMeta.hasItemFlag(ItemFlag.HIDE_ENCHANTS)) {
+                ConfigReader.getAddHideEnchantsFlag(itemMeta)) {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : clientItemStack.getEnchantments().keySet()) {
@@ -115,6 +115,10 @@ public class ItemModify {
             serverItemStack.setItemMeta(tempMeta);
         }
         ItemMeta itemMeta = serverItemStack.getItemMeta();
+        if (EnchantmentSlots.instance.getConfig().getBoolean("" +
+                "settings.add-hide-enchants-flag", false)) {
+            itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
         List<String> lore = new ArrayList<>();
         List<String> newLore = new ArrayList<>();
         if (itemMeta.hasLore()) {
@@ -140,7 +144,10 @@ public class ItemModify {
                 }
                 for (String configStr : ConfigReader.getDisplayLore()) {
                     if (!configStr.equals("{enchants}") && !configStr.equals("{empty_slots}")) {
-                        itemMeta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
+                        if (!EnchantmentSlots.instance.getConfig().getBoolean("" +
+                                "settings.add-hide-enchants-flag", false)) {
+                            itemMeta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
+                        }
                         Pattern pattern1 = Pattern.compile(ColorParser.parse(configStr)
                                 .replace("{slot_amount}", "(\\d+)")
                                 .replace("{enchant_amount}", "(\\d+)"), Pattern.CASE_INSENSITIVE);

@@ -51,8 +51,7 @@ public class WindowItem extends GeneralPackets{
                         continue;
                     }
                     int maxEnchantments = ItemLimits.getMaxEnchantments(event.getPlayer(), itemStack);
-                    if (itemStack.getEnchantments().size() > 0 &&
-                            itemStack.getEnchantments().size() >= maxEnchantments) {
+                    if (itemStack.getEnchantments().size() >= maxEnchantments) {
                         if (ConfigReader.getRemoveExtraEnchants()) {
                             int removeAmount = itemStack.getEnchantments().size() - maxEnchantments;
                             for (Enchantment enchant : itemStack.getEnchantments().keySet()) {

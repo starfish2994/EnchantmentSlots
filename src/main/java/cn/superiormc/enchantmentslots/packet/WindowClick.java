@@ -45,8 +45,7 @@ public class WindowClick extends GeneralPackets{
                     return;
                 }
                 int maxEnchantments = ItemLimits.getMaxEnchantments(event.getPlayer(), clientItemStack);
-                if (clientItemStack.getEnchantments().size() > 0 &&
-                        clientItemStack.getEnchantments().size() >= maxEnchantments) {
+                if (clientItemStack.getEnchantments().size() >= maxEnchantments) {
                     if (ConfigReader.getRemoveExtraEnchants() && clientItemStack.hasItemMeta()) {
                         int removeAmount = clientItemStack.getEnchantments().size() - maxEnchantments;
                         for (Enchantment enchant : clientItemStack.getEnchantments().keySet()) {

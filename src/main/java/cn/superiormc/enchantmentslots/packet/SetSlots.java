@@ -42,7 +42,7 @@ public class SetSlots extends GeneralPackets{
                     return;
                 }
                 int maxEnchantments = ItemLimits.getMaxEnchantments(event.getPlayer(), serverItemStack);
-                if (packet.getIntegers().read(0) == 0 && serverItemStack.getEnchantments().size() > 0 &&
+                if (packet.getIntegers().read(0) == 0 &&
                         serverItemStack.getEnchantments().size() >= maxEnchantments) {
                     if (ConfigReader.getRemoveExtraEnchants() && serverItemStack.hasItemMeta()) {
                         int removeAmount = serverItemStack.getEnchantments().size() - maxEnchantments;
