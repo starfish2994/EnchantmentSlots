@@ -9,8 +9,6 @@ settings:
   #   - eco (Recommend use if you are using EcoItems, EcoEnchants...)
   #   - ProtocolLib (Classic and stable choice)
   use-listener-plugin: ProtocolLib
-  # If you are using ExcellentEnchantments, set this option to LOWEST, and change ExcellentEnchantments config.yml
-  # Display.Mode option value from 1 to 2.
   # ProtocolLib Support value:
   #    LOWEST(0),
   #    LOW(1),

@@ -182,10 +182,10 @@ public class ConfigReader {
     }
     public static ListenerPriority getPriority() {
         return ListenerPriority.valueOf(EnchantmentSlots.instance.getConfig().getString(
-                "packet-listener-priority", "MONITOR").toUpperCase());
+                "settings.packet-listener-priority", "MONITOR").toUpperCase());
     }
     public static DisplayPriority getEcoPriority() {
         return DisplayPriority.valueOf(EnchantmentSlots.instance.getConfig().getString(
-                "packet-listener-priority", "HIGHEST").toUpperCase());
+                "settings.packet-listener-priority", "HIGHEST").toUpperCase());
     }
 }
