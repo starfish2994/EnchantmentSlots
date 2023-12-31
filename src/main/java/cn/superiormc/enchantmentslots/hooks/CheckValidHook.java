@@ -35,7 +35,7 @@ public class CheckValidHook {
         }
         if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("MMOItems")) {
             String tempVal1 = MMOItems.getID(itemStack);
-            if (tempVal1 != null) {
+            if (tempVal1 != null && !tempVal1.isEmpty()) {
                 if (ConfigReader.getUseTiers()) {
                     ItemTier tempVal2 = ItemTier.ofItem(NBTItem.get(itemStack));
                     if (tempVal2 != null) {
