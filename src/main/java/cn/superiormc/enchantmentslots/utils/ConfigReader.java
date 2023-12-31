@@ -52,9 +52,25 @@ public class ConfigReader {
         for (String tempVal2 : EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.black-items")) {
             tempVal1.add(tempVal2.toLowerCase());
         }
-        return tempVal1.contains(itemStack.getType().getKey().getKey()) ||
-                (EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.black-item-has-lore", false) &&
-                itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore());
+        if (tempVal1.contains(itemStack.getType().getKey().getKey())) {
+            return true;
+        }
+        if (!itemStack.hasItemMeta()) {
+            return false;
+        }
+        if (EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.black-item-has-lore", false) &&
+                itemStack.getItemMeta().hasLore()) {
+            return true;
+        }
+        if (!EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.black-item-contains-lore").isEmpty()) {
+            for (String lore : itemStack.getItemMeta().getLore()) {
+                if (EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.black-item-contains-lore").contains(lore)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
     }
     public static boolean getEnchantItemTrigger() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.trigger.EnchantItemEvent.enabled", true);

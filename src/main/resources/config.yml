@@ -112,6 +112,8 @@ settings:
     # This option support ProtocolLib only.
     black-creative-mode: true
     black-item-has-lore: false
+    # black-item-contains-lore:
+    #   - '----'
     black-items:
       - book
       - enchanted_book

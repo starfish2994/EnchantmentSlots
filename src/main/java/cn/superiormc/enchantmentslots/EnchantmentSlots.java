@@ -2,6 +2,7 @@ package cn.superiormc.enchantmentslots;
 
 import cn.superiormc.enchantmentslots.commands.MainCommand;
 import cn.superiormc.enchantmentslots.commands.MainTab;
+import cn.superiormc.enchantmentslots.events.EnchantGUIEnchant;
 import cn.superiormc.enchantmentslots.events.PlayerClick;
 import cn.superiormc.enchantmentslots.events.PlayerEnchant;
 import cn.superiormc.enchantmentslots.events.PlayerInventory;
@@ -40,6 +41,9 @@ public final class EnchantmentSlots extends JavaPlugin {
             Bukkit.getPluginManager().registerEvents(new PlayerClick(), this);
         }
         Bukkit.getPluginManager().registerEvents(new PlayerInventory(), this);
+        if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("EnchantGui")) {
+            Bukkit.getPluginManager().registerEvents(new EnchantGUIEnchant(), this);
+        }
     }
 
     public void registerCommands() {
