@@ -66,10 +66,13 @@ public class ConfigReader {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.trigger.Packet.enabled", true);
     }
     public static boolean getAutoAddSlotsAutoCheck() {
-        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.trigger.Packet.auto-check", true);
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.item-can-be-enchanted.auto-check", true);
     }
     public static List<String> getAutoAddSlotsItems() {
-        return EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.trigger.Packet.whitelist-items");
+        if (EnchantmentSlots.instance.getConfig().getStringList("settings.item-can-be-enchanted.whitelist-items").isEmpty()) {
+            return EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.trigger.Packet.whitelist-items");
+        }
+        return EnchantmentSlots.instance.getConfig().getStringList("settings.item-can-be-enchanted.whitelist-items");
     }
     public static List<String> getDisplayLore() {
         return EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.display-value");

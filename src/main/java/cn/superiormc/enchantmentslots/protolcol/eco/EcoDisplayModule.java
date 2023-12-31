@@ -18,8 +18,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EcoDisplayModule extends DisplayModule {
-
-    public Map<ItemStack, Player> itemCache = new HashMap<>();
     public static void init() {
         Display.registerDisplayModule(new EcoDisplayModule(EcoPlugin.getPlugin("eco"), ConfigReader.getEcoPriority()));
     }
@@ -38,6 +36,5 @@ public class EcoDisplayModule extends DisplayModule {
         }
         ItemModify.addLore(player, itemStack, true);
         ItemModify.serverToClient(player, itemStack);
-        itemCache.put(itemStack, player);
     }
 }

@@ -25,7 +25,77 @@ settings:
   #    HIGH(300),
   #    HIGHEST(400)
   # The value after the value just a number help you know it's level, do not type them in option.
-  packet-listener-priority: HIGHEST
+  packet-listener-priority: LOWEST
+  item-can-be-enchanted:
+    # Will try auto check whether the item can be enchanted.
+    # Recommend not use it. If not enable, will use whitelist-items instead.
+    auto-check: false
+    whitelist-items:
+      - wooden_pickaxe
+      - stone_pickaxe
+      - iron_pickaxe
+      - golden_pickaxe
+      - diamond_pickaxe
+      - netherite_pickaxe
+      - wooden_hoe
+      - stone_hoe
+      - iron_hoe
+      - golden_hoe
+      - diamond_hoe
+      - netherite_hoe
+      - wooden_axe
+      - stone_axe
+      - iron_axe
+      - golden_axe
+      - diamond_axe
+      - netherite_axe
+      - wooden_shovel
+      - stone_shovel
+      - iron_shovel
+      - golden_shovel
+      - diamond_shovel
+      - netherite_shovel
+      - wooden_sword
+      - stone_sword
+      - iron_sword
+      - golden_sword
+      - diamond_sword
+      - netherite_sword
+      - fishing_rod
+      - trident
+      - elytra
+      - bow
+      - crossbow
+      - carrot_on_a_stick
+      - shield
+      - turtle_helmet
+      - leather_helmet
+      - chainmail_helmet
+      - iron_helmet
+      - golden_helmet
+      - diamond_helmet
+      - netherite_helmet
+      - leather_chestplate
+      - chainmail_chestplate
+      - iron_chestplate
+      - golden_chestplate
+      - diamond_chestplate
+      - netherite_chestplate
+      - leather_leggings
+      - chainmail_leggings
+      - iron_leggings
+      - golden_leggings
+      - diamond_leggings
+      - netherite_leggings
+      - leather_boots
+      - chainmail_boots
+      - iron_boots
+      - golden_boots
+      - diamond_boots
+      - netherite_boots
+      - book
+      - enchanted_book
+  # Only item that can be enchanted will be added lore.
   add-lore:
     # Does not support other packed-based item, enchants plugins.
     # Like EcoEnchants, EcoItems. (You can also try eco as use-listener-plugin, then change packet-listener-priority)
@@ -61,74 +131,6 @@ settings:
       # Recommend not enable it because it will lead to item in third-plugin GUI will also be added the lore.
       Packet:
         enabled: false
-        # Will try auto check whether the item can be enchanted.
-        # Recommend not use it. If not enable, will use whitelist-items instead.
-        auto-check: false
-        whitelist-items:
-          - wooden_pickaxe
-          - stone_pickaxe
-          - iron_pickaxe
-          - golden_pickaxe
-          - diamond_pickaxe
-          - netherite_pickaxe
-          - wooden_hoe
-          - stone_hoe
-          - iron_hoe
-          - golden_hoe
-          - diamond_hoe
-          - netherite_hoe
-          - wooden_axe
-          - stone_axe
-          - iron_axe
-          - golden_axe
-          - diamond_axe
-          - netherite_axe
-          - wooden_shovel
-          - stone_shovel
-          - iron_shovel
-          - golden_shovel
-          - diamond_shovel
-          - netherite_shovel
-          - wooden_sword
-          - stone_sword
-          - iron_sword
-          - golden_sword
-          - diamond_sword
-          - netherite_sword
-          - fishing_rod
-          - trident
-          - elytra
-          - bow
-          - crossbow
-          - carrot_on_a_stick
-          - shield
-          - turtle_helmet
-          - leather_helmet
-          - chainmail_helmet
-          - iron_helmet
-          - golden_helmet
-          - diamond_helmet
-          - netherite_helmet
-          - leather_chestplate
-          - chainmail_chestplate
-          - iron_chestplate
-          - golden_chestplate
-          - diamond_chestplate
-          - netherite_chestplate
-          - leather_leggings
-          - chainmail_leggings
-          - iron_leggings
-          - golden_leggings
-          - diamond_leggings
-          - netherite_leggings
-          - leather_boots
-          - chainmail_boots
-          - iron_boots
-          - golden_boots
-          - diamond_boots
-          - netherite_boots
-          - book
-          - enchanted_book
       EnchantItemEvent:
         enabled: true
       InventoryClickEvent:

@@ -1,9 +1,11 @@
 package cn.superiormc.enchantmentslots.utils;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
+import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -63,6 +65,11 @@ public class ItemLimits {
     }
 
     public static boolean canEnchant(ItemStack itemStack) {
+        ConfigurationSection section = EnchantmentSlots.instance.getConfig().
+                getConfigurationSection("settings.default-slots-by-item");
+        if (section != null && section.getKeys(false).contains(CheckValidHook.checkValid(itemStack))) {
+            return true;
+        }
         if (!ConfigReader.getAutoAddSlotsAutoCheck()) {
             return ConfigReader.getAutoAddSlotsItems().contains(itemStack.getType().name().toLowerCase()) ||
                     ConfigReader.getAutoAddSlotsItems().contains(itemStack.getType().name().toUpperCase());
