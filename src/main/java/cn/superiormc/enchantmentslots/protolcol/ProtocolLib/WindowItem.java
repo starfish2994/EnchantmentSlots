@@ -4,6 +4,7 @@ import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.utils.ConfigReader;
 import cn.superiormc.enchantmentslots.utils.ItemModify;
 import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLib;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
@@ -38,6 +39,14 @@ public class WindowItem extends GeneralPackets {
                     return;
                 }
                 PacketContainer packet = event.getPacket();
+                StructureModifier<ItemStack> singleItemStackStructureModifier = packet.getItemModifier();
+                if (singleItemStackStructureModifier.size() != 0) {
+                    ItemStack serverItemStack = singleItemStackStructureModifier.read(0);
+                    ItemModify.addLore(event.getPlayer(), serverItemStack, true);
+                    ItemStack clientItemStack = ItemModify.serverToClient(event.getPlayer(), serverItemStack);
+                    // client 是加过 Lore 的，server 是没加过的！
+                    singleItemStackStructureModifier.write(0, clientItemStack);
+                }
                 StructureModifier<List<ItemStack>> itemStackStructureModifier = packet.getItemListModifier();
                 List<ItemStack> serverItemStack = itemStackStructureModifier.read(0);
                 List<ItemStack> clientItemStack = new ArrayList<>();

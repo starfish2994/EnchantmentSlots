@@ -57,7 +57,7 @@ public class SetSlots extends GeneralPackets {
                     }
                     if (ConfigReader.getDebug()) {
                         Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §f" +
-                                "Packet Slot ID: " + slot + " , spigot Slot ID: " + spigotSlot + ".");
+                                "Packet Slot ID: " + slot + ", Spigot Slot ID: " + spigotSlot + ".");
                     }
                     ItemStack tempItemStack = event.getPlayer().getInventory().getItem(spigotSlot);
                     if (tempItemStack == null || tempItemStack.getType().isAir()) {

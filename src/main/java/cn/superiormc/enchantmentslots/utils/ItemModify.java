@@ -2,7 +2,7 @@ package cn.superiormc.enchantmentslots.utils;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.protolcol.GeneralProtolcol;
-import cn.superiormc.enchantmentslots.protolcol.ProtocolLib.GeneralPackets;
+import com.willfp.eco.util.StringUtils;
 import com.willfp.ecoenchants.enchant.EcoEnchant;
 import com.willfp.ecoenchants.enchant.EcoEnchants;
 import org.bukkit.Bukkit;
@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import su.nexmedia.engine.utils.Colorizer;
 import su.nightexpress.excellentenchants.enchantment.impl.ExcellentEnchant;
 import su.nightexpress.excellentenchants.enchantment.registry.EnchantRegistry;
 
@@ -42,7 +42,8 @@ public class ItemModify {
                     for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
                         String value = ColorParser.parse(
                                 ConfigReader.getEnchantPlaceholder().
-                                        replace("{enchant_name}", getEnchantName(enchantment)).
+                                        replace("{enchant_name}", getEnchantName(enchantment, true)).
+                                        replace("{enchant_raw_name}", ItemModify.getEnchantName(enchantment, false)).
                                         replace("{enchant_level}", String.valueOf(
                                                 itemStack.getEnchantments().get(enchantment))).
                                         replace("{enchant_level_roman}", NumberUtil.convertToRoman(
@@ -86,7 +87,8 @@ public class ItemModify {
                     for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
                         String value = ColorParser.parse(
                                 ConfigReader.getEnchantPlaceholder().
-                                        replace("{enchant_name}", getEnchantName(enchantment)).
+                                        replace("{enchant_name}", getEnchantName(enchantment, true)).
+                                        replace("{enchant_raw_name}", ItemModify.getEnchantName(enchantment, false)).
                                         replace("{enchant_level}", String.valueOf(
                                                 itemStack.getEnchantments().get(enchantment))).
                                         replace("{enchant_level_roman}", NumberUtil.convertToRoman(
@@ -152,7 +154,8 @@ public class ItemModify {
                 Matcher matcher2 = pattern2.matcher(str);
                 if (matcher2.find()) {
                     for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
-                        if (matcher2.group().equals(getEnchantName(enchantment))) {
+                        if (matcher2.group().equals(getEnchantName(enchantment, false)) ||
+                                matcher2.group().equals(getEnchantName(enchantment, true))) {
                             continue bigfor;
                         }
                     }
@@ -210,20 +213,21 @@ public class ItemModify {
         }
     }
 
-    public static String getEnchantName(Enchantment enchantment) {
+    public static String getEnchantName(Enchantment enchantment, boolean showTierColor) {
         if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("EcoEnchants")) {
             if (EnchantmentSlots.instance.getServer().getPluginManager().getPlugin("EcoEnchants").getDescription().
                     getVersion().startsWith("11")) {
                 EcoEnchant ecoEnchant = EcoEnchants.INSTANCE.getByID(enchantment.getKey().getKey());
                 if (ecoEnchant != null) {
-                    return ecoEnchant.getRawDisplayName();
+                    String name = ecoEnchant.getRawDisplayName();
+                    if (showTierColor) {
+                        name = ecoEnchant.getType().getFormat() + name;
+                    }
+                    return StringUtils.format(name);
                 }
             }
             else {
                 com.willfp.ecoenchants.enchants.EcoEnchant ecoEnchant = com.willfp.ecoenchants.enchants.EcoEnchants.getByKey(enchantment.getKey());
-                if (ConfigReader.getDebug()) {
-                    Bukkit.getConsoleSender().sendMessage(com.willfp.ecoenchants.enchants.EcoEnchants.keySet() + "");
-                }
                 if (ecoEnchant != null) {
                     return ecoEnchant.getDisplayName();
                 }
@@ -231,9 +235,13 @@ public class ItemModify {
         } else if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("ExcellentEnchants")) {
             ExcellentEnchant excellentEnchant = EnchantRegistry.getByKey(enchantment.getKey());
             if (excellentEnchant != null) {
-                return excellentEnchant.getDisplayName();
+                String name = excellentEnchant.getDisplayName();
+                if (showTierColor) {
+                    name = excellentEnchant.getTier().getColor() + name;
+                }
+                return Colorizer.apply(name);
             }
         }
-        return ConfigReader.getEnchantmentName(enchantment);
+        return ColorParser.parse(ConfigReader.getEnchantmentName(enchantment));
     }
 }

@@ -121,7 +121,7 @@ settings:
     # Only change this if your server has stopped!
     placeholder:
       enchants:
-        # Other placeholder: {enchant_level_roman}
+        # Other placeholder: {enchant_level_roman}, {raw_enchant_name}
         format: '&6  {enchant_name} {enchant_level}'
       empty-slots:
         format: '&7  --- Empty Slot ---'

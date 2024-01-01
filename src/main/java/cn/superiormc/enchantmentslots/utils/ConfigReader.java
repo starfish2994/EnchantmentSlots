@@ -100,7 +100,8 @@ public class ConfigReader {
                 for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
                     tempLore.add(ColorParser.parse(
                             ConfigReader.getEnchantPlaceholder().
-                                    replace("{enchant_name}", ItemModify.getEnchantName(enchantment)).
+                                    replace("{enchant_name}", ItemModify.getEnchantName(enchantment, true)).
+                                    replace("{enchant_raw_name}", ItemModify.getEnchantName(enchantment, false)).
                                     replace("{enchant_level}", String.valueOf(
                                             itemStack.getEnchantments().get(enchantment))).
                                     replace("{enchant_level_roman}", NumberUtil.convertToRoman(

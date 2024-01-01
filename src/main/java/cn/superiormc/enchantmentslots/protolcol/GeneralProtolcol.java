@@ -3,6 +3,7 @@ package cn.superiormc.enchantmentslots.protolcol;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.protolcol.ProtocolLib.SetCreativeSlots;
 import cn.superiormc.enchantmentslots.protolcol.ProtocolLib.SetSlots;
+import cn.superiormc.enchantmentslots.protolcol.ProtocolLib.Test;
 import cn.superiormc.enchantmentslots.protolcol.ProtocolLib.WindowItem;
 import cn.superiormc.enchantmentslots.protolcol.eco.EcoDisplayModule;
 import org.bukkit.Bukkit;
