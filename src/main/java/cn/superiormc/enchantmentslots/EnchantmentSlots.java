@@ -18,6 +18,9 @@ import java.util.*;
 public final class EnchantmentSlots extends JavaPlugin {
 
     public static JavaPlugin instance;
+
+    public static boolean demoVersion = false;
+
     @Override
     public void onEnable() {
         instance = this;

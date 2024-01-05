@@ -158,10 +158,13 @@ settings:
   slots-conditions:
     vip:
       - 'permission: group.vip'
-  # Weather use item tier instead of item ID to identify item slots.
+  # Whether you use item tier instead of item ID to identify item slots.
   # If this item plugin don't have tier, will still use Item ID as identify.
   use-tier-identify-slots: false
   close-inventory-if-reached-limit: true
+  # Whether cancel add slot or just set item slot to max slot value if item reached max slot limit
+  # by using add slot items.
+  cancel-add-slot-if-reached-max-slot: true
   # This option support ProtocolLib only.
   remove-illegal-extra-enchant: true
 

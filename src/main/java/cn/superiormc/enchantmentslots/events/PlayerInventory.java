@@ -46,8 +46,14 @@ public class PlayerInventory implements Listener {
         }
         int maxValue = ConfigReader.getMaxLimits(player, targetItem);
         if (maxValue != -1 && baseValue + value >= maxValue) {
-            player.sendMessage(ConfigReader.getMessages("max-slots-reached"));
-            return;
+            if (ConfigReader.getCancelMaxLimits() || baseValue >= maxValue) {
+                player.sendMessage(ConfigReader.getMessages("max-slots-reached"));
+                return;
+            } else {
+                extraItem.setAmount(extraItem.getAmount() - 1);
+                ItemLimits.setMaxEnchantments(targetItem, maxValue);
+                player.sendMessage(ConfigReader.getMessages("success-add").replace("%amount%", String.valueOf(maxValue - baseValue)));
+            }
         }
         extraItem.setAmount(extraItem.getAmount() - 1);
         ItemLimits.setMaxEnchantments(targetItem, baseValue + value);

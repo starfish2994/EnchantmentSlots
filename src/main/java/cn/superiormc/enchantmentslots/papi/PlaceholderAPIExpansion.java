@@ -31,7 +31,7 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
     @NotNull
     @Override
     public String getIdentifier() {
-        return "enchantmentslot";
+        return "enchantmentslots";
     }
 
     @Override
