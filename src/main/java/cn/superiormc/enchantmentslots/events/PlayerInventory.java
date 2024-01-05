@@ -53,6 +53,7 @@ public class PlayerInventory implements Listener {
                 extraItem.setAmount(extraItem.getAmount() - 1);
                 ItemLimits.setMaxEnchantments(targetItem, maxValue);
                 player.sendMessage(ConfigReader.getMessages("success-add").replace("%amount%", String.valueOf(maxValue - baseValue)));
+                return;
             }
         }
         extraItem.setAmount(extraItem.getAmount() - 1);
