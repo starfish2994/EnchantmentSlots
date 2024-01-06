@@ -215,22 +215,25 @@ public class ItemModify {
 
     public static String getEnchantName(Enchantment enchantment, boolean showTierColor) {
         if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("EcoEnchants")) {
-            if (EnchantmentSlots.instance.getServer().getPluginManager().getPlugin("EcoEnchants").getDescription().
-                    getVersion().startsWith("11")) {
-                EcoEnchant ecoEnchant = EcoEnchants.INSTANCE.getByID(enchantment.getKey().getKey());
-                if (ecoEnchant != null) {
-                    String name = ecoEnchant.getRawDisplayName();
-                    if (showTierColor) {
-                        name = ecoEnchant.getType().getFormat() + name;
+            try {
+                if (Integer.valueOf(EnchantmentSlots.instance.getServer().getPluginManager().getPlugin("EcoEnchants").getDescription().
+                        getVersion().split("\\.")[0]) > 10) {
+                    EcoEnchant ecoEnchant = EcoEnchants.INSTANCE.getByID(enchantment.getKey().getKey());
+                    if (ecoEnchant != null) {
+                        String name = ecoEnchant.getRawDisplayName();
+                        if (showTierColor) {
+                            name = ecoEnchant.getType().getFormat() + name;
+                        }
+                        return StringUtils.format(name);
                     }
-                    return StringUtils.format(name);
+                } else {
+                    com.willfp.ecoenchants.enchants.EcoEnchant ecoEnchant = com.willfp.ecoenchants.enchants.EcoEnchants.getByKey(enchantment.getKey());
+                    if (ecoEnchant != null) {
+                        return ecoEnchant.getDisplayName();
+                    }
                 }
-            }
-            else {
-                com.willfp.ecoenchants.enchants.EcoEnchant ecoEnchant = com.willfp.ecoenchants.enchants.EcoEnchants.getByKey(enchantment.getKey());
-                if (ecoEnchant != null) {
-                    return ecoEnchant.getDisplayName();
-                }
+            } catch (Exception ep) {
+                return ColorParser.parse(ConfigReader.getEnchantmentName(enchantment));
             }
         } else if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("ExcellentEnchants")) {
             ExcellentEnchant excellentEnchant = EnchantRegistry.getByKey(enchantment.getKey());
