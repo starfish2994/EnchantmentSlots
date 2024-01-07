@@ -2,13 +2,14 @@ package cn.superiormc.enchantmentslots;
 
 import cn.superiormc.enchantmentslots.commands.MainCommand;
 import cn.superiormc.enchantmentslots.commands.MainTab;
+import cn.superiormc.enchantmentslots.configs.Messages;
 import cn.superiormc.enchantmentslots.events.EnchantGUIEnchant;
 import cn.superiormc.enchantmentslots.events.PlayerClick;
 import cn.superiormc.enchantmentslots.events.PlayerEnchant;
 import cn.superiormc.enchantmentslots.events.PlayerInventory;
 import cn.superiormc.enchantmentslots.papi.PlaceholderAPIExpansion;
 import cn.superiormc.enchantmentslots.protolcol.GeneralProtolcol;
-import cn.superiormc.enchantmentslots.utils.ConfigReader;
+import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import com.comphenix.protocol.ProtocolLibrary;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,7 +18,7 @@ import java.util.*;
 
 public final class EnchantmentSlots extends JavaPlugin {
 
-    public static JavaPlugin instance;
+    public static EnchantmentSlots instance;
 
     public static boolean demoVersion = false;
 
@@ -28,6 +29,7 @@ public final class EnchantmentSlots extends JavaPlugin {
         registerEvents();
         registerCommands();
         registerPackets();
+        registerLanguage();
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             PlaceholderAPIExpansion.papi = new PlaceholderAPIExpansion(this);
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into PlaceholderAPI...");
@@ -64,5 +66,9 @@ public final class EnchantmentSlots extends JavaPlugin {
 
     public void registerPackets() {
         GeneralProtolcol.init();
+    }
+
+    public void registerLanguage() {
+        Messages.init();
     }
 }

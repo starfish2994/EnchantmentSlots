@@ -1,10 +1,7 @@
 package cn.superiormc.enchantmentslots.utils;
 
-import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.protolcol.GeneralProtolcol;
-import com.willfp.eco.util.StringUtils;
-import com.willfp.ecoenchants.enchant.EcoEnchant;
-import com.willfp.ecoenchants.enchant.EcoEnchants;
+import cn.superiormc.enchantmentslots.configs.ConfigReader;
+import cn.superiormc.enchantmentslots.configs.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -14,17 +11,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-import su.nexmedia.engine.utils.Colorizer;
-import su.nightexpress.excellentenchants.enchantment.impl.ExcellentEnchant;
-import su.nightexpress.excellentenchants.enchantment.registry.EnchantRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class ItemModify {
+
+    public static String lorePrefix = "";
 
     public static ItemStack serverToClient(@NotNull Player player, @NotNull ItemStack itemStack) {
         if (ItemLimits.getRealMaxEnchantments(player, itemStack) == 0) {
@@ -42,15 +36,13 @@ public class ItemModify {
                     for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
                         String value = ColorParser.parse(
                                 ConfigReader.getEnchantPlaceholder().
-                                        replace("{enchant_name}", getEnchantName(enchantment, true)).
-                                        replace("{enchant_raw_name}", ItemModify.getEnchantName(enchantment, false)).
+                                        replace("{enchant_name}", Messages.getEnchantName(enchantment, true)).
+                                        replace("{enchant_raw_name}", Messages.getEnchantName(enchantment, false)).
                                         replace("{enchant_level}", String.valueOf(
                                                 itemStack.getEnchantments().get(enchantment))).
                                         replace("{enchant_level_roman}", NumberUtil.convertToRoman(
                                                 itemStack.getEnchantments().get(enchantment))));
-                        if (GeneralProtolcol.plugin.equals("eco")) {
-                            value = "§z" + value;
-                        }
+                        value = lorePrefix + value;
                         lore.add(value);
                     }
                     itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -60,17 +52,13 @@ public class ItemModify {
                     int i = ItemLimits.getMaxEnchantments(player, itemStack) - itemStack.getEnchantments().size();
                     while (i > 0) {
                         String value = ColorParser.parse(ConfigReader.getEmptySlotPlaceholder());
-                        if (GeneralProtolcol.plugin.equals("eco")) {
-                            value = "§z" + value;
-                        }
+                        value = lorePrefix + value;
                         lore.add(value);
                         i--;
                     }
                     continue;
                 }
-                if (GeneralProtolcol.plugin.equals("eco")) {
-                    line = "§z" + line;
-                }
+                line = lorePrefix + line;
                 lore.add(ColorParser.parse(line)
                         .replace("{slot_amount}", String.valueOf(ItemLimits.getMaxEnchantments(player, itemStack)))
                         .replace("{enchant_amount}", String.valueOf(itemStack.getEnchantments().size())));
@@ -87,15 +75,13 @@ public class ItemModify {
                     for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
                         String value = ColorParser.parse(
                                 ConfigReader.getEnchantPlaceholder().
-                                        replace("{enchant_name}", getEnchantName(enchantment, true)).
-                                        replace("{enchant_raw_name}", ItemModify.getEnchantName(enchantment, false)).
+                                        replace("{enchant_name}", Messages.getEnchantName(enchantment, true)).
+                                        replace("{enchant_raw_name}", Messages.getEnchantName(enchantment, false)).
                                         replace("{enchant_level}", String.valueOf(
                                                 itemStack.getEnchantments().get(enchantment))).
                                         replace("{enchant_level_roman}", NumberUtil.convertToRoman(
                                                 itemStack.getEnchantments().get(enchantment))));
-                        if (GeneralProtolcol.plugin.equals("eco")) {
-                            value = "§z" + value;
-                        }
+                        value = lorePrefix + value;
                         lore.add(value);
                     }
                     itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -105,17 +91,13 @@ public class ItemModify {
                     int i = ItemLimits.getMaxEnchantments(player, itemStack) - itemStack.getEnchantments().size();
                     while (i > 0) {
                         String value = ColorParser.parse(ConfigReader.getEmptySlotPlaceholder());
-                        if (GeneralProtolcol.plugin.equals("eco")) {
-                            value = "§z" + value;
-                        }
+                        value = lorePrefix + value;
                         lore.add(value);
                         i--;
                     }
                     continue;
                 }
-                if (GeneralProtolcol.plugin.equals("eco")) {
-                    line = "§z" + line;
-                }
+                line = lorePrefix + line;
                 lore.add(ColorParser.parse(line)
                         .replace("{slot_amount}", String.valueOf(ItemLimits.getMaxEnchantments(player, itemStack)))
                         .replace("{enchant_amount}", String.valueOf(itemStack.getEnchantments().size())));
@@ -143,37 +125,9 @@ public class ItemModify {
         List<String> newLore = new ArrayList<>();
         if (itemMeta.hasLore()) {
             lore = itemMeta.getLore();
-            bigfor:
             for (String str : lore) {
-                Pattern pattern2 = Pattern.compile(ColorParser.parse(
-                                ConfigReader.getEnchantPlaceholder()).
-                        replace("{enchant_name}", "(.*)").
-                        replace("{enchant_level}", "(\\d+)").
-                        replace("{enchant_level_roman}", "(.*)"),
-                        Pattern.CASE_INSENSITIVE);
-                Matcher matcher2 = pattern2.matcher(str);
-                if (matcher2.find()) {
-                    for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
-                        if (matcher2.group().equals(getEnchantName(enchantment, false)) ||
-                                matcher2.group().equals(getEnchantName(enchantment, true))) {
-                            continue bigfor;
-                        }
-                    }
-                }
-                if (str.equalsIgnoreCase(ColorParser.parse(ConfigReader.getEmptySlotPlaceholder()))) {
+                if (str.startsWith(lorePrefix)) {
                     continue;
-                }
-                for (String configStr : ConfigReader.getDisplayLore()) {
-                    if (!configStr.equals("{enchants}") && !configStr.equals("{empty_slots}")) {
-                        itemMeta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
-                        Pattern pattern1 = Pattern.compile(ColorParser.parse(configStr)
-                                .replace("{slot_amount}", "(\\d+)")
-                                .replace("{enchant_amount}", "(\\d+)"), Pattern.CASE_INSENSITIVE);
-                        Matcher matcher1 = pattern1.matcher(str);
-                        if (matcher1.find()) {
-                            continue bigfor;
-                        }
-                    }
                 }
                 newLore.add(str);
             }
@@ -211,40 +165,5 @@ public class ItemModify {
                     ConfigReader.getDefaultLimits(player, item));
             item.setItemMeta(meta);
         }
-    }
-
-    public static String getEnchantName(Enchantment enchantment, boolean showTierColor) {
-        if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("EcoEnchants")) {
-            try {
-                if (Integer.valueOf(EnchantmentSlots.instance.getServer().getPluginManager().getPlugin("EcoEnchants").getDescription().
-                        getVersion().split("\\.")[0]) > 10) {
-                    EcoEnchant ecoEnchant = EcoEnchants.INSTANCE.getByID(enchantment.getKey().getKey());
-                    if (ecoEnchant != null) {
-                        String name = ecoEnchant.getRawDisplayName();
-                        if (showTierColor) {
-                            name = ecoEnchant.getType().getFormat() + name;
-                        }
-                        return StringUtils.format(name);
-                    }
-                } else {
-                    com.willfp.ecoenchants.enchants.EcoEnchant ecoEnchant = com.willfp.ecoenchants.enchants.EcoEnchants.getByKey(enchantment.getKey());
-                    if (ecoEnchant != null) {
-                        return ecoEnchant.getDisplayName();
-                    }
-                }
-            } catch (Exception ep) {
-                return ColorParser.parse(ConfigReader.getEnchantmentName(enchantment));
-            }
-        } else if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("ExcellentEnchants")) {
-            ExcellentEnchant excellentEnchant = EnchantRegistry.getByKey(enchantment.getKey());
-            if (excellentEnchant != null) {
-                String name = excellentEnchant.getDisplayName();
-                if (showTierColor) {
-                    name = excellentEnchant.getTier().getColor() + name;
-                }
-                return Colorizer.apply(name);
-            }
-        }
-        return ColorParser.parse(ConfigReader.getEnchantmentName(enchantment));
     }
 }

@@ -1,8 +1,7 @@
 package cn.superiormc.enchantmentslots.commands;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.utils.ConfigReader;
-import org.bukkit.Bukkit;
+import cn.superiormc.enchantmentslots.configs.Messages;
 import org.bukkit.command.CommandSender;
 
 public class SubReload {
@@ -10,10 +9,11 @@ public class SubReload {
     public static void SubReloadCommand(CommandSender sender) {
         if (sender.hasPermission("enchantmentslots.admin")) {
             EnchantmentSlots.instance.reloadConfig();
-            sender.sendMessage(ConfigReader.getMessages("plugin-reloaded"));
+            EnchantmentSlots.instance.registerLanguage();
+            sender.sendMessage(Messages.getMessages("plugin-reloaded"));
         }
         else {
-            sender.sendMessage(ConfigReader.getMessages("error-miss-permission"));
+            sender.sendMessage(Messages.getMessages("error-miss-permission"));
         }
     }
 }

@@ -1,21 +1,15 @@
 package cn.superiormc.enchantmentslots.protolcol.eco;
 
-import cn.superiormc.enchantmentslots.utils.ConfigReader;
-import cn.superiormc.enchantmentslots.utils.ItemLimits;
+import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.utils.ItemModify;
 import com.willfp.eco.core.EcoPlugin;
 import com.willfp.eco.core.display.Display;
 import com.willfp.eco.core.display.DisplayModule;
 import com.willfp.eco.core.display.DisplayPriority;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class EcoDisplayModule extends DisplayModule {
     public static void init() {
@@ -28,6 +22,19 @@ public class EcoDisplayModule extends DisplayModule {
 
     @Override
     public void display(@NotNull ItemStack itemStack, @Nullable Player player, @NotNull Object... args) {
+        //try {
+        //    Class<?> yourClass = Display.class; // 替换为包含 REGISTERED_MODULES 的类
+        //    Field field = yourClass.getDeclaredField("REGISTERED_MODULES");
+        //    field.setAccessible(true); // 设置私有变量的可访问性
+        //    Map<Integer, List<DisplayModule>> registeredModules = (Map<Integer, List<DisplayModule>>) field.get(null);
+        //    for (int b : registeredModules.keySet()) {
+        //        for (DisplayModule displayModule : registeredModules.get(b)) {
+        //            Bukkit.getConsoleSender().sendMessage(displayModule.getPluginName() + "  " + b);
+        //        }
+        //    }
+        //} catch (NoSuchFieldException | IllegalAccessException e) {
+        //    e.printStackTrace();
+        //}
         if (player == null) {
             return;
         }

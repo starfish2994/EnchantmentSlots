@@ -1,6 +1,7 @@
 package cn.superiormc.enchantmentslots.commands;
 
-import cn.superiormc.enchantmentslots.utils.ConfigReader;
+import cn.superiormc.enchantmentslots.configs.ConfigReader;
+import cn.superiormc.enchantmentslots.configs.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,7 +11,7 @@ public class MainCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
             command.setUsage(null);
-            sender.sendMessage(ConfigReader.getMessages("error-args"));
+            sender.sendMessage(Messages.getMessages("error-args"));
             return false;
         } else {
             sendCommandArg(sender, args);
@@ -33,7 +34,7 @@ public class MainCommand implements CommandExecutor {
         }
         else
         {
-            sender.sendMessage(ConfigReader.getMessages("error-args"));
+            sender.sendMessage(Messages.getMessages("error-args"));
         }
     }
 }

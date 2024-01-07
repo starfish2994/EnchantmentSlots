@@ -1,8 +1,8 @@
-package cn.superiormc.enchantmentslots.utils;
+package cn.superiormc.enchantmentslots.configs;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
-import cn.superiormc.enchantmentslots.protolcol.GeneralProtolcol;
+import cn.superiormc.enchantmentslots.utils.*;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.willfp.eco.core.display.DisplayPriority;
 import org.bukkit.Bukkit;
@@ -47,9 +47,6 @@ public class ConfigReader {
         return EnchantmentSlots.instance.getConfig().getString("settings.add-lore.placeholder.empty-slots.format",
                 "&7  --- Empty Slot ---");
     }
-    public static boolean getBlackCreativeMode() {
-        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.black-creative-mode", true);
-    }
     public static boolean getBlackItems(ItemStack itemStack) {
         List<String> tempVal1 = new ArrayList<>();
         for (String tempVal2 : EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.black-items")) {
@@ -65,10 +62,13 @@ public class ConfigReader {
                 itemStack.getItemMeta().hasLore()) {
             return true;
         }
-        if (!EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.black-item-contains-lore").isEmpty()) {
-            for (String lore : itemStack.getItemMeta().getLore()) {
-                if (EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.black-item-contains-lore").contains(lore)) {
-                    return true;
+        if (!EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.black-item-contains-lore").isEmpty()
+        && itemStack.getItemMeta().hasLore()) {
+            for (String hasLore : itemStack.getItemMeta().getLore()) {
+                for (String requiredLore : EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.black-item-contains-lore")) {
+                    if (hasLore.contains(requiredLore)) {
+                        return true;
+                    }
                 }
             }
             return false;
@@ -103,8 +103,8 @@ public class ConfigReader {
                 for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
                     tempLore.add(ColorParser.parse(
                             ConfigReader.getEnchantPlaceholder().
-                                    replace("{enchant_name}", ItemModify.getEnchantName(enchantment, true)).
-                                    replace("{enchant_raw_name}", ItemModify.getEnchantName(enchantment, false)).
+                                    replace("{enchant_name}", Messages.getEnchantName(enchantment, true)).
+                                    replace("{enchant_raw_name}", Messages.getEnchantName(enchantment, false)).
                                     replace("{enchant_level}", String.valueOf(
                                             itemStack.getEnchantments().get(enchantment))).
                                     replace("{enchant_level_roman}", NumberUtil.convertToRoman(
@@ -196,9 +196,6 @@ public class ConfigReader {
             result.add(-1);
         }
         return Collections.max(result);
-    }
-    public static String getMessages(String key) {
-        return ColorParser.parse(EnchantmentSlots.instance.getConfig().getString("messages." + key));
     }
     public static ListenerPriority getPriority() {
         return ListenerPriority.valueOf(EnchantmentSlots.instance.getConfig().getString(

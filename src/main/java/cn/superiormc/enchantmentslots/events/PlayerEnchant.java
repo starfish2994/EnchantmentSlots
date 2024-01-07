@@ -1,6 +1,7 @@
 package cn.superiormc.enchantmentslots.events;
 
-import cn.superiormc.enchantmentslots.utils.ConfigReader;
+import cn.superiormc.enchantmentslots.configs.ConfigReader;
+import cn.superiormc.enchantmentslots.configs.Messages;
 import cn.superiormc.enchantmentslots.utils.ItemLimits;
 import cn.superiormc.enchantmentslots.utils.ItemModify;
 import org.bukkit.entity.Player;
@@ -21,7 +22,7 @@ public class PlayerEnchant implements Listener {
             if (ConfigReader.getCloseInventory()) {
                 player.closeInventory();
             }
-            player.sendMessage(ConfigReader.getMessages("slots-limit-reached"));
+            player.sendMessage(Messages.getMessages("slots-limit-reached"));
         }
     }
 }

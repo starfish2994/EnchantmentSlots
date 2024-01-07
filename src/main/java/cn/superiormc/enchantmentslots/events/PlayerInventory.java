@@ -1,6 +1,7 @@
 package cn.superiormc.enchantmentslots.events;
 
-import cn.superiormc.enchantmentslots.utils.ConfigReader;
+import cn.superiormc.enchantmentslots.configs.ConfigReader;
+import cn.superiormc.enchantmentslots.configs.Messages;
 import cn.superiormc.enchantmentslots.utils.ExtraSlotsItem;
 import cn.superiormc.enchantmentslots.utils.ItemLimits;
 import org.bukkit.entity.Player;
@@ -47,17 +48,17 @@ public class PlayerInventory implements Listener {
         int maxValue = ConfigReader.getMaxLimits(player, targetItem);
         if (maxValue != -1 && baseValue + value >= maxValue) {
             if (ConfigReader.getCancelMaxLimits() || baseValue >= maxValue) {
-                player.sendMessage(ConfigReader.getMessages("max-slots-reached"));
+                player.sendMessage(Messages.getMessages("max-slots-reached"));
                 return;
             } else {
                 extraItem.setAmount(extraItem.getAmount() - 1);
                 ItemLimits.setMaxEnchantments(targetItem, maxValue);
-                player.sendMessage(ConfigReader.getMessages("success-add").replace("%amount%", String.valueOf(maxValue - baseValue)));
+                player.sendMessage(Messages.getMessages("success-add").replace("%amount%", String.valueOf(maxValue - baseValue)));
                 return;
             }
         }
         extraItem.setAmount(extraItem.getAmount() - 1);
         ItemLimits.setMaxEnchantments(targetItem, baseValue + value);
-        player.sendMessage(ConfigReader.getMessages("success-add").replace("%amount%", String.valueOf(value)));
+        player.sendMessage(Messages.getMessages("success-add").replace("%amount%", String.valueOf(value)));
     }
 }

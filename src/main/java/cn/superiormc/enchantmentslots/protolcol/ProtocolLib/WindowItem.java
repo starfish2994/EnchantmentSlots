@@ -1,7 +1,7 @@
 package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.utils.ConfigReader;
+import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.utils.ItemModify;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -32,9 +32,6 @@ public class WindowItem extends GeneralPackets {
                             "Found WindowsItem packet.");
                 }
                 if (event.getPlayer() == null) {
-                    return;
-                }
-                if (ConfigReader.getBlackCreativeMode() && event.getPlayer().getGameMode() == GameMode.CREATIVE) {
                     return;
                 }
                 PacketContainer packet = event.getPacket();

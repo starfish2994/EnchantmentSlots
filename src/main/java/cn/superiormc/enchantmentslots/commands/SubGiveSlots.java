@@ -1,6 +1,6 @@
 package cn.superiormc.enchantmentslots.commands;
 
-import cn.superiormc.enchantmentslots.utils.ConfigReader;
+import cn.superiormc.enchantmentslots.configs.Messages;
 import cn.superiormc.enchantmentslots.utils.ExtraSlotsItem;
 import cn.superiormc.enchantmentslots.utils.ItemLimits;
 import org.bukkit.Bukkit;
@@ -16,12 +16,12 @@ public class SubGiveSlots {
             if (args.length >= 3) {
                 ItemStack item = ExtraSlotsItem.getExtraSlotItem(args[1]);
                 if (item == null) {
-                    sender.sendMessage(ConfigReader.getMessages("error-no-item"));
+                    sender.sendMessage(Messages.getMessages("error-no-item"));
                     return;
                 }
                 Player player = Bukkit.getPlayer(args[2]);
                 if (player == null) {
-                    sender.sendMessage(ConfigReader.getMessages("error-player-not-found").replace(
+                    sender.sendMessage(Messages.getMessages("error-player-not-found").replace(
                             "%player%", args[2]
                     ));
                     return;
@@ -32,31 +32,31 @@ public class SubGiveSlots {
                 }
                 item.setAmount(amount);
                 player.getInventory().addItem(item);
-                sender.sendMessage(ConfigReader.getMessages("give-extra-slot-item").
+                sender.sendMessage(Messages.getMessages("give-extra-slot-item").
                         replace("%player%", player.getName()).
                         replace("%item%", args[1]).
                         replace("%amount%", String.valueOf(amount)));
                 return;
             }
             if (!(sender instanceof Player)){
-                sender.sendMessage(ConfigReader.getMessages("error-in-game"));
+                sender.sendMessage(Messages.getMessages("error-in-game"));
                 return;
             }
             ItemStack target = ((Player) sender).getInventory().getItemInMainHand();
             if (target.getType().isAir()) {
-                sender.sendMessage(ConfigReader.getMessages("error-no-item"));
+                sender.sendMessage(Messages.getMessages("error-no-item"));
                 return;
             }
             if (args.length == 1) {
                 ItemLimits.setMaxEnchantments(target, ItemLimits.getMaxEnchantments(((Player) sender), target) + 1);
-                sender.sendMessage(ConfigReader.getMessages("success-set")
+                sender.sendMessage(Messages.getMessages("success-set")
                         .replace("%amount%", String.valueOf(ItemLimits.getMaxEnchantments(((Player) sender), target) + 1)));
                 return;
             }
             ItemLimits.setMaxEnchantments(target, ItemLimits.getMaxEnchantments(((Player) sender), target) + Integer.parseInt(args[1]));
-            sender.sendMessage(ConfigReader.getMessages("success-set").replace("%amount%", args[1]));
+            sender.sendMessage(Messages.getMessages("success-set").replace("%amount%", args[1]));
         } else {
-            sender.sendMessage(ConfigReader.getMessages("help-main"));
+            sender.sendMessage(Messages.getMessages("help-main"));
         }
     }
 }

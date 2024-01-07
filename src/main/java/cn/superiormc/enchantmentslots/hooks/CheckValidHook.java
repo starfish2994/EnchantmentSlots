@@ -1,10 +1,9 @@
 package cn.superiormc.enchantmentslots.hooks;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.utils.ConfigReader;
+import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import com.willfp.eco.core.items.Items;
 import com.willfp.ecoarmor.sets.ArmorSet;
-import com.willfp.ecoarmor.sets.ArmorSlot;
 import com.willfp.ecoarmor.sets.ArmorUtils;
 import com.willfp.ecoitems.items.EcoItem;
 import com.willfp.ecoitems.items.ItemUtilsKt;
@@ -14,7 +13,6 @@ import io.lumine.mythic.lib.api.item.NBTItem;
 import io.th0rgal.oraxen.api.OraxenItems;
 import net.Indyuce.mmoitems.MMOItems;
 import net.Indyuce.mmoitems.api.ItemTier;
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import pers.neige.neigeitems.manager.ItemManager;
 
