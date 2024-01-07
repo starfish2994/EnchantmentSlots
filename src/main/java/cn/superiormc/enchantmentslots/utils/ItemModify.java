@@ -78,7 +78,13 @@ public class ItemModify {
                                         replace("{enchant_level}", String.valueOf(
                                                 itemStack.getEnchantments().get(enchantment))).
                                         replace("{enchant_level_roman}", NumberUtil.convertToRoman(
-                                                itemStack.getEnchantments().get(enchantment))));
+                                                itemStack.getEnchantments().get(enchantment)))).
+                                        replace("[enchant_name]", Messages.getEnchantName(enchantment, true)).
+                                        replace("[enchant_raw_name]", Messages.getEnchantName(enchantment, false)).
+                                        replace("[enchant_level]", String.valueOf(
+                                                itemStack.getEnchantments().get(enchantment))).
+                                        replace("[enchant_level_roman]", NumberUtil.convertToRoman(
+                                                itemStack.getEnchantments().get(enchantment)));
                         value = lorePrefix + value;
                         lore.add(value);
                     }
@@ -98,7 +104,9 @@ public class ItemModify {
                 line = lorePrefix + line;
                 lore.add(ColorParser.parse(line)
                         .replace("{slot_amount}", String.valueOf(ItemLimits.getMaxEnchantments(player, itemStack)))
-                        .replace("{enchant_amount}", String.valueOf(itemStack.getEnchantments().size())));
+                        .replace("{enchant_amount}", String.valueOf(itemStack.getEnchantments().size()))
+                        .replace("[slot_amount]", String.valueOf(ItemLimits.getMaxEnchantments(player, itemStack)))
+                        .replace("[enchant_amount]", String.valueOf(itemStack.getEnchantments().size())));
 
             }
         }
