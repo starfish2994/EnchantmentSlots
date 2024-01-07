@@ -21,16 +21,13 @@ public class ItemModify {
     public static String lorePrefix = "";
 
     public static ItemStack serverToClient(@NotNull Player player, @NotNull ItemStack itemStack) {
-        if (ItemLimits.getRealMaxEnchantments(player, itemStack) == 0) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null) {
             return itemStack;
         }
-        if (!itemStack.hasItemMeta()) {
-            ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(itemStack.getType());
-            itemStack.setItemMeta(tempMeta);
-        }
-        ItemMeta itemMeta = itemStack.getItemMeta();
         List<String> lore = new ArrayList<>();
-        if (ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack)) {
+        if (ItemLimits.getRealMaxEnchantments(player, itemStack) != 0 &&
+                ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack)) {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
@@ -69,7 +66,8 @@ public class ItemModify {
             List<String> tempLore = itemMeta.getLore();
             lore.addAll(ConfigReader.editDisplayLore(tempLore, itemStack, player));
         }
-        if (!ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack)) {
+        if (ItemLimits.getRealMaxEnchantments(player, itemStack) != 0 &&
+                !ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack)) {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {

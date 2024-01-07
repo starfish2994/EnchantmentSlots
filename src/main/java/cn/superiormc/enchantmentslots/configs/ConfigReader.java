@@ -131,7 +131,7 @@ public class ConfigReader {
                 getConfigurationSection("settings.default-slots-by-item." +
                         CheckValidHook.checkValid(itemStack));
         if (ConfigReader.getDebug()) {
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] Item ID: " + CheckValidHook.checkValid(itemStack));
+            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fItem ID: " + CheckValidHook.checkValid(itemStack));
         }
         if (section == null) {
             section = EnchantmentSlots.instance.getConfig().
