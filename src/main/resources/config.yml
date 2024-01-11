@@ -112,6 +112,9 @@ settings:
     black-item-has-lore: false
     black-item-contains-lore:
       - 'Click to'
+    black-item-contains-name:
+      - 'page'
+      - 'Page'
     black-items:
       - book
       - enchanted_book

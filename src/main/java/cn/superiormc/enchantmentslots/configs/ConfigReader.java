@@ -73,6 +73,15 @@ public class ConfigReader {
             }
             return false;
         }
+        if (!EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.black-item-contains-name").isEmpty()
+            && itemStack.getItemMeta().hasDisplayName()) {
+            for (String requiredName : EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.black-item-contains-name")) {
+                if (itemStack.getItemMeta().getDisplayName().contains(requiredName)) {
+                    return true;
+                }
+            }
+            return false;
+        }
         return false;
     }
     public static boolean getEnchantItemTrigger() {
