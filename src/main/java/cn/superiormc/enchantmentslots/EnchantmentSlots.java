@@ -10,6 +10,7 @@ import cn.superiormc.enchantmentslots.events.PlayerInventory;
 import cn.superiormc.enchantmentslots.papi.PlaceholderAPIExpansion;
 import cn.superiormc.enchantmentslots.protolcol.GeneralProtolcol;
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
+import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import com.comphenix.protocol.ProtocolLibrary;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,7 +31,7 @@ public final class EnchantmentSlots extends JavaPlugin {
         registerCommands();
         registerPackets();
         registerLanguage();
-        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+        if (CommonUtil.checkPluginLoad("PlaceholderAPI")) {
             PlaceholderAPIExpansion.papi = new PlaceholderAPIExpansion(this);
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into PlaceholderAPI...");
             if (PlaceholderAPIExpansion.papi.register()){

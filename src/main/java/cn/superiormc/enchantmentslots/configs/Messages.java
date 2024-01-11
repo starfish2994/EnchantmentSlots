@@ -2,6 +2,7 @@ package cn.superiormc.enchantmentslots.configs;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.utils.ColorParser;
+import cn.superiormc.enchantmentslots.utils.TextUtil;
 import com.willfp.eco.util.StringUtils;
 import com.willfp.ecoenchants.enchant.EcoEnchant;
 import com.willfp.ecoenchants.enchant.EcoEnchants;
@@ -61,9 +62,9 @@ public class Messages {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            return ColorParser.parse(tempMessageFile.getString(path));
+            return TextUtil.parse(tempMessageFile.getString(path));
         }
-        return ColorParser.parse(messageFile.getString(path));
+        return TextUtil.parse(messageFile.getString(path));
     }
 
     public static String getEnchantName(Enchantment enchantment, boolean showTierColor) {
@@ -86,7 +87,7 @@ public class Messages {
                     }
                 }
             } catch (Exception ep) {
-                return ColorParser.parse(ConfigReader.getEnchantmentName(enchantment));
+                return TextUtil.parse(ConfigReader.getEnchantmentName(enchantment));
             }
         } else if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("ExcellentEnchants")) {
             ExcellentEnchant excellentEnchant = EnchantRegistry.getByKey(enchantment.getKey());
@@ -98,6 +99,6 @@ public class Messages {
                 return Colorizer.apply(name);
             }
         }
-        return ColorParser.parse(ConfigReader.getEnchantmentName(enchantment));
+        return TextUtil.parse(ConfigReader.getEnchantmentName(enchantment));
     }
 }

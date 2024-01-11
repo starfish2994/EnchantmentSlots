@@ -1,8 +1,8 @@
 package cn.superiormc.enchantmentslots.commands;
 
 import cn.superiormc.enchantmentslots.configs.Messages;
-import cn.superiormc.enchantmentslots.utils.ExtraSlotsItem;
-import cn.superiormc.enchantmentslots.utils.ItemLimits;
+import cn.superiormc.enchantmentslots.methods.ExtraSlotsItem;
+import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

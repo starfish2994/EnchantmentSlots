@@ -1,7 +1,7 @@
 package cn.superiormc.enchantmentslots.papi;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.utils.ItemLimits;
+import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;

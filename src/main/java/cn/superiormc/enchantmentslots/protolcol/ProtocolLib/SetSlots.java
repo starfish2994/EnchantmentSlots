@@ -2,15 +2,14 @@ package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
-import cn.superiormc.enchantmentslots.utils.ItemLimits;
-import cn.superiormc.enchantmentslots.utils.ItemModify;
+import cn.superiormc.enchantmentslots.methods.ItemLimits;
+import cn.superiormc.enchantmentslots.methods.ItemModify;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.reflect.StructureModifier;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

@@ -3,10 +3,10 @@ package cn.superiormc.enchantmentslots.protolcol;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.protolcol.ProtocolLib.SetCreativeSlots;
 import cn.superiormc.enchantmentslots.protolcol.ProtocolLib.SetSlots;
-import cn.superiormc.enchantmentslots.protolcol.ProtocolLib.Test;
 import cn.superiormc.enchantmentslots.protolcol.ProtocolLib.WindowItem;
 import cn.superiormc.enchantmentslots.protolcol.eco.EcoDisplayModule;
-import cn.superiormc.enchantmentslots.utils.ItemModify;
+import cn.superiormc.enchantmentslots.methods.ItemModify;
+import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import org.bukkit.Bukkit;
 
 public abstract class GeneralProtolcol {
@@ -16,7 +16,7 @@ public abstract class GeneralProtolcol {
     public static void init() {
         if (EnchantmentSlots.instance.getConfig().getString("settings.use-listener-plugin", "ProtocolLib")
                 .equals("ProtocolLib") &&
-                Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
+                CommonUtil.checkPluginLoad("ProtocolLib")) {
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into ProtocolLib....");
             plugin = "ProtocolLib";
             Bukkit.getScheduler().runTaskAsynchronously(EnchantmentSlots.instance, () -> {
@@ -27,7 +27,7 @@ public abstract class GeneralProtolcol {
             });
         } else if (EnchantmentSlots.instance.getConfig().getString("settings.use-listener-plugin")
                 .equals("eco") &&
-                Bukkit.getPluginManager().isPluginEnabled("eco")) {
+                CommonUtil.checkPluginLoad("eco")) {
             plugin = "eco";
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into eco....");
             EcoDisplayModule.init();

@@ -1,7 +1,10 @@
-package cn.superiormc.enchantmentslots.utils;
+package cn.superiormc.enchantmentslots.methods;
 
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.configs.Messages;
+import cn.superiormc.enchantmentslots.utils.ColorParser;
+import cn.superiormc.enchantmentslots.utils.NumberUtil;
+import cn.superiormc.enchantmentslots.utils.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -31,7 +34,7 @@ public class ItemModify {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
-                        String value = ColorParser.parse(
+                        String value = TextUtil.parse(
                                 ConfigReader.getEnchantPlaceholder().
                                         replace("{enchant_name}", Messages.getEnchantName(enchantment, true)).
                                         replace("{enchant_raw_name}", Messages.getEnchantName(enchantment, false)).
@@ -48,7 +51,7 @@ public class ItemModify {
                 if (line.equals("{empty_slots}")) {
                     int i = ItemLimits.getMaxEnchantments(player, itemStack) - itemStack.getEnchantments().size();
                     while (i > 0) {
-                        String value = ColorParser.parse(ConfigReader.getEmptySlotPlaceholder());
+                        String value = TextUtil.parse(ConfigReader.getEmptySlotPlaceholder());
                         value = lorePrefix + value;
                         lore.add(value);
                         i--;
@@ -56,7 +59,7 @@ public class ItemModify {
                     continue;
                 }
                 line = lorePrefix + line;
-                lore.add(ColorParser.parse(line)
+                lore.add(TextUtil.parse(line)
                         .replace("{slot_amount}", String.valueOf(ItemLimits.getMaxEnchantments(player, itemStack)))
                         .replace("{enchant_amount}", String.valueOf(itemStack.getEnchantments().size())));
 
@@ -71,7 +74,7 @@ public class ItemModify {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
-                        String value = ColorParser.parse(
+                        String value = TextUtil.parse(
                                 ConfigReader.getEnchantPlaceholder().
                                         replace("{enchant_name}", Messages.getEnchantName(enchantment, true)).
                                         replace("{enchant_raw_name}", Messages.getEnchantName(enchantment, false)).
@@ -94,7 +97,7 @@ public class ItemModify {
                 if (line.equals("{empty_slots}")) {
                     int i = ItemLimits.getMaxEnchantments(player, itemStack) - itemStack.getEnchantments().size();
                     while (i > 0) {
-                        String value = ColorParser.parse(ConfigReader.getEmptySlotPlaceholder());
+                        String value = TextUtil.parse(ConfigReader.getEmptySlotPlaceholder());
                         value = lorePrefix + value;
                         lore.add(value);
                         i--;
@@ -102,7 +105,7 @@ public class ItemModify {
                     continue;
                 }
                 line = lorePrefix + line;
-                lore.add(ColorParser.parse(line)
+                lore.add(TextUtil.parse(line)
                         .replace("{slot_amount}", String.valueOf(ItemLimits.getMaxEnchantments(player, itemStack)))
                         .replace("{enchant_amount}", String.valueOf(itemStack.getEnchantments().size()))
                         .replace("[slot_amount]", String.valueOf(ItemLimits.getMaxEnchantments(player, itemStack)))

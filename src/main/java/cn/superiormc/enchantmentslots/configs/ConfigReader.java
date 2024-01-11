@@ -2,6 +2,8 @@ package cn.superiormc.enchantmentslots.configs;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
+import cn.superiormc.enchantmentslots.methods.Condition;
+import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.utils.*;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.willfp.eco.core.display.DisplayPriority;
@@ -110,7 +112,7 @@ public class ConfigReader {
         for (String str : lore) {
             if (str.contains("{enchants}")) {
                 for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
-                    tempLore.add(ColorParser.parse(
+                    tempLore.add(TextUtil.parse(
                             ConfigReader.getEnchantPlaceholder().
                                     replace("{enchant_name}", Messages.getEnchantName(enchantment, true)).
                                     replace("{enchant_raw_name}", Messages.getEnchantName(enchantment, false)).
@@ -124,7 +126,7 @@ public class ConfigReader {
             if (str.contains("{empty_slots}")) {
                 int i = ItemLimits.getMaxEnchantments(player, itemStack) - itemStack.getEnchantments().size();
                 while (i > 0) {
-                    tempLore.add(ColorParser.parse(ConfigReader.getEmptySlotPlaceholder()));
+                    tempLore.add(TextUtil.parse(ConfigReader.getEmptySlotPlaceholder()));
                     i--;
                 }
                 continue;

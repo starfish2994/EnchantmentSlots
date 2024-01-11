@@ -1,7 +1,7 @@
 package cn.superiormc.enchantmentslots.protolcol.eco;
 
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
-import cn.superiormc.enchantmentslots.utils.ItemModify;
+import cn.superiormc.enchantmentslots.methods.ItemModify;
 import com.willfp.eco.core.EcoPlugin;
 import com.willfp.eco.core.display.Display;
 import com.willfp.eco.core.display.DisplayModule;

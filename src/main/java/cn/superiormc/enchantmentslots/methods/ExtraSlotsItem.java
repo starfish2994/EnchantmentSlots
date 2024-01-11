@@ -1,17 +1,13 @@
-package cn.superiormc.enchantmentslots.utils;
+package cn.superiormc.enchantmentslots.methods;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import com.cryptomorin.xseries.XItemStack;
+import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ExtraSlotsItem {
 
@@ -25,27 +21,7 @@ public class ExtraSlotsItem {
         if (section == null) {
             return null;
         }
-        if (section.getString("material") == null) {
-            return new ItemStack(Material.STONE);
-        }
-        if (Material.getMaterial(section.getString("material").toUpperCase()) == null) {
-            return new ItemStack(Material.STONE);
-        }
-        if (section.getString("name") != null) {
-            section.set("name", ColorParser.parse(section.getString("name")));
-        }
-        List<String> loreList = new ArrayList<>();
-        for (String s : section.getStringList("lore")) {
-            loreList.add(ColorParser.parse(s));
-        }
-        if (loreList.isEmpty() && section.getString("lore") != null) {
-            loreList.add(section.getString("lore"));
-        }
-        if (!loreList.isEmpty()) {
-            section.set("lore", loreList);
-        }
-
-        resultItem = XItemStack.deserialize(section);
+        resultItem = ItemUtil.buildItemStack(section);
         if (!resultItem.hasItemMeta()) {
             ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(resultItem.getType());
             resultItem.setItemMeta(tempMeta);

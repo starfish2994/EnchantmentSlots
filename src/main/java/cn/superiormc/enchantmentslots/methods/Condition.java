@@ -1,4 +1,4 @@
-package cn.superiormc.enchantmentslots.utils;
+package cn.superiormc.enchantmentslots.methods;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import me.clip.placeholderapi.PlaceholderAPI;

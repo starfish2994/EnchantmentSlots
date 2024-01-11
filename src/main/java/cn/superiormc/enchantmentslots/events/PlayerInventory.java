@@ -2,8 +2,8 @@ package cn.superiormc.enchantmentslots.events;
 
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.configs.Messages;
-import cn.superiormc.enchantmentslots.utils.ExtraSlotsItem;
-import cn.superiormc.enchantmentslots.utils.ItemLimits;
+import cn.superiormc.enchantmentslots.methods.ExtraSlotsItem;
+import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
