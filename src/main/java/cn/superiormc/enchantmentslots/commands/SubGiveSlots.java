@@ -16,7 +16,7 @@ public class SubGiveSlots {
             if (args.length >= 3) {
                 ItemStack item = ExtraSlotsItem.getExtraSlotItem(args[1]);
                 if (item == null) {
-                    sender.sendMessage(Messages.getMessages("error-no-item"));
+                    sender.sendMessage(Messages.getMessages("error-item-not-found"));
                     return;
                 }
                 Player player = Bukkit.getPlayer(args[2]);

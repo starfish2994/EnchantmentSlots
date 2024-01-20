@@ -23,4 +23,5 @@ error-args: "&#98FB98[EnchantmentSlots] &cWrong command usage, if you need help,
 error-miss-permission: "&#98FB98[EnchantmentSlots] &cYou don't have permission to use this command!"
 error-in-game: "&#98FB98[EnchantmentSlots] &cYou have to use this command in game!"
 error-no-item: "&#98FB98[EnchantmentSlots] &cCan not get item in your main hand!"
+error-item-not-found: "&#98FB98[EnchantmentSlots] &cCan not get extra slot item for this name!"
 player-not-found: "&#98FB98[EnchantmentSlots] &cWe can't find player %player%!"

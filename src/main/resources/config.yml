@@ -175,14 +175,31 @@ add-slot-items:
     name: '&dExtra Enchantment Slot &7(+1)'
     lore:
       - '&fDrag this item into your item to use!'
+      - '&fApply for all items but have only 50% success rate!'
     add-slots: 1
+    chance: 50
+    success-actions:
+      - 'sound: block.note_block.harp;;1;;1'
+      - 'message: &#98FB98[EnchantmentSlots] &aAdd {amount} extra enchantment slot to your item!'
+    fail-actions:
+      - 'sound: block.note_block.bass;;1;;1'
+      - 'message: &#98FB98[EnchantmentSlots] &cYou are not very lucky, slot item has broken!'
   B:
     material: PAPER
     custom-model-data: 5
     name: '&dExtra Enchantment Slot &7(+5)'
     lore:
       - '&fDrag this item into your item to use!'
+      - '&f100% success but only work for diamond sword.'
     add-slots: 5
+    success-actions:
+      - 'sound: block.note_block.harp;;1;;1'
+      - 'message: &#98FB98[EnchantmentSlots] &aAdd {amount} extra enchantment slot to your item!'
+    fail-actions:
+      - 'sound: block.note_block.bass;;1;;1'
+      - 'message: &#98FB98[EnchantmentSlots] &cYou are not very lucky, slot item has broken!'
+    apply-items:
+      - 'diamond_sword'
 
 # Enchant Name
 enchant-name:

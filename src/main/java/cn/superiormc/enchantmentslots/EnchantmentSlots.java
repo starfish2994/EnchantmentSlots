@@ -7,6 +7,7 @@ import cn.superiormc.enchantmentslots.events.EnchantGUIEnchant;
 import cn.superiormc.enchantmentslots.events.PlayerClick;
 import cn.superiormc.enchantmentslots.events.PlayerEnchant;
 import cn.superiormc.enchantmentslots.events.PlayerInventory;
+import cn.superiormc.enchantmentslots.methods.ExtraSlotsItem;
 import cn.superiormc.enchantmentslots.papi.PlaceholderAPIExpansion;
 import cn.superiormc.enchantmentslots.protolcol.GeneralProtolcol;
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
@@ -29,8 +30,8 @@ public final class EnchantmentSlots extends JavaPlugin {
         saveDefaultConfig();
         registerEvents();
         registerCommands();
-        registerPackets();
-        registerLanguage();
+        GeneralProtolcol.init();
+        Messages.init();
         if (CommonUtil.checkPluginLoad("PlaceholderAPI")) {
             PlaceholderAPIExpansion.papi = new PlaceholderAPIExpansion(this);
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into PlaceholderAPI...");
@@ -38,6 +39,7 @@ public final class EnchantmentSlots extends JavaPlugin {
                 Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fFinished hook!");
             }
         }
+        ExtraSlotsItem.init();
         Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fPlugin is loaded. Author: PQguanfang.");
     }
 
@@ -63,13 +65,5 @@ public final class EnchantmentSlots extends JavaPlugin {
     public void registerCommands() {
         Objects.requireNonNull(Bukkit.getPluginCommand("enchantmentslots")).setExecutor(new MainCommand());
         Objects.requireNonNull(Bukkit.getPluginCommand("enchantmentslots")).setTabCompleter(new MainTab());
-    }
-
-    public void registerPackets() {
-        GeneralProtolcol.init();
-    }
-
-    public void registerLanguage() {
-        Messages.init();
     }
 }

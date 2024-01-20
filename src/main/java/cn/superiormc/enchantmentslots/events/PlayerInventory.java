@@ -37,28 +37,39 @@ public class PlayerInventory implements Listener {
         extraItem.getType().isAir()) {
             return;
         }
-        int value = ExtraSlotsItem.getExtraSlotItemValue(extraItem);
-        if (value == 0) {
+        ExtraSlotsItem item = ExtraSlotsItem.getExtraSlotItemValue(extraItem);
+        if (item == null || !item.canApply(targetItem)) {
             return;
         }
+        int value = item.getAddSlot();
         int baseValue = ItemLimits.getMaxEnchantments(player, targetItem);
         if (baseValue == 0) {
             return;
         }
         int maxValue = ConfigReader.getMaxLimits(player, targetItem);
-        if (maxValue != -1 && baseValue + value >= maxValue) {
+        if (maxValue != -1 && baseValue + value > maxValue) {
             if (ConfigReader.getCancelMaxLimits() || baseValue >= maxValue) {
+                item.doFailAction(player);
                 player.sendMessage(Messages.getMessages("max-slots-reached"));
-                return;
             } else {
                 extraItem.setAmount(extraItem.getAmount() - 1);
                 ItemLimits.setMaxEnchantments(targetItem, maxValue);
-                player.sendMessage(Messages.getMessages("success-add").replace("%amount%", String.valueOf(maxValue - baseValue)));
-                return;
+                if (value == 0) {
+                    item.doFailAction(player);
+                    player.sendMessage(Messages.getMessages("fail-add"));
+                } else {
+                    item.doSuccessAction(player);
+                }
             }
+            return;
         }
         extraItem.setAmount(extraItem.getAmount() - 1);
         ItemLimits.setMaxEnchantments(targetItem, baseValue + value);
-        player.sendMessage(Messages.getMessages("success-add").replace("%amount%", String.valueOf(value)));
+        if (value == 0) {
+            item.doFailAction(player);
+            player.sendMessage(Messages.getMessages("fail-add"));
+        } else {
+            item.doSuccessAction(player);
+        }
     }
 }
