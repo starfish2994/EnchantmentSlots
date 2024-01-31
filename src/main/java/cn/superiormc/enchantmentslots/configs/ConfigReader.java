@@ -161,12 +161,12 @@ public class ConfigReader {
         Set<String> groupNameSet = conditionSection.getKeys(false);
         List<Integer> result = new ArrayList<>();
         for (String groupName : groupNameSet) {
-            if (section.getInt(groupName, 0) != 0 && Condition.getBoolean(player, conditionSection.getStringList(groupName))) {
+            if (section.getInt(groupName, -1) != -1 && Condition.getBoolean(player, conditionSection.getStringList(groupName))) {
                 result.add(section.getInt(groupName));
             }
             else {
-                if (section.getInt("default", 0) != 0) {
-                    result.add(section.getInt("default", 5));
+                if (section.getInt("default", -1) != -1) {
+                    result.add(section.getInt("default"));
                 }
             }
         }
@@ -194,12 +194,12 @@ public class ConfigReader {
         Set<String> groupNameSet = conditionSection.getKeys(false);
         List<Integer> result = new ArrayList<>();
         for (String groupName : groupNameSet) {
-            if (section.getInt(groupName, 0) != 0 && Condition.getBoolean(player, conditionSection.getStringList(groupName))) {
+            if (section.getInt(groupName, -1) != -1 && Condition.getBoolean(player, conditionSection.getStringList(groupName))) {
                 result.add(section.getInt(groupName));
             }
             else {
-                if (section.getInt("default") != 0) {
-                    result.add(section.getInt("default", -1));
+                if (section.getInt("default", -1) != -1) {
+                    result.add(section.getInt("default"));
                 }
             }
         }
