@@ -28,7 +28,7 @@ public class WindowItem extends GeneralPackets {
             public void onPacketSending(PacketEvent event) {
                 if (ConfigReader.getDebug()) {
                     Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §f" +
-                            "Found WindowsItem packet.");
+                            "Found WindowsItem packet. Window ID: " + event.getPacket().getIntegers().read(0));
                 }
                 if (event.getPlayer() == null) {
                     return;
@@ -42,7 +42,7 @@ public class WindowItem extends GeneralPackets {
                     // client 是加过 Lore 的，server 是没加过的！
                     singleItemStackStructureModifier.write(0, clientItemStack);
                 }
-                if (!ConfigReader.getOnlyInInventory() || event.getPacket().getIntegers().read(0) != 0) {
+                if (!ConfigReader.getOnlyInInventory() || event.getPacket().getIntegers().read(0) == 0) {
                     StructureModifier<List<ItemStack>> itemStackStructureModifier = packet.getItemListModifier();
                     List<ItemStack> serverItemStack = itemStackStructureModifier.read(0);
                     List<ItemStack> clientItemStack = new ArrayList<>();
