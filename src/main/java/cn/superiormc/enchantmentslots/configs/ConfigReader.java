@@ -32,6 +32,9 @@ public class ConfigReader {
     public static boolean getRemoveExtraEnchants() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.remove-illegal-extra-enchant", true);
     }
+    public static boolean getOnlyInInventory() {
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.only-in-player-inventory", false);
+    }
     public static boolean getCancelMaxLimits() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.cancel-add-slot-if-reached-max-slot", true);
     }

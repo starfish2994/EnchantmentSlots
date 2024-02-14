@@ -42,19 +42,21 @@ public class WindowItem extends GeneralPackets {
                     // client 是加过 Lore 的，server 是没加过的！
                     singleItemStackStructureModifier.write(0, clientItemStack);
                 }
-                StructureModifier<List<ItemStack>> itemStackStructureModifier = packet.getItemListModifier();
-                List<ItemStack> serverItemStack = itemStackStructureModifier.read(0);
-                List<ItemStack> clientItemStack = new ArrayList<>();
-                for (ItemStack itemStack : serverItemStack) {
-                    if (itemStack.getType().isAir()) {
-                        clientItemStack.add(itemStack);
-                        continue;
+                if (!ConfigReader.getOnlyInInventory() || event.getPacket().getIntegers().read(0) != 0) {
+                    StructureModifier<List<ItemStack>> itemStackStructureModifier = packet.getItemListModifier();
+                    List<ItemStack> serverItemStack = itemStackStructureModifier.read(0);
+                    List<ItemStack> clientItemStack = new ArrayList<>();
+                    for (ItemStack itemStack : serverItemStack) {
+                        if (itemStack.getType().isAir()) {
+                            clientItemStack.add(itemStack);
+                            continue;
+                        }
+                        ItemModify.addLore(event.getPlayer(), itemStack, true);
+                        clientItemStack.add(ItemModify.serverToClient(event.getPlayer(), itemStack));
                     }
-                    ItemModify.addLore(event.getPlayer(), itemStack, true);
-                    clientItemStack.add(ItemModify.serverToClient(event.getPlayer(), itemStack));
+                    // client 是加过 Lore 的，server 是没加过的！
+                    itemStackStructureModifier.write(0, clientItemStack);
                 }
-                // client 是加过 Lore 的，server 是没加过的！
-                itemStackStructureModifier.write(0, clientItemStack);
             }
         };
     }

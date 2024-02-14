@@ -29,8 +29,8 @@ public class ItemModify {
             return itemStack;
         }
         List<String> lore = new ArrayList<>();
-        if (ItemLimits.getRealMaxEnchantments(player, itemStack) != 0 &&
-                ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack)) {
+        if (ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack) &&
+                ItemLimits.getRealMaxEnchantments(player, itemStack) != 0) {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
@@ -69,8 +69,8 @@ public class ItemModify {
             List<String> tempLore = itemMeta.getLore();
             lore.addAll(ConfigReader.editDisplayLore(tempLore, itemStack, player));
         }
-        if (ItemLimits.getRealMaxEnchantments(player, itemStack) != 0 &&
-                !ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack)) {
+        if (!ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack) &&
+                ItemLimits.getRealMaxEnchantments(player, itemStack) != 0) {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {

@@ -21,13 +21,6 @@ public class ItemLimits {
         if (EnchantmentSlots.demoVersion && item.getType() != Material.DIAMOND_SWORD) {
             return 0;
         }
-        if (!item.hasItemMeta()) {
-            ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
-            if (tempMeta == null) {
-                return 0;
-            }
-            item.setItemMeta(tempMeta);
-        }
         ItemMeta meta = item.getItemMeta();
         if (!meta.getPersistentDataContainer().has(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER)) {
             if (canEnchant(item)) {
@@ -46,13 +39,6 @@ public class ItemLimits {
         }
         if (ConfigReader.getAutoAddSlotsLimit()) {
             return getMaxEnchantments(player, item);
-        }
-        if (!item.hasItemMeta()) {
-            ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
-            if (tempMeta == null) {
-                return 0;
-            }
-            item.setItemMeta(tempMeta);
         }
         ItemMeta meta = item.getItemMeta();
         if (!meta.getPersistentDataContainer().has(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER)) {

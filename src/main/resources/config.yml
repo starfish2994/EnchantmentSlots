@@ -168,6 +168,8 @@ settings:
   cancel-add-slot-if-reached-max-slot: true
   # This option support ProtocolLib only.
   remove-illegal-extra-enchant: true
+  # This option support ProtocolLib only.
+  only-in-player-inventory: false
 
 add-slot-items:
   A:
