@@ -1,5 +1,6 @@
 package cn.superiormc.enchantmentslots.commands;
 
+import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.configs.Messages;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import org.bukkit.command.CommandSender;
@@ -18,9 +19,10 @@ public class SubSetSlots {
                 return;
             }
             if (args.length == 1) {
-                ItemLimits.setMaxEnchantments(target, ItemLimits.getMaxEnchantments(((Player) sender), target) + 1);
+                int slot = ItemLimits.getMaxEnchantments(target, ConfigReader.getDefaultLimits((Player) sender, target));
+                ItemLimits.setMaxEnchantments(target, slot + 1);
                 sender.sendMessage(Messages.getMessages("success-set")
-                        .replace("%amount%", String.valueOf(ItemLimits.getMaxEnchantments(((Player) sender), target) + 1)));
+                        .replace("%amount%", String.valueOf(slot + 1)));
                 return;
             }
             ItemLimits.setMaxEnchantments(target, Integer.parseInt(args[1]));

@@ -37,26 +37,29 @@ public class WindowItem extends GeneralPackets {
                 StructureModifier<ItemStack> singleItemStackStructureModifier = packet.getItemModifier();
                 if (singleItemStackStructureModifier.size() != 0) {
                     ItemStack serverItemStack = singleItemStackStructureModifier.read(0);
-                    ItemModify.addLore(event.getPlayer(), serverItemStack, true);
+                    ItemModify.addLore(event.getPlayer(), serverItemStack);
                     ItemStack clientItemStack = ItemModify.serverToClient(event.getPlayer(), serverItemStack);
                     // client 是加过 Lore 的，server 是没加过的！
                     singleItemStackStructureModifier.write(0, clientItemStack);
                 }
-                if (!ConfigReader.getOnlyInInventory() || event.getPacket().getIntegers().read(0) == 0) {
-                    StructureModifier<List<ItemStack>> itemStackStructureModifier = packet.getItemListModifier();
-                    List<ItemStack> serverItemStack = itemStackStructureModifier.read(0);
-                    List<ItemStack> clientItemStack = new ArrayList<>();
-                    for (ItemStack itemStack : serverItemStack) {
-                        if (itemStack.getType().isAir()) {
-                            clientItemStack.add(itemStack);
-                            continue;
-                        }
-                        ItemModify.addLore(event.getPlayer(), itemStack, true);
-                        clientItemStack.add(ItemModify.serverToClient(event.getPlayer(), itemStack));
+                StructureModifier<List<ItemStack>> itemStackStructureModifier = packet.getItemListModifier();
+                List<ItemStack> serverItemStack = itemStackStructureModifier.read(0);
+                List<ItemStack> clientItemStack = new ArrayList<>();
+                boolean isPlayerInventory = event.getPacket().getIntegers().read(0) == 0 || serverItemStack.size() % 9 != 0;
+                int index = 1;
+                for (ItemStack itemStack : serverItemStack) {
+                    if (itemStack.getType().isAir()) {
+                        clientItemStack.add(itemStack);
+                        continue;
                     }
-                    // client 是加过 Lore 的，server 是没加过的！
-                    itemStackStructureModifier.write(0, clientItemStack);
+                    if (!ConfigReader.getOnlyInInventory() || isPlayerInventory || index > serverItemStack.size() - 36) {
+                        ItemModify.addLore(event.getPlayer(), itemStack);
+                    }
+                    clientItemStack.add(ItemModify.serverToClient(event.getPlayer(), itemStack));
+                    index ++;
                 }
+                // client 是加过 Lore 的，server 是没加过的！
+                itemStackStructureModifier.write(0, clientItemStack);
             }
         };
     }

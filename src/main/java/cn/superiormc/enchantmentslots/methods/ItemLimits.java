@@ -17,7 +17,7 @@ public class ItemLimits {
 
     public static final NamespacedKey ENCHANTMENT_SLOTS_KEY = new NamespacedKey(EnchantmentSlots.instance, "enchantment_slots");
 
-    public static int getMaxEnchantments(Player player, ItemStack item) {
+    public static int getMaxEnchantments(ItemStack item, int defaultSlot) {
         if (EnchantmentSlots.demoVersion && item.getType() != Material.DIAMOND_SWORD) {
             return 0;
         }
@@ -31,7 +31,7 @@ public class ItemLimits {
         ItemMeta meta = item.getItemMeta();
         if (!meta.getPersistentDataContainer().has(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER)) {
             if (canEnchant(item)) {
-                return ConfigReader.getDefaultLimits(player, item);
+                return defaultSlot;
             }
             else {
                 return 0;
@@ -40,7 +40,7 @@ public class ItemLimits {
         return meta.getPersistentDataContainer().get(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER);
     }
 
-    public static int getRealMaxEnchantments(Player player, ItemStack item) {
+    public static int getRealMaxEnchantments(ItemStack item) {
         if (EnchantmentSlots.demoVersion && item.getType() != Material.DIAMOND_SWORD) {
             return 0;
         }
@@ -50,9 +50,6 @@ public class ItemLimits {
                 return 0;
             }
             item.setItemMeta(tempMeta);
-        }
-        if (ConfigReader.getAutoAddSlotsLimit()) {
-            return getMaxEnchantments(player, item);
         }
         ItemMeta meta = item.getItemMeta();
         if (!meta.getPersistentDataContainer().has(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER)) {

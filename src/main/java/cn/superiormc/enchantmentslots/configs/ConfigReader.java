@@ -33,7 +33,7 @@ public class ConfigReader {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.remove-illegal-extra-enchant", true);
     }
     public static boolean getOnlyInInventory() {
-        return EnchantmentSlots.instance.getConfig().getBoolean("settings.only-in-player-inventory", false);
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.only-in-player-inventory", true);
     }
     public static boolean getCancelMaxLimits() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.cancel-add-slot-if-reached-max-slot", true);
@@ -110,7 +110,7 @@ public class ConfigReader {
     public static List<String> getDisplayLore() {
         return EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.display-value");
     }
-    public static List<String> editDisplayLore(List<String> lore, ItemStack itemStack, Player player) {
+    public static List<String> editDisplayLore(List<String> lore, ItemStack itemStack, Player player, int slot) {
         List<String> tempLore = new ArrayList<>();
         for (String str : lore) {
             if (str.contains("{enchants}")) {
@@ -127,7 +127,7 @@ public class ConfigReader {
                 continue;
             }
             if (str.contains("{empty_slots}")) {
-                int i = ItemLimits.getMaxEnchantments(player, itemStack) - itemStack.getEnchantments().size();
+                int i = slot - itemStack.getEnchantments().size();
                 while (i > 0) {
                     tempLore.add(TextUtil.parse(ConfigReader.getEmptySlotPlaceholder()));
                     i--;
@@ -135,7 +135,7 @@ public class ConfigReader {
                 continue;
             }
             tempLore.add(str
-                    .replace("{slot_amount}", String.valueOf(ItemLimits.getMaxEnchantments(player, itemStack)))
+                    .replace("{slot_amount}", String.valueOf(slot))
                     .replace("{enchant_amount}", String.valueOf(itemStack.getEnchantments().size())));
         }
         return tempLore;

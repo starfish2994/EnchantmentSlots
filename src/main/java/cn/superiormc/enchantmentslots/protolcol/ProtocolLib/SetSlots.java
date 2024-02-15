@@ -37,42 +37,48 @@ public class SetSlots extends GeneralPackets {
                     return;
                 }
                 int slot = packet.getIntegers().read(packet.getIntegers().size() - 1);
-                ItemModify.addLore(event.getPlayer(), serverItemStack, true);
-                ItemStack clientItemStack = ItemModify.serverToClient(event.getPlayer(), serverItemStack);
-                // client 是加过 Lore 的，server 是没加过的！
-                itemStackStructureModifier.write(0, clientItemStack);
-                if (ConfigReader.getRemoveExtraEnchants()) {
-                    if (slot < 5 || slot > 44) {
-                        return;
+                int spigotSlot;
+                if (slot >= 36) {
+                    spigotSlot = slot - 36;
+                } else if (slot <= 8) {
+                    spigotSlot = slot + 31;
+                } else {
+                    spigotSlot = slot;
+                }
+                if (ConfigReader.getDebug()) {
+                    Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §f" +
+                            "Packet Slot ID: " + slot + ", Spigot Slot ID: " + spigotSlot + ".");
+                }
+                ItemStack newItem = ItemModify.addLore(event.getPlayer(), serverItemStack);
+                if (slot >= 5 && slot <= 44) {
+                    if (newItem != null && ConfigReader.getAutoAddSlotsLimit()) {
+                        event.getPlayer().getInventory().setItem(spigotSlot, newItem);
                     }
-                    int spigotSlot = slot;
-                    if (slot >= 36) {
-                        spigotSlot = slot - 36;
-                    } else if (slot <= 8) {
-                        spigotSlot = slot + 31;
-                    }
-                    if (ConfigReader.getDebug()) {
-                        Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §f" +
-                                "Packet Slot ID: " + slot + ", Spigot Slot ID: " + spigotSlot + ".");
-                    }
-                    ItemStack tempItemStack = event.getPlayer().getInventory().getItem(spigotSlot);
-                    if (tempItemStack == null || tempItemStack.getType().isAir()) {
-                        return;
-                    }
-                    int maxEnchantments = ItemLimits.getMaxEnchantments(event.getPlayer(), tempItemStack);
-                    if (tempItemStack.getEnchantments().size() >= maxEnchantments) {
-                        int removeAmount = tempItemStack.getEnchantments().size() - maxEnchantments;
-                        for (Enchantment enchant : tempItemStack.getEnchantments().keySet()) {
-                            if (removeAmount <= 0) {
-                                break;
+                    if (ConfigReader.getRemoveExtraEnchants()) {
+                        ItemStack tempItemStack = event.getPlayer().getInventory().getItem(spigotSlot);
+                        if (tempItemStack != null && !tempItemStack.getType().isAir()) {
+                            int maxEnchantments = ItemLimits.getRealMaxEnchantments(serverItemStack);
+                            if (tempItemStack.getEnchantments().size() >= maxEnchantments) {
+                                int removeAmount = tempItemStack.getEnchantments().size() - maxEnchantments;
+                                for (Enchantment enchant : tempItemStack.getEnchantments().keySet()) {
+                                    if (removeAmount <= 0) {
+                                        break;
+                                    }
+                                    ItemMeta meta = tempItemStack.getItemMeta();
+                                    if (meta == null) {
+                                        break;
+                                    }
+                                    meta.removeEnchant(enchant);
+                                    tempItemStack.setItemMeta(meta);
+                                    removeAmount--;
+                                }
                             }
-                            ItemMeta meta = tempItemStack.getItemMeta();
-                            meta.removeEnchant(enchant);
-                            tempItemStack.setItemMeta(meta);
-                            removeAmount--;
                         }
                     }
                 }
+                ItemStack clientItemStack = ItemModify.serverToClient(event.getPlayer(), serverItemStack);
+                // client 是加过 Lore 的，server 是没加过的！
+                itemStackStructureModifier.write(0, clientItemStack);
             }
         };
     }

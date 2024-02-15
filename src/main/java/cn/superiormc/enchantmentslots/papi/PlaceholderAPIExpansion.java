@@ -1,6 +1,7 @@
 package cn.superiormc.enchantmentslots.papi;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
+import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
@@ -55,14 +56,14 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
             if (mainHandItem.getType().isAir()) {
                 return "0";
             }
-            return String.valueOf(ItemLimits.getMaxEnchantments(player, mainHandItem));
+            return String.valueOf(ItemLimits.getMaxEnchantments(mainHandItem, ConfigReader.getDefaultLimits(player, mainHandItem)));
         }
         else if (params.equals("has_empty_slot")) {
             ItemStack mainHandItem = player.getInventory().getItemInMainHand();
             if (mainHandItem.getType().isAir()) {
                 return "false";
             }
-            if (mainHandItem.getEnchantments().size() >= ItemLimits.getMaxEnchantments(player, mainHandItem)) {
+            if (mainHandItem.getEnchantments().size() >= ItemLimits.getMaxEnchantments(mainHandItem, ConfigReader.getDefaultLimits(player, mainHandItem))) {
                 return "false";
             }
             return "true";

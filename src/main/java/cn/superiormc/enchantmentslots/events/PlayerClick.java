@@ -24,10 +24,11 @@ public class PlayerClick implements Listener {
             Player player = (Player)event.getWhoClicked();
             AnvilInventory inventory = (AnvilInventory) event.getInventory();
             ItemStack item = inventory.getItem(0);
-            ItemModify.addLore(player, item, false);
+            int defaultSlot = ConfigReader.getDefaultLimits(player, item);
+            ItemModify.addLore(item, defaultSlot);
             ItemStack result = inventory.getItem(2);
             if (result != null) {
-                int maxEnchantments = ItemLimits.getMaxEnchantments(player, result);
+                int maxEnchantments = ItemLimits.getMaxEnchantments(result, defaultSlot);
                 if (result.getEnchantments().size() > maxEnchantments) {
                     event.setCancelled(true);
                     if (ConfigReader.getCloseInventory()) {

@@ -131,7 +131,7 @@ settings:
       # This means all items that can be enchanted will auto add lore.
       # Recommend not enable it because it will lead to item in third-plugin GUI will also be added the lore.
       Packet:
-        enabled: false
+        enabled: true
       EnchantItemEvent:
         enabled: true
       InventoryClickEvent:
@@ -169,7 +169,7 @@ settings:
   # This option support ProtocolLib only.
   remove-illegal-extra-enchant: true
   # This option support ProtocolLib only.
-  only-in-player-inventory: false
+  only-in-player-inventory: true
 
 add-slot-items:
   A:

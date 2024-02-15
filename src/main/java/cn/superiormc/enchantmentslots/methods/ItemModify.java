@@ -2,7 +2,6 @@ package cn.superiormc.enchantmentslots.methods;
 
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.configs.Messages;
-import cn.superiormc.enchantmentslots.utils.ColorParser;
 import cn.superiormc.enchantmentslots.utils.NumberUtil;
 import cn.superiormc.enchantmentslots.utils.TextUtil;
 import org.bukkit.Bukkit;
@@ -18,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static cn.superiormc.enchantmentslots.methods.ItemLimits.ENCHANTMENT_SLOTS_KEY;
+
 
 public class ItemModify {
 
@@ -28,9 +29,10 @@ public class ItemModify {
         if (itemMeta == null) {
             return itemStack;
         }
+        int slot = ItemLimits.getRealMaxEnchantments(itemStack);
         List<String> lore = new ArrayList<>();
         if (ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack) &&
-                ItemLimits.getRealMaxEnchantments(player, itemStack) != 0) {
+                slot != 0) {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
@@ -49,7 +51,7 @@ public class ItemModify {
                     continue;
                 }
                 if (line.equals("{empty_slots}")) {
-                    int i = ItemLimits.getMaxEnchantments(player, itemStack) - itemStack.getEnchantments().size();
+                    int i = slot - itemStack.getEnchantments().size();
                     while (i > 0) {
                         String value = TextUtil.parse(ConfigReader.getEmptySlotPlaceholder());
                         value = lorePrefix + value;
@@ -60,17 +62,17 @@ public class ItemModify {
                 }
                 line = lorePrefix + line;
                 lore.add(TextUtil.parse(line)
-                        .replace("{slot_amount}", String.valueOf(ItemLimits.getMaxEnchantments(player, itemStack)))
+                        .replace("{slot_amount}", String.valueOf(slot))
                         .replace("{enchant_amount}", String.valueOf(itemStack.getEnchantments().size())));
 
             }
         }
         if (itemMeta.hasLore()) {
             List<String> tempLore = itemMeta.getLore();
-            lore.addAll(ConfigReader.editDisplayLore(tempLore, itemStack, player));
+            lore.addAll(ConfigReader.editDisplayLore(tempLore, itemStack, player, slot));
         }
         if (!ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack) &&
-                ItemLimits.getRealMaxEnchantments(player, itemStack) != 0) {
+                slot != 0) {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
@@ -95,7 +97,7 @@ public class ItemModify {
                     continue;
                 }
                 if (line.equals("{empty_slots}")) {
-                    int i = ItemLimits.getMaxEnchantments(player, itemStack) - itemStack.getEnchantments().size();
+                    int i = slot - itemStack.getEnchantments().size();
                     while (i > 0) {
                         String value = TextUtil.parse(ConfigReader.getEmptySlotPlaceholder());
                         value = lorePrefix + value;
@@ -106,25 +108,22 @@ public class ItemModify {
                 }
                 line = lorePrefix + line;
                 lore.add(TextUtil.parse(line)
-                        .replace("{slot_amount}", String.valueOf(ItemLimits.getMaxEnchantments(player, itemStack)))
+                        .replace("{slot_amount}", String.valueOf(slot))
                         .replace("{enchant_amount}", String.valueOf(itemStack.getEnchantments().size()))
-                        .replace("[slot_amount]", String.valueOf(ItemLimits.getMaxEnchantments(player, itemStack)))
+                        .replace("[slot_amount]", String.valueOf(slot))
                         .replace("[enchant_amount]", String.valueOf(itemStack.getEnchantments().size())));
 
             }
         }
         itemMeta.setLore(lore);
-        if (ConfigReader.getDebug()) {
+        if (ConfigReader.getDebug() && !lore.isEmpty()) {
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fAdded lore: " + lore + ".");
         }
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
 
-    public static ItemStack clientToServer(@NotNull Player player, @NotNull ItemStack itemStack) {
-        if (ItemLimits.getRealMaxEnchantments(player, itemStack) == 0) {
-            return itemStack;
-        }
+    public static ItemStack clientToServer(@NotNull ItemStack itemStack) {
         if (!itemStack.hasItemMeta()) {
             ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(itemStack.getType());
             itemStack.setItemMeta(tempMeta);
@@ -150,17 +149,11 @@ public class ItemModify {
         return itemStack;
     }
 
-    public static void addLore(Player player, ItemStack item, boolean fromPacket) {
-        if (!ConfigReader.getAutoAddSlotsLimit() && fromPacket) {
-            return;
-        }
-        if (item == null) {
+    public static void addLore(ItemStack item, int defaultSlot) {
+        if (item == null || item.getType().isAir()) {
             return;
         }
         if (item.getType() == Material.ENCHANTED_BOOK) {
-            return;
-        }
-        if (ItemLimits.getRealMaxEnchantments(player, item) != 0) {
             return;
         }
         if (!item.hasItemMeta()) {
@@ -168,11 +161,46 @@ public class ItemModify {
             item.setItemMeta(tempMeta);
         }
         ItemMeta meta = item.getItemMeta();
+        if (!item.hasItemMeta()) {
+            ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
+            item.setItemMeta(tempMeta);
+        }
+        if (meta.getPersistentDataContainer().has(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER)) {
+            return;
+        }
         if (ItemLimits.canEnchant(item)) {
-            meta.getPersistentDataContainer().set(ItemLimits.ENCHANTMENT_SLOTS_KEY,
+            meta.getPersistentDataContainer().set(ENCHANTMENT_SLOTS_KEY,
                     PersistentDataType.INTEGER,
-                    ConfigReader.getDefaultLimits(player, item));
+                    defaultSlot);
             item.setItemMeta(meta);
         }
+    }
+
+    public static ItemStack addLore(Player player, ItemStack item) {
+        if (item == null || item.getType().isAir()) {
+            return null;
+        }
+        if (item.getType() == Material.ENCHANTED_BOOK) {
+            return null;
+        }
+        if (!ItemLimits.canEnchant(item)) {
+            return null;
+        }
+        if (!item.hasItemMeta()) {
+            ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
+            item.setItemMeta(tempMeta);
+        }
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) {
+            return null;
+        }
+        if (meta.getPersistentDataContainer().has(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER)) {
+            return null;
+        }
+        meta.getPersistentDataContainer().set(ENCHANTMENT_SLOTS_KEY,
+                PersistentDataType.INTEGER,
+                ConfigReader.getDefaultLimits(player, item));
+        item.setItemMeta(meta);
+        return item;
     }
 }

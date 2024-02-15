@@ -33,7 +33,7 @@ public class SetCreativeSlots extends GeneralPackets {
                 if (clientItemStack.getType().isAir()) {
                     return;
                 }
-                ItemStack serverItemStack = ItemModify.clientToServer(event.getPlayer(), clientItemStack);
+                ItemStack serverItemStack = ItemModify.clientToServer(clientItemStack);
                 itemStackStructureModifier.write(0, serverItemStack);
             }
         };
