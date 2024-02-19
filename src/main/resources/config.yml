@@ -25,9 +25,6 @@ settings:
   # The value after the value just a number help you know it's level, do not type them in option.
   packet-listener-priority: LOWEST
   item-can-be-enchanted:
-    # Will try auto check whether the item can be enchanted.
-    # Recommend not use it. If not enable, will use whitelist-items instead.
-    auto-check: false
     whitelist-items:
       - wooden_pickaxe
       - stone_pickaxe

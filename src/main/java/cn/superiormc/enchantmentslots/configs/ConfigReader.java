@@ -98,9 +98,6 @@ public class ConfigReader {
     public static boolean getAutoAddSlotsLimit() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.trigger.Packet.enabled", true);
     }
-    public static boolean getAutoAddSlotsAutoCheck() {
-        return EnchantmentSlots.instance.getConfig().getBoolean("settings.item-can-be-enchanted.auto-check", true);
-    }
     public static List<String> getAutoAddSlotsItems() {
         if (EnchantmentSlots.instance.getConfig().getStringList("settings.item-can-be-enchanted.whitelist-items").isEmpty()) {
             return EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.trigger.Packet.whitelist-items");

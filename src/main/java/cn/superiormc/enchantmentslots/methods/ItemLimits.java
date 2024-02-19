@@ -77,19 +77,7 @@ public class ItemLimits {
         if (section != null && section.getKeys(false).contains(CheckValidHook.checkValid(itemStack))) {
             return true;
         }
-        if (!ConfigReader.getAutoAddSlotsAutoCheck()) {
-            return ConfigReader.getAutoAddSlotsItems().contains(itemStack.getType().name().toLowerCase()) ||
+        return ConfigReader.getAutoAddSlotsItems().contains(itemStack.getType().name().toLowerCase()) ||
                     ConfigReader.getAutoAddSlotsItems().contains(itemStack.getType().name().toUpperCase());
-        }
-        Material material = itemStack.getType();
-        if (material.equals(Material.ENCHANTED_BOOK) || material.equals(Material.BOOK)) {
-            return false;
-        }
-        for (Enchantment enchantment : Enchantment.values()) {
-            if (enchantment.canEnchantItem(itemStack)) {
-                return true;
-            }
-        }
-        return false;
     }
 }
