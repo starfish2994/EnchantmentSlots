@@ -31,8 +31,7 @@ public class ItemModify {
         }
         int slot = ItemLimits.getRealMaxEnchantments(itemStack);
         List<String> lore = new ArrayList<>();
-        if (ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack) &&
-                slot != 0) {
+        if (ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack) && slot != 0) {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
@@ -71,8 +70,7 @@ public class ItemModify {
             List<String> tempLore = itemMeta.getLore();
             lore.addAll(ConfigReader.editDisplayLore(tempLore, itemStack, player, slot));
         }
-        if (!ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack) &&
-                slot != 0) {
+        if (!ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack) && slot != 0) {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
@@ -153,9 +151,6 @@ public class ItemModify {
         if (item == null || item.getType().isAir()) {
             return;
         }
-        if (item.getType() == Material.ENCHANTED_BOOK) {
-            return;
-        }
         if (!item.hasItemMeta()) {
             ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
             item.setItemMeta(tempMeta);
@@ -178,9 +173,6 @@ public class ItemModify {
 
     public static ItemStack addLore(Player player, ItemStack item) {
         if (item == null || item.getType().isAir()) {
-            return null;
-        }
-        if (item.getType() == Material.ENCHANTED_BOOK) {
             return null;
         }
         if (!ItemLimits.canEnchant(item)) {
