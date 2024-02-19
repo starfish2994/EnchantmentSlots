@@ -13,7 +13,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 public class WindowClick implements Listener {
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.isCancelled()) {
             return;
@@ -45,27 +45,6 @@ public class WindowClick implements Listener {
                     player.getItemOnCursor().setAmount(0);
                 }
                 event.getClickedInventory().setItem(event.getSlot(), newItem);
-            }
-        } else {
-            int topSize = player.getOpenInventory().getTopInventory().getSize();
-            int slot = event.getSlot();
-            if (slot < topSize || slot > topSize + 36) {
-                return;
-            }
-            ItemStack tempItemStack = event.getCurrentItem();
-            if (tempItemStack == null || tempItemStack.getType().isAir()) {
-                tempItemStack = player.getItemOnCursor();
-                if (tempItemStack.getType().isAir()) {
-                    return;
-                }
-                replaceItem = false;
-            }
-            ItemStack newItem = ItemModify.addLore(player, tempItemStack);
-            if (replaceItem && newItem != null && ConfigReader.getAutoAddSlotsLimit()) {
-                if (!player.getItemOnCursor().getType().isAir()) {
-                    player.getItemOnCursor().setAmount(0);
-                }
-                event.getClickedInventory().setItem(slot, newItem);
             }
         }
     }
