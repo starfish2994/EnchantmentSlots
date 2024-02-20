@@ -29,11 +29,9 @@ public class ConfigReader {
     public static boolean getCloseInventory() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.close-inventory-if-reached-limit", true);
     }
-    public static boolean getRemoveExtraEnchants() {
-        return EnchantmentSlots.instance.getConfig().getBoolean("settings.remove-illegal-extra-enchant", true);
-    }
     public static boolean getOnlyInInventory() {
-        return EnchantmentSlots.instance.getConfig().getBoolean("settings.only-in-player-inventory", true);
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.only-in-player-inventory",
+                EnchantmentSlots.instance.getConfig().getBoolean("settings.only-in-player-inventory", true));
     }
     public static boolean getCancelMaxLimits() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.cancel-add-slot-if-reached-max-slot", true);
@@ -90,13 +88,21 @@ public class ConfigReader {
         return false;
     }
     public static boolean getEnchantItemTrigger() {
-        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.trigger.EnchantItemEvent.enabled", true);
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.EnchantItemEvent.enabled", true);
+    }
+    public static boolean getAnvilItemTrigger() {
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.AnvilItemEvent.enabled", true);
     }
     public static boolean getInventoryClickTrigger() {
-        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.trigger.InventoryClickEvent.enabled", true);
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.InventoryClickEvent.enabled", true);
     }
     public static boolean getAutoAddSlotsLimit() {
-        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.trigger.Packet.enabled", true);
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.SetSlotPacket.enabled",
+                EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.trigger.Packet.enabled", true));
+    }
+    public static boolean getRemoveExtraEnchants() {
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.SetSlotPacket.remove-illegal-extra-enchant",
+                EnchantmentSlots.instance.getConfig().getBoolean("settings.remove-illegal-extra-enchant", true));
     }
     public static List<String> getAutoAddSlotsItems() {
         if (EnchantmentSlots.instance.getConfig().getStringList("settings.item-can-be-enchanted.whitelist-items").isEmpty()) {
@@ -210,10 +216,12 @@ public class ConfigReader {
     }
     public static ListenerPriority getPriority() {
         return ListenerPriority.valueOf(EnchantmentSlots.instance.getConfig().getString(
-                "settings.packet-listener-priority", "MONITOR").toUpperCase());
+                "settings.add-lore.packet-listener-priority", EnchantmentSlots.instance.getConfig().getString(
+                        "settings.packet-listener-priority", "MONITOR")).toUpperCase());
     }
     public static DisplayPriority getEcoPriority() {
         return DisplayPriority.valueOf(EnchantmentSlots.instance.getConfig().getString(
-                "settings.packet-listener-priority", "HIGHEST").toUpperCase());
+                "settings.add-lore.packet-listener-priority", EnchantmentSlots.instance.getConfig().getString(
+                        "settings.packet-listener-priority", "HIGHEST")).toUpperCase());
     }
 }

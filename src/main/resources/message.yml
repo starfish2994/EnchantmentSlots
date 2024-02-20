@@ -24,4 +24,5 @@ error-miss-permission: "&#98FB98[EnchantmentSlots] &cYou don't have permission t
 error-in-game: "&#98FB98[EnchantmentSlots] &cYou have to use this command in game!"
 error-no-item: "&#98FB98[EnchantmentSlots] &cCan not get item in your main hand!"
 error-item-not-found: "&#98FB98[EnchantmentSlots] &cCan not get extra slot item for this name!"
-player-not-found: "&#98FB98[EnchantmentSlots] &cWe can't find player %player%!"
+error-player-not-found: "&#98FB98[EnchantmentSlots] &cWe can't find player %player%!"
+error-creative-mode: "&#98FB98[EnchantmentSlots] &cThis feature does not support creative mode for now!"

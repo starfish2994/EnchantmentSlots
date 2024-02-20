@@ -3,10 +3,7 @@ package cn.superiormc.enchantmentslots;
 import cn.superiormc.enchantmentslots.commands.MainCommand;
 import cn.superiormc.enchantmentslots.commands.MainTab;
 import cn.superiormc.enchantmentslots.configs.Messages;
-import cn.superiormc.enchantmentslots.listeners.EnchantGUIEnchantListener;
-import cn.superiormc.enchantmentslots.listeners.PlayerClickListener;
-import cn.superiormc.enchantmentslots.listeners.PlayerEnchantListener;
-import cn.superiormc.enchantmentslots.listeners.PlayerInventoryListener;
+import cn.superiormc.enchantmentslots.listeners.*;
 import cn.superiormc.enchantmentslots.methods.ExtraSlotsItem;
 import cn.superiormc.enchantmentslots.papi.PlaceholderAPIExpansion;
 import cn.superiormc.enchantmentslots.protolcol.GeneralProtolcol;
@@ -52,6 +49,9 @@ public final class EnchantmentSlots extends JavaPlugin {
     private void registerEvents() {
         if (ConfigReader.getEnchantItemTrigger()) {
             Bukkit.getPluginManager().registerEvents(new PlayerEnchantListener(), this);
+        }
+        if (ConfigReader.getAnvilItemTrigger()) {
+            Bukkit.getPluginManager().registerEvents(new PlayerAnvilListener(), this);
         }
         if (ConfigReader.getInventoryClickTrigger()) {
             Bukkit.getPluginManager().registerEvents(new PlayerClickListener(), this);

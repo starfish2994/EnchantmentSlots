@@ -5,25 +5,6 @@
 # Settings
 settings:
   debug: false
-  # Support plugin:
-  #   - eco (Recommend use if you are using EcoItems, EcoEnchants...)
-  #   - ProtocolLib (Classic and stable choice)
-  use-listener-plugin: ProtocolLib
-  # ProtocolLib Support value:
-  #    LOWEST(0),
-  #    LOW(1),
-  #    NORMAL(2),
-  #    HIGH(3),
-  #    HIGHEST(4),
-  #    MONITOR(5)
-  # eco Support value:
-  #    CUSTOM(250),
-  #    LOWEST(100),
-  #    LOW(200),
-  #    HIGH(300),
-  #    HIGHEST(400)
-  # The value after the value just a number help you know it's level, do not type them in option.
-  packet-listener-priority: LOWEST
   item-can-be-enchanted:
     whitelist-items:
       - wooden_pickaxe
@@ -90,8 +71,42 @@ settings:
       - netherite_boots
       - book
       - enchanted_book
+  # This is when will the plugin trying adds enchantment slot NBT for an enchantable item which also means set fixed
+  # enchantment slot for an item.
+  set-slot-trigger:
+    # This option support ProtocolLib only.
+    SetSlotPacket:
+      enabled: true
+      remove-illegal-extra-enchant: true
+    EnchantItemEvent:
+      enabled: true
+    AnvilItemEvent:
+      enabled: true
+    InventoryClickEvent:
+      enabled: true
   # Only item that can be enchanted will be added lore.
   add-lore:
+    # This option support ProtocolLib only.
+    only-in-player-inventory: true
+    # Support plugin:
+    #   - eco (Recommend use if you are using EcoItems, EcoEnchants...)
+    #   - ProtocolLib (Classic and stable choice)
+    use-listener-plugin: ProtocolLib
+    # ProtocolLib Support value:
+    #    LOWEST(0),
+    #    LOW(1),
+    #    NORMAL(2),
+    #    HIGH(3),
+    #    HIGHEST(4),
+    #    MONITOR(5)
+    # eco Support value:
+    #    CUSTOM(250),
+    #    LOWEST(100),
+    #    LOW(200),
+    #    HIGH(300),
+    #    HIGHEST(400)
+    # The value after the value just a number help you know it's level, do not type them in option.
+    packet-listener-priority: LOWEST
     # Does not support other packed-based item, enchants plugins.
     # Like EcoEnchants, EcoItems. (You can also try eco as use-listener-plugin, then change packet-listener-priority)
     # They will always put their lore at first location and EnchantmentSlots can do nothing about it.
@@ -123,16 +138,6 @@ settings:
         format: '&6  {enchant_name} {enchant_level}'
       empty-slots:
         format: '&7  --- Empty Slot ---'
-    # This is when will plugin try add lore?
-    trigger:
-      # This means all items that can be enchanted will auto add lore.
-      # Recommend not enable it because it will lead to item in third-plugin GUI will also be added the lore.
-      Packet:
-        enabled: true
-      EnchantItemEvent:
-        enabled: true
-      InventoryClickEvent:
-        enabled: true
   default-slots:
     default: 5
     vip: 10
@@ -163,10 +168,6 @@ settings:
   # Whether cancel add slot or just set item slot to max slot value if item reached max slot limit
   # by using add slot items.
   cancel-add-slot-if-reached-max-slot: true
-  # This option support ProtocolLib only.
-  remove-illegal-extra-enchant: true
-  # This option support ProtocolLib only.
-  only-in-player-inventory: true
 
 add-slot-items:
   A:
