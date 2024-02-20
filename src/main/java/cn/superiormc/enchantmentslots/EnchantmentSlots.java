@@ -47,12 +47,8 @@ public final class EnchantmentSlots extends JavaPlugin {
     }
 
     private void registerEvents() {
-        if (ConfigReader.getEnchantItemTrigger()) {
-            Bukkit.getPluginManager().registerEvents(new PlayerEnchantListener(), this);
-        }
-        if (ConfigReader.getAnvilItemTrigger()) {
-            Bukkit.getPluginManager().registerEvents(new PlayerAnvilListener(), this);
-        }
+        Bukkit.getPluginManager().registerEvents(new PlayerEnchantListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerAnvilListener(), this);
         if (ConfigReader.getInventoryClickTrigger()) {
             Bukkit.getPluginManager().registerEvents(new PlayerClickListener(), this);
         }

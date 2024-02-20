@@ -2,6 +2,7 @@ package cn.superiormc.enchantmentslots.methods;
 
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.configs.Messages;
+import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import cn.superiormc.enchantmentslots.utils.NumberUtil;
 import cn.superiormc.enchantmentslots.utils.TextUtil;
 import org.bukkit.Bukkit;
@@ -10,12 +11,15 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import static cn.superiormc.enchantmentslots.methods.ItemLimits.ENCHANTMENT_SLOTS_KEY;
 
@@ -31,18 +35,25 @@ public class ItemModify {
         }
         int slot = ItemLimits.getRealMaxEnchantments(itemStack);
         List<String> lore = new ArrayList<>();
+        Map<Enchantment, Integer> enchantments = ItemUtil.getEnchantments(itemStack);
         if (ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack) && slot != 0) {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
-                    for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
+                    for (Enchantment enchantment : ItemUtil.getEnchantments(itemStack).keySet()) {
                         String value = TextUtil.parse(
                                 ConfigReader.getEnchantPlaceholder().
                                         replace("{enchant_name}", Messages.getEnchantName(enchantment, true)).
                                         replace("{enchant_raw_name}", Messages.getEnchantName(enchantment, false)).
                                         replace("{enchant_level}", String.valueOf(
-                                                itemStack.getEnchantments().get(enchantment))).
+                                                enchantments.get(enchantment))).
                                         replace("{enchant_level_roman}", NumberUtil.convertToRoman(
-                                                itemStack.getEnchantments().get(enchantment))));
+                                                enchantments.get(enchantment)))).
+                                        replace("[enchant_name]", Messages.getEnchantName(enchantment, true)).
+                                        replace("[enchant_raw_name]", Messages.getEnchantName(enchantment, false)).
+                                        replace("[enchant_level]", String.valueOf(
+                                                enchantments.get(enchantment))).
+                                        replace("[enchant_level_roman]", NumberUtil.convertToRoman(
+                                                enchantments.get(enchantment)));
                         value = lorePrefix + value;
                         lore.add(value);
                     }
@@ -62,7 +73,7 @@ public class ItemModify {
                 line = lorePrefix + line;
                 lore.add(TextUtil.parse(line)
                         .replace("{slot_amount}", String.valueOf(slot))
-                        .replace("{enchant_amount}", String.valueOf(itemStack.getEnchantments().size())));
+                        .replace("{enchant_amount}", String.valueOf(enchantments.size())));
 
             }
         }
@@ -73,21 +84,21 @@ public class ItemModify {
         if (!ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack) && slot != 0) {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
-                    for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
+                    for (Enchantment enchantment : enchantments.keySet()) {
                         String value = TextUtil.parse(
                                 ConfigReader.getEnchantPlaceholder().
                                         replace("{enchant_name}", Messages.getEnchantName(enchantment, true)).
                                         replace("{enchant_raw_name}", Messages.getEnchantName(enchantment, false)).
                                         replace("{enchant_level}", String.valueOf(
-                                                itemStack.getEnchantments().get(enchantment))).
+                                                enchantments.get(enchantment))).
                                         replace("{enchant_level_roman}", NumberUtil.convertToRoman(
-                                                itemStack.getEnchantments().get(enchantment)))).
+                                                enchantments.get(enchantment)))).
                                         replace("[enchant_name]", Messages.getEnchantName(enchantment, true)).
                                         replace("[enchant_raw_name]", Messages.getEnchantName(enchantment, false)).
                                         replace("[enchant_level]", String.valueOf(
-                                                itemStack.getEnchantments().get(enchantment))).
+                                                enchantments.get(enchantment))).
                                         replace("[enchant_level_roman]", NumberUtil.convertToRoman(
-                                                itemStack.getEnchantments().get(enchantment)));
+                                                enchantments.get(enchantment)));
                         value = lorePrefix + value;
                         lore.add(value);
                     }
@@ -107,9 +118,9 @@ public class ItemModify {
                 line = lorePrefix + line;
                 lore.add(TextUtil.parse(line)
                         .replace("{slot_amount}", String.valueOf(slot))
-                        .replace("{enchant_amount}", String.valueOf(itemStack.getEnchantments().size()))
+                        .replace("{enchant_amount}", String.valueOf(enchantments.size()))
                         .replace("[slot_amount]", String.valueOf(slot))
-                        .replace("[enchant_amount]", String.valueOf(itemStack.getEnchantments().size())));
+                        .replace("[enchant_amount]", String.valueOf(enchantments.size())));
 
             }
         }

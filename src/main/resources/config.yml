@@ -85,6 +85,7 @@ settings:
     InventoryClickEvent:
       enabled: true
   # Only item that can be enchanted will be added lore.
+  # If item don't have enchantment slot NBT, plugin will auto calculate it default slot as max slot.
   add-lore:
     # This option support ProtocolLib only.
     only-in-player-inventory: true

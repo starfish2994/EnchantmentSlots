@@ -40,7 +40,7 @@ public class PlayerClickListener implements Listener {
                 replaceItem = false;
             }
             ItemStack newItem = ItemModify.addLore(player, tempItemStack);
-            if (replaceItem && newItem != null && ConfigReader.getAutoAddSlotsLimit()) {
+            if (replaceItem && newItem != null) {
                 if (!player.getItemOnCursor().getType().isAir()) {
                     player.getItemOnCursor().setAmount(0);
                 }

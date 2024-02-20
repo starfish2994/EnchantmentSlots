@@ -10,11 +10,15 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class ItemUtil {
@@ -89,4 +93,22 @@ public class ItemUtil {
         return item;
     }
 
+    @NotNull
+    public static Map<Enchantment, Integer> getEnchantments(@NotNull ItemStack itemStack) {
+        Map<Enchantment, Integer> enchantments;
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null) {
+            return new HashMap<>();
+        }
+        if (itemMeta instanceof EnchantmentStorageMeta) {
+            EnchantmentStorageMeta storageMeta = (EnchantmentStorageMeta) itemMeta;
+            enchantments = storageMeta.getStoredEnchants();
+            if (enchantments.isEmpty()) {
+                enchantments = itemStack.getEnchantments();
+            }
+        } else {
+            enchantments =  itemStack.getEnchantments();
+        }
+        return enchantments;
+    }
 }

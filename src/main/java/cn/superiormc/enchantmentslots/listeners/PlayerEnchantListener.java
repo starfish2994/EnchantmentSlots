@@ -4,6 +4,7 @@ import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.configs.Messages;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
+import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,9 +17,11 @@ public class PlayerEnchantListener implements Listener {
         Player player = event.getEnchanter();
         ItemStack item = event.getItem();
         int defaultSlot = ConfigReader.getDefaultLimits(player, item);
-        ItemModify.addLore(item, defaultSlot);
+        if (ConfigReader.getEnchantItemTrigger()) {
+            ItemModify.addLore(item, defaultSlot);
+        }
         int maxEnchantments = ItemLimits.getMaxEnchantments(item, defaultSlot);
-        if (event.getEnchantsToAdd().size() + item.getEnchantments().size() > maxEnchantments) {
+        if (event.getEnchantsToAdd().size() + ItemUtil.getEnchantments(item).size() > maxEnchantments) {
             event.setCancelled(true);
             if (ConfigReader.getCloseInventory()) {
                 player.closeInventory();

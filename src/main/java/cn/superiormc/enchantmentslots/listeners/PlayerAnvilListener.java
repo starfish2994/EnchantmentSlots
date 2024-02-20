@@ -4,6 +4,7 @@ import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.configs.Messages;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
+import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,11 +26,13 @@ public class PlayerAnvilListener implements Listener {
             AnvilInventory inventory = (AnvilInventory) event.getInventory();
             ItemStack item = inventory.getItem(0);
             int defaultSlot = ConfigReader.getDefaultLimits(player, item);
-            ItemModify.addLore(item, defaultSlot);
+            if (ConfigReader.getAnvilItemTrigger()) {
+                ItemModify.addLore(item, defaultSlot);
+            }
             ItemStack result = inventory.getItem(2);
             if (result != null) {
                 int maxEnchantments = ItemLimits.getMaxEnchantments(result, defaultSlot);
-                if (result.getEnchantments().size() > maxEnchantments) {
+                if (ItemUtil.getEnchantments(result).size() > maxEnchantments) {
                     event.setCancelled(true);
                     if (ConfigReader.getCloseInventory()) {
                         player.closeInventory();
