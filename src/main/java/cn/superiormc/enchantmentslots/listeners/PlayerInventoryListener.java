@@ -1,4 +1,4 @@
-package cn.superiormc.enchantmentslots.events;
+package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.configs.Messages;
@@ -10,11 +10,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class PlayerInventory implements Listener {
+public class PlayerInventoryListener implements Listener {
 
     @EventHandler
     public void onInventoryDrag(InventoryClickEvent event) {
-        if (event.getInventory() instanceof org.bukkit.inventory.PlayerInventory) {
+        if (!(event.getClickedInventory() instanceof org.bukkit.inventory.PlayerInventory)) {
             return;
         }
         if (!event.getClick().isRightClick() && !event.getClick().isLeftClick()) {
@@ -42,6 +42,10 @@ public class PlayerInventory implements Listener {
             return;
         }
         int value = item.getAddSlot();
+        if (value == 0) {
+            item.doFailAction(player);
+            return;
+        }
         int baseValue = ItemLimits.getMaxEnchantments(targetItem, ConfigReader.getDefaultLimits(player, targetItem));
         if (baseValue == 0) {
             return;
@@ -54,22 +58,12 @@ public class PlayerInventory implements Listener {
             } else {
                 extraItem.setAmount(extraItem.getAmount() - 1);
                 ItemLimits.setMaxEnchantments(targetItem, maxValue);
-                if (value == 0) {
-                    item.doFailAction(player);
-                    player.sendMessage(Messages.getMessages("fail-add"));
-                } else {
-                    item.doSuccessAction(player);
-                }
+                item.doSuccessAction(player);
             }
             return;
         }
         extraItem.setAmount(extraItem.getAmount() - 1);
         ItemLimits.setMaxEnchantments(targetItem, baseValue + value);
-        if (value == 0) {
-            item.doFailAction(player);
-            player.sendMessage(Messages.getMessages("fail-add"));
-        } else {
-            item.doSuccessAction(player);
-        }
+        item.doSuccessAction(player);
     }
 }

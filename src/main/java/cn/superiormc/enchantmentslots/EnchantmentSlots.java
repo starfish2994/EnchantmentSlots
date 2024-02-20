@@ -3,10 +3,10 @@ package cn.superiormc.enchantmentslots;
 import cn.superiormc.enchantmentslots.commands.MainCommand;
 import cn.superiormc.enchantmentslots.commands.MainTab;
 import cn.superiormc.enchantmentslots.configs.Messages;
-import cn.superiormc.enchantmentslots.events.EnchantGUIEnchant;
-import cn.superiormc.enchantmentslots.events.PlayerClick;
-import cn.superiormc.enchantmentslots.events.PlayerEnchant;
-import cn.superiormc.enchantmentslots.events.PlayerInventory;
+import cn.superiormc.enchantmentslots.listeners.EnchantGUIEnchantListener;
+import cn.superiormc.enchantmentslots.listeners.PlayerClickListener;
+import cn.superiormc.enchantmentslots.listeners.PlayerEnchantListener;
+import cn.superiormc.enchantmentslots.listeners.PlayerInventoryListener;
 import cn.superiormc.enchantmentslots.methods.ExtraSlotsItem;
 import cn.superiormc.enchantmentslots.papi.PlaceholderAPIExpansion;
 import cn.superiormc.enchantmentslots.protolcol.GeneralProtolcol;
@@ -51,14 +51,14 @@ public final class EnchantmentSlots extends JavaPlugin {
 
     private void registerEvents() {
         if (ConfigReader.getEnchantItemTrigger()) {
-            Bukkit.getPluginManager().registerEvents(new PlayerEnchant(), this);
+            Bukkit.getPluginManager().registerEvents(new PlayerEnchantListener(), this);
         }
         if (ConfigReader.getInventoryClickTrigger()) {
-            Bukkit.getPluginManager().registerEvents(new PlayerClick(), this);
+            Bukkit.getPluginManager().registerEvents(new PlayerClickListener(), this);
         }
-        Bukkit.getPluginManager().registerEvents(new PlayerInventory(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerInventoryListener(), this);
         if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("EnchantGui")) {
-            Bukkit.getPluginManager().registerEvents(new EnchantGUIEnchant(), this);
+            Bukkit.getPluginManager().registerEvents(new EnchantGUIEnchantListener(), this);
         }
     }
 

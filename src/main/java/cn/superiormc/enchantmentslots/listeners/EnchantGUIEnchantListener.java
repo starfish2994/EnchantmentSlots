@@ -1,4 +1,4 @@
-package cn.superiormc.enchantmentslots.events;
+package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
@@ -14,7 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-public class EnchantGUIEnchant implements Listener {
+public class EnchantGUIEnchantListener implements Listener {
     @EventHandler
     public void onEnchantItem(PlayerEnchantItemEvent event) {
         Player player = event.getPlayer();
