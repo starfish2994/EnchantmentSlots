@@ -29,10 +29,8 @@ public class CommonUtil {
         int topSize = player.getOpenInventory().getTopInventory().getSize();
         if (player.getOpenInventory().getTopInventory() instanceof CraftingInventory &&
         player.getOpenInventory().getTopInventory().getSize() == 5) {
-            Bukkit.getConsoleSender().sendMessage("111");
             return slot >= 5 && slot <= 44;
         }
-        Bukkit.getConsoleSender().sendMessage(player.getOpenInventory().getTopInventory().getClass().getName());
         return slot >= topSize;
     }
 

@@ -40,7 +40,6 @@ public class SetSlots extends GeneralPackets {
                     return;
                 }
                 int slot = packet.getIntegers().read(packet.getIntegers().size() - 1);
-                int topSize = event.getPlayer().getOpenInventory().getTopInventory().getSize();
                 int spigotSlot;
                 if (slot >= 36) {
                     spigotSlot = slot - 36;
@@ -51,7 +50,8 @@ public class SetSlots extends GeneralPackets {
                 }
                 if (ConfigReader.getDebug()) {
                     Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §f" +
-                            "Packet Slot ID: " + slot + " ,Window ID: " + windowID + " ,Top Size: " + topSize + ".");
+                            "Packet Slot ID: " + slot + ", Window ID: " + windowID + ", Top Size: " +
+                            event.getPlayer().getOpenInventory().getTopInventory().getSize() + ".");
                 }
                 ItemStack newItem = null;
                 if (!ConfigReader.getOnlyInInventory() || CommonUtil.inPlayerInventory(event.getPlayer(), slot)) {
