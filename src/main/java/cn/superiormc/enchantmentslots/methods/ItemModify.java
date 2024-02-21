@@ -125,9 +125,6 @@ public class ItemModify {
             }
         }
         itemMeta.setLore(lore);
-        if (ConfigReader.getDebug() && !lore.isEmpty()) {
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fAdded lore: " + lore + ".");
-        }
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }

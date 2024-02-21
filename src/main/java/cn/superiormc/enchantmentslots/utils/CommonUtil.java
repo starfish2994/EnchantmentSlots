@@ -3,6 +3,9 @@ package cn.superiormc.enchantmentslots.utils;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.CraftingInventory;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,6 +23,17 @@ public class CommonUtil {
             return Integer.parseInt(matcher.group(1));
         }
         return 20;
+    }
+
+    public static boolean inPlayerInventory(Player player, int slot) {
+        int topSize = player.getOpenInventory().getTopInventory().getSize();
+        if (player.getOpenInventory().getTopInventory() instanceof CraftingInventory &&
+        player.getOpenInventory().getTopInventory().getSize() == 5) {
+            Bukkit.getConsoleSender().sendMessage("111");
+            return slot >= 5 && slot <= 44;
+        }
+        Bukkit.getConsoleSender().sendMessage(player.getOpenInventory().getTopInventory().getClass().getName());
+        return slot >= topSize;
     }
 
     public static void dispatchCommand(String command){

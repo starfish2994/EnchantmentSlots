@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -29,23 +30,15 @@ public class PlayerClickListener implements Listener {
             return;
         }
         Player player = (Player) event.getWhoClicked();
-        boolean replaceItem = true;
-        if (event.getClickedInventory() instanceof PlayerInventory) {
+        if (event.getClickedInventory().equals(player.getOpenInventory().getBottomInventory())) {
             ItemStack tempItemStack = event.getCurrentItem();
             if (tempItemStack == null || tempItemStack.getType().isAir()) {
                 tempItemStack = player.getItemOnCursor();
                 if (tempItemStack.getType().isAir()) {
                     return;
                 }
-                replaceItem = false;
             }
-            ItemStack newItem = ItemModify.addLore(player, tempItemStack);
-            if (replaceItem && newItem != null) {
-                if (!player.getItemOnCursor().getType().isAir()) {
-                    player.getItemOnCursor().setAmount(0);
-                }
-                event.getClickedInventory().setItem(event.getSlot(), newItem);
-            }
+            ItemModify.addLore(player, tempItemStack);
         }
     }
 }

@@ -4,6 +4,7 @@ import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
+import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -32,12 +33,14 @@ public class SetSlots extends GeneralPackets {
                     return;
                 }
                 PacketContainer packet = event.getPacket();
+                int windowID = packet.getIntegers().read(0);
                 StructureModifier<ItemStack> itemStackStructureModifier = packet.getItemModifier();
                 ItemStack serverItemStack = itemStackStructureModifier.read(0);
                 if (serverItemStack == null || serverItemStack.getType().isAir()) {
                     return;
                 }
                 int slot = packet.getIntegers().read(packet.getIntegers().size() - 1);
+                int topSize = event.getPlayer().getOpenInventory().getTopInventory().getSize();
                 int spigotSlot;
                 if (slot >= 36) {
                     spigotSlot = slot - 36;
@@ -48,10 +51,13 @@ public class SetSlots extends GeneralPackets {
                 }
                 if (ConfigReader.getDebug()) {
                     Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §f" +
-                            "Packet Slot ID: " + slot + ", Spigot Slot ID: " + spigotSlot + ".");
+                            "Packet Slot ID: " + slot + " ,Window ID: " + windowID + " ,Top Size: " + topSize + ".");
                 }
-                ItemStack newItem = ItemModify.addLore(event.getPlayer(), serverItemStack);
-                if (slot >= 5 && slot <= 44) {
+                ItemStack newItem = null;
+                if (!ConfigReader.getOnlyInInventory() || CommonUtil.inPlayerInventory(event.getPlayer(), slot)) {
+                    newItem = ItemModify.addLore(event.getPlayer(), serverItemStack);
+                }
+                if (CommonUtil.inPlayerInventory(event.getPlayer(), slot)) {
                     if (newItem != null && ConfigReader.getAutoAddSlotsLimit()) {
                         event.getPlayer().getInventory().setItem(spigotSlot, newItem);
                     }
