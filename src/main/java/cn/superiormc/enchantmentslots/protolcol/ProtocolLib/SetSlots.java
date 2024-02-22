@@ -59,7 +59,7 @@ public class SetSlots extends GeneralPackets {
                 }
                 if (CommonUtil.inPlayerInventory(event.getPlayer(), slot)) {
                     if (newItem != null && ConfigReader.getAutoAddSlotsLimit()) {
-                        event.getPlayer().getInventory().setItem(spigotSlot, newItem);
+                        ItemModify.addLore(event.getPlayer(), event.getPlayer().getInventory().getItem(spigotSlot));
                     }
                     if (ConfigReader.getRemoveExtraEnchants()) {
                         ItemStack tempItemStack = event.getPlayer().getInventory().getItem(spigotSlot);
