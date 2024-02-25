@@ -28,7 +28,7 @@ public class ItemModify {
 
     public static String lorePrefix = "";
 
-    public static ItemStack serverToClient(@NotNull Player player, @NotNull ItemStack itemStack) {
+    public static ItemStack serverToClient(@NotNull ItemStack itemStack) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null) {
             return itemStack;
@@ -79,7 +79,7 @@ public class ItemModify {
         }
         if (itemMeta.hasLore()) {
             List<String> tempLore = itemMeta.getLore();
-            lore.addAll(ConfigReader.editDisplayLore(tempLore, itemStack, player, slot));
+            lore.addAll(ConfigReader.editDisplayLore(tempLore, itemStack, slot));
         }
         if (!ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack) && slot != 0) {
             for (String line : ConfigReader.getDisplayLore()) {

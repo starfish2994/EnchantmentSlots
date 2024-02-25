@@ -41,7 +41,9 @@ public class EcoDisplayModule extends DisplayModule {
         if (itemStack.getType().isAir()) {
             return;
         }
-        ItemModify.addLore(player, itemStack);
-        ItemModify.serverToClient(player, itemStack);
+        if (ConfigReader.getAutoAddLore()) {
+            ItemModify.addLore(player, itemStack);
+        }
+        ItemModify.serverToClient(itemStack);
     }
 }

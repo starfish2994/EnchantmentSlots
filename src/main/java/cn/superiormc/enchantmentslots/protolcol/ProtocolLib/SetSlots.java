@@ -54,7 +54,8 @@ public class SetSlots extends GeneralPackets {
                             event.getPlayer().getOpenInventory().getTopInventory().getSize() + ".");
                 }
                 ItemStack newItem = null;
-                if (!ConfigReader.getOnlyInInventory() || CommonUtil.inPlayerInventory(event.getPlayer(), slot)) {
+                if (ConfigReader.getAutoAddLore() && (
+                        !ConfigReader.getOnlyInInventory() || CommonUtil.inPlayerInventory(event.getPlayer(), slot))) {
                     newItem = ItemModify.addLore(event.getPlayer(), serverItemStack);
                 }
                 if (CommonUtil.inPlayerInventory(event.getPlayer(), slot)) {
@@ -83,7 +84,7 @@ public class SetSlots extends GeneralPackets {
                         }
                     }
                 }
-                ItemStack clientItemStack = ItemModify.serverToClient(event.getPlayer(), serverItemStack);
+                ItemStack clientItemStack = ItemModify.serverToClient(serverItemStack);
                 // client 是加过 Lore 的，server 是没加过的！
                 itemStackStructureModifier.write(0, clientItemStack);
             }

@@ -6,6 +6,10 @@
 settings:
   debug: false
   item-can-be-enchanted:
+    # Auto add enchantment slot lore for all item that can be enchanted.
+    # If disabled, only item has enchantment slot NBT will display lore.
+    # Maybe lead to server lag.
+    auto-add-lore: true
     whitelist-items:
       - wooden_pickaxe
       - stone_pickaxe
@@ -69,14 +73,14 @@ settings:
       - golden_boots
       - diamond_boots
       - netherite_boots
-      - book
       - enchanted_book
+      - book
   # This is when will the plugin trying adds enchantment slot NBT for an enchantable item which also means set fixed
   # enchantment slot for an item.
   set-slot-trigger:
     # This option support ProtocolLib only.
     SetSlotPacket:
-      enabled: true
+      enabled: false
       remove-illegal-extra-enchant: true
     EnchantItemEvent:
       enabled: true

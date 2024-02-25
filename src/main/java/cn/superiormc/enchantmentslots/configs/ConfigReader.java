@@ -23,6 +23,9 @@ public class ConfigReader {
     public static boolean getDebug() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.debug", false);
     }
+    public static boolean getAutoAddLore() {
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.item-can-be-enchanted.auto-add-lore", true);
+    }
     public static String getEnchantmentName(Enchantment enchantment) {
         return EnchantmentSlots.instance.getConfig().getString("enchant-name." + enchantment.getKey().getKey(), enchantment.getKey().getKey());
     }
@@ -98,11 +101,11 @@ public class ConfigReader {
     }
     public static boolean getAutoAddSlotsLimit() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.SetSlotPacket.enabled",
-                EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.trigger.Packet.enabled", true));
+                EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.trigger.Packet.enabled", false));
     }
     public static boolean getRemoveExtraEnchants() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.SetSlotPacket.remove-illegal-extra-enchant",
-                EnchantmentSlots.instance.getConfig().getBoolean("settings.remove-illegal-extra-enchant", true));
+                EnchantmentSlots.instance.getConfig().getBoolean("settings.remove-illegal-extra-enchant", false));
     }
     public static List<String> getAutoAddSlotsItems() {
         if (EnchantmentSlots.instance.getConfig().getStringList("settings.item-can-be-enchanted.whitelist-items").isEmpty()) {
@@ -113,7 +116,7 @@ public class ConfigReader {
     public static List<String> getDisplayLore() {
         return EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.display-value");
     }
-    public static List<String> editDisplayLore(List<String> lore, ItemStack itemStack, Player player, int slot) {
+    public static List<String> editDisplayLore(List<String> lore, ItemStack itemStack, int slot) {
         List<String> tempLore = new ArrayList<>();
         for (String str : lore) {
             if (str.contains("{enchants}")) {

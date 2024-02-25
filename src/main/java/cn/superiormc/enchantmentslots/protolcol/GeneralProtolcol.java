@@ -1,6 +1,7 @@
 package cn.superiormc.enchantmentslots.protolcol;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
+import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.listeners.PlayerClickListener;
 import cn.superiormc.enchantmentslots.protolcol.ProtocolLib.*;
 import cn.superiormc.enchantmentslots.protolcol.eco.EcoDisplayModule;
@@ -18,7 +19,9 @@ public abstract class GeneralProtolcol {
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into ProtocolLib....");
             new SetCreativeSlots();
             new SetSlots();
-            new WindowItem();
+            if (ConfigReader.getAutoAddLore()) {
+                new WindowItem();
+            }
             Bukkit.getPluginManager().registerEvents(new PlayerClickListener(), EnchantmentSlots.instance);
             ItemModify.lorePrefix = "§y";
         } else if (plugin.equals("eco") &&
