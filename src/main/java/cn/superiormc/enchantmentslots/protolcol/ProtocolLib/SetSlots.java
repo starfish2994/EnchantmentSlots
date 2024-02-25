@@ -53,13 +53,12 @@ public class SetSlots extends GeneralPackets {
                             "Packet Slot ID: " + slot + ", Window ID: " + windowID + ", Top Size: " +
                             event.getPlayer().getOpenInventory().getTopInventory().getSize() + ".");
                 }
-                ItemStack newItem = null;
                 if (ConfigReader.getAutoAddLore() && (
                         !ConfigReader.getOnlyInInventory() || CommonUtil.inPlayerInventory(event.getPlayer(), slot))) {
-                    newItem = ItemModify.addLore(event.getPlayer(), serverItemStack);
+                    ItemModify.addLore(event.getPlayer(), serverItemStack);
                 }
                 if (CommonUtil.inPlayerInventory(event.getPlayer(), slot)) {
-                    if (newItem != null && ConfigReader.getAutoAddSlotsLimit()) {
+                    if (ConfigReader.getAutoAddSlotsLimit()) {
                         ItemModify.addLore(event.getPlayer(), event.getPlayer().getInventory().getItem(spigotSlot));
                     }
                     if (ConfigReader.getRemoveExtraEnchants()) {

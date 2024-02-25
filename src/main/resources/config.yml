@@ -9,7 +9,7 @@ settings:
     # Auto add enchantment slot lore for all item that can be enchanted.
     # If disabled, only item has enchantment slot NBT will display lore.
     # Maybe lead to server lag.
-    auto-add-lore: true
+    auto-add-lore: false
     whitelist-items:
       - wooden_pickaxe
       - stone_pickaxe
@@ -79,6 +79,7 @@ settings:
   # enchantment slot for an item.
   set-slot-trigger:
     # This option support ProtocolLib only.
+    # Enable this maybe improve plugin performance.
     SetSlotPacket:
       enabled: false
       remove-illegal-extra-enchant: true
@@ -86,6 +87,8 @@ settings:
       enabled: true
     AnvilItemEvent:
       enabled: true
+    # Enable this maybe improve plugin performance.
+    # Maybe has incompatible issue with other plugins.
     InventoryClickEvent:
       enabled: false
   # Only item that can be enchanted will be added lore.
