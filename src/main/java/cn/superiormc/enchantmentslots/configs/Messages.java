@@ -1,7 +1,6 @@
 package cn.superiormc.enchantmentslots.configs;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.utils.ColorParser;
 import cn.superiormc.enchantmentslots.utils.TextUtil;
 import com.willfp.eco.util.StringUtils;
 import com.willfp.ecoenchants.enchant.EcoEnchant;

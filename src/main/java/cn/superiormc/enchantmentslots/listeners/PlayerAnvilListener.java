@@ -2,6 +2,7 @@ package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.configs.Messages;
+import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
@@ -25,7 +26,7 @@ public class PlayerAnvilListener implements Listener {
             Player player = (Player)event.getWhoClicked();
             AnvilInventory inventory = (AnvilInventory) event.getInventory();
             ItemStack item = inventory.getItem(0);
-            int defaultSlot = ConfigReader.getDefaultLimits(player, item);
+            int defaultSlot = ConfigReader.getDefaultLimits(player, CheckValidHook.checkValid(item));
             if (ConfigReader.getAnvilItemTrigger()) {
                 ItemModify.addLore(item, defaultSlot);
             }

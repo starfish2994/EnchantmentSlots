@@ -7,6 +7,10 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.PlayerInventory;
 
+import java.io.FileInputStream;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.JarInputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,6 +53,42 @@ public class CommonUtil {
             Bukkit.dispatchCommand(player, command);
         } finally {
             player.setOp(playerIsOp);
+        }
+    }
+
+    public static boolean checkJarFiles() {
+        try {
+            boolean txtFileFound = false;
+            String jarFilePath = CommonUtil.class.getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .toURI()
+                    .getPath();
+            JarFile jarFile = new JarFile(jarFilePath);
+            String comment = jarFile.getComment();
+            if (comment != null && !comment.isEmpty()) {
+                if (comment.toUpperCase().contains("LEAK") ||
+                        comment.toUpperCase().contains("BLACK") ||
+                        comment.toUpperCase().contains("NULLED") ||
+                        comment.toUpperCase().contains("RESOURCE")) {
+                    return false;
+                }
+            }
+            JarInputStream jarInputStream = new JarInputStream(new FileInputStream(jarFilePath));
+            JarEntry entry;
+            while ((entry = jarInputStream.getNextJarEntry()) != null) {
+                // 获取条目的名称
+                String entryName = entry.getName();
+                // 判断是否为第一层的文件（不包含文件夹）
+                if (!entryName.contains("/") && entryName.toLowerCase().endsWith(".txt")) {
+                    txtFileFound = true;
+                    break;
+                }
+            }
+            jarInputStream.close();
+            return !txtFileFound;
+        } catch (Exception e) {
+            return true;
         }
     }
 }

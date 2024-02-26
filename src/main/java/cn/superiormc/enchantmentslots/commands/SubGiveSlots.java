@@ -2,6 +2,7 @@ package cn.superiormc.enchantmentslots.commands;
 
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.configs.Messages;
+import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ExtraSlotsItem;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import org.bukkit.Bukkit;
@@ -48,7 +49,7 @@ public class SubGiveSlots {
                 sender.sendMessage(Messages.getMessages("error-no-item"));
                 return;
             }
-            int slot = ItemLimits.getMaxEnchantments(target, ConfigReader.getDefaultLimits((Player) sender, target));
+            int slot = ItemLimits.getMaxEnchantments(target, ConfigReader.getDefaultLimits((Player) sender, CheckValidHook.checkValid(target)));
             if (args.length == 1) {
                 ItemLimits.setMaxEnchantments(target, slot + 1);
                 sender.sendMessage(Messages.getMessages("success-set")

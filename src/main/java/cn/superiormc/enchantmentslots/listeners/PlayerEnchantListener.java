@@ -2,6 +2,7 @@ package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.configs.Messages;
+import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
@@ -16,7 +17,7 @@ public class PlayerEnchantListener implements Listener {
     public void onEnchantItem(EnchantItemEvent event) {
         Player player = event.getEnchanter();
         ItemStack item = event.getItem();
-        int defaultSlot = ConfigReader.getDefaultLimits(player, item);
+        int defaultSlot = ConfigReader.getDefaultLimits(player, CheckValidHook.checkValid(item));
         if (ConfigReader.getEnchantItemTrigger()) {
             ItemModify.addLore(item, defaultSlot);
         }

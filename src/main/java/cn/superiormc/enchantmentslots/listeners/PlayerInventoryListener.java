@@ -2,6 +2,7 @@ package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.configs.Messages;
+import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ExtraSlotsItem;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import org.bukkit.Bukkit;
@@ -44,7 +45,7 @@ public class PlayerInventoryListener implements Listener {
             return;
         }
         int value = item.getAddSlot();
-        int baseValue = ItemLimits.getMaxEnchantments(targetItem, ConfigReader.getDefaultLimits(player, targetItem));
+        int baseValue = ItemLimits.getMaxEnchantments(targetItem, ConfigReader.getDefaultLimits(player, CheckValidHook.checkValid(targetItem)));
         if (baseValue == 0) {
             return;
         }

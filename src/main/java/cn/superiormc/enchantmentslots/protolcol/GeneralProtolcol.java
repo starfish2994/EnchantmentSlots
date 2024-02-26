@@ -19,10 +19,7 @@ public abstract class GeneralProtolcol {
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into ProtocolLib....");
             new SetCreativeSlots();
             new SetSlots();
-            if (ConfigReader.getAutoAddLore()) {
-                new WindowItem();
-            }
-            Bukkit.getPluginManager().registerEvents(new PlayerClickListener(), EnchantmentSlots.instance);
+            new WindowItem();
             ItemModify.lorePrefix = "§y";
         } else if (plugin.equals("eco") &&
                 CommonUtil.checkPluginLoad("eco")) {

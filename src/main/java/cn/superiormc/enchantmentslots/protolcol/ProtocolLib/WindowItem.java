@@ -37,7 +37,9 @@ public class WindowItem extends GeneralPackets {
                 StructureModifier<ItemStack> singleItemStackStructureModifier = packet.getItemModifier();
                 if (singleItemStackStructureModifier.size() != 0) {
                     ItemStack serverItemStack = singleItemStackStructureModifier.read(0);
-                    ItemModify.addLore(event.getPlayer(), serverItemStack);
+                    if (ConfigReader.getAutoAddLore()) {
+                        ItemModify.addLore(event.getPlayer(), serverItemStack);
+                    }
                     ItemStack clientItemStack = ItemModify.serverToClient(serverItemStack);
                     // client 是加过 Lore 的，server 是没加过的！
                     singleItemStackStructureModifier.write(0, clientItemStack);
@@ -52,7 +54,7 @@ public class WindowItem extends GeneralPackets {
                         clientItemStack.add(itemStack);
                         continue;
                     }
-                    if (!ConfigReader.getOnlyInInventory() || isPlayerInventory || index > serverItemStack.size() - 36) {
+                    if (ConfigReader.getAutoAddLore() && (!ConfigReader.getOnlyInInventory() || isPlayerInventory || index > serverItemStack.size() - 36)) {
                         ItemModify.addLore(event.getPlayer(), itemStack);
                     }
                     clientItemStack.add(ItemModify.serverToClient(itemStack));

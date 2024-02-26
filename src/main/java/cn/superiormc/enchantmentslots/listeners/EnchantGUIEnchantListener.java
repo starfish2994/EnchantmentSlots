@@ -3,6 +3,7 @@ package cn.superiormc.enchantmentslots.listeners;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.configs.Messages;
+import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import com.gmail.legamemc.enchantgui.api.event.PlayerEnchantItemEvent;
@@ -19,7 +20,7 @@ public class EnchantGUIEnchantListener implements Listener {
     public void onEnchantItem(PlayerEnchantItemEvent event) {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
-        int defaultSlot = ConfigReader.getDefaultLimits(player, item);
+        int defaultSlot = ConfigReader.getDefaultLimits(player, CheckValidHook.checkValid(item));
         ItemModify.addLore(item, defaultSlot);
         int maxEnchantments = ItemLimits.getMaxEnchantments(item, defaultSlot);
         if (item.getEnchantments().size() >= maxEnchantments) {

@@ -2,6 +2,7 @@ package cn.superiormc.enchantmentslots.methods;
 
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.configs.Messages;
+import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import cn.superiormc.enchantmentslots.utils.NumberUtil;
 import cn.superiormc.enchantmentslots.utils.TextUtil;
@@ -199,7 +200,7 @@ public class ItemModify {
         }
         meta.getPersistentDataContainer().set(ENCHANTMENT_SLOTS_KEY,
                 PersistentDataType.INTEGER,
-                ConfigReader.getDefaultLimits(player, item));
+                ConfigReader.getDefaultLimits(player, CheckValidHook.checkValid(item)));
         item.setItemMeta(meta);
         return item;
     }

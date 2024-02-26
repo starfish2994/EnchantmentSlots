@@ -1,5 +1,6 @@
 package cn.superiormc.enchantmentslots.utils;
 
+import cn.superiormc.enchantmentslots.libs.ColorParser;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 

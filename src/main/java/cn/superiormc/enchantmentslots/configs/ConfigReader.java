@@ -96,9 +96,6 @@ public class ConfigReader {
     public static boolean getAnvilItemTrigger() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.AnvilItemEvent.enabled", true);
     }
-    public static boolean getInventoryClickTrigger() {
-        return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.InventoryClickEvent.enabled", true);
-    }
     public static boolean getAutoAddSlotsLimit() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.SetSlotPacket.enabled",
                 EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.trigger.Packet.enabled", false));
@@ -146,12 +143,11 @@ public class ConfigReader {
         }
         return tempLore;
     }
-    public static int getDefaultLimits(Player player, ItemStack itemStack) {
+    public static int getDefaultLimits(Player player, String itemID) {
         ConfigurationSection section = EnchantmentSlots.instance.getConfig().
-                getConfigurationSection("settings.default-slots-by-item." +
-                        CheckValidHook.checkValid(itemStack));
+                getConfigurationSection("settings.default-slots-by-item." + itemID);
         if (ConfigReader.getDebug()) {
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fItem ID: " + CheckValidHook.checkValid(itemStack));
+            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fItem ID: " + itemID);
         }
         if (section == null) {
             section = EnchantmentSlots.instance.getConfig().
