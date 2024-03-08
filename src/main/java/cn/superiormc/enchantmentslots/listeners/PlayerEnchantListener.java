@@ -17,11 +17,12 @@ public class PlayerEnchantListener implements Listener {
     public void onEnchantItem(EnchantItemEvent event) {
         Player player = event.getEnchanter();
         ItemStack item = event.getItem();
-        int defaultSlot = ConfigReader.getDefaultLimits(player, CheckValidHook.checkValid(item));
+        String itemID = CheckValidHook.checkValid(item);
+        int defaultSlot = ConfigReader.getDefaultLimits(player, itemID);
         if (ConfigReader.getEnchantItemTrigger()) {
-            ItemModify.addLore(item, defaultSlot);
+            ItemModify.addLore(item, defaultSlot, itemID);
         }
-        int maxEnchantments = ItemLimits.getMaxEnchantments(item, defaultSlot);
+        int maxEnchantments = ItemLimits.getMaxEnchantments(item, defaultSlot, itemID);
         if (event.getEnchantsToAdd().size() + ItemUtil.getEnchantments(item).size() > maxEnchantments) {
             event.setCancelled(true);
             if (ConfigReader.getCloseInventory()) {

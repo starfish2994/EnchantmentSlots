@@ -35,6 +35,9 @@ public class ItemModify {
             return itemStack;
         }
         int slot = ItemLimits.getRealMaxEnchantments(itemStack);
+        if (slot == 0) {
+            return itemStack;
+        }
         List<String> lore = new ArrayList<>();
         Map<Enchantment, Integer> enchantments = ItemUtil.getEnchantments(itemStack);
         if (ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack) && slot != 0) {
@@ -131,6 +134,10 @@ public class ItemModify {
     }
 
     public static ItemStack clientToServer(@NotNull ItemStack itemStack) {
+        int slot = ItemLimits.getRealMaxEnchantments(itemStack);
+        if (slot == 0) {
+            return itemStack;
+        }
         if (!itemStack.hasItemMeta()) {
             ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(itemStack.getType());
             itemStack.setItemMeta(tempMeta);
@@ -156,36 +163,12 @@ public class ItemModify {
         return itemStack;
     }
 
-    public static void addLore(ItemStack item, int defaultSlot) {
+    public static void addLore(ItemStack item, int defaultSlot, String itemID) {
         if (item == null || item.getType().isAir()) {
             return;
         }
-        if (!item.hasItemMeta()) {
-            ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
-            item.setItemMeta(tempMeta);
-        }
-        ItemMeta meta = item.getItemMeta();
-        if (!item.hasItemMeta()) {
-            ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
-            item.setItemMeta(tempMeta);
-        }
-        if (meta.getPersistentDataContainer().has(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER)) {
+        if (!ItemLimits.canEnchant(item, itemID)) {
             return;
-        }
-        if (ItemLimits.canEnchant(item)) {
-            meta.getPersistentDataContainer().set(ENCHANTMENT_SLOTS_KEY,
-                    PersistentDataType.INTEGER,
-                    defaultSlot);
-            item.setItemMeta(meta);
-        }
-    }
-
-    public static ItemStack addLore(Player player, ItemStack item) {
-        if (item == null || item.getType().isAir()) {
-            return null;
-        }
-        if (!ItemLimits.canEnchant(item)) {
-            return null;
         }
         if (!item.hasItemMeta()) {
             ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
@@ -193,15 +176,14 @@ public class ItemModify {
         }
         ItemMeta meta = item.getItemMeta();
         if (meta == null) {
-            return null;
+            return;
         }
         if (meta.getPersistentDataContainer().has(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER)) {
-            return null;
+            return;
         }
         meta.getPersistentDataContainer().set(ENCHANTMENT_SLOTS_KEY,
                 PersistentDataType.INTEGER,
-                ConfigReader.getDefaultLimits(player, CheckValidHook.checkValid(item)));
+                defaultSlot);
         item.setItemMeta(meta);
-        return item;
     }
 }

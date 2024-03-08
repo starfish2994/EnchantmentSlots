@@ -2,22 +2,20 @@ package cn.superiormc.enchantmentslots.methods;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
-import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemLimits {
 
     public static final NamespacedKey ENCHANTMENT_SLOTS_KEY = new NamespacedKey(EnchantmentSlots.instance, "enchantment_slots");
 
-    public static int getMaxEnchantments(ItemStack item, int defaultSlot) {
+    public static int getMaxEnchantments(ItemStack item, int defaultSlot, String itemID) {
         if (!item.hasItemMeta()) {
             ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
             if (tempMeta == null) {
@@ -27,7 +25,7 @@ public class ItemLimits {
         }
         ItemMeta meta = item.getItemMeta();
         if (!meta.getPersistentDataContainer().has(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER)) {
-            if (canEnchant(item)) {
+            if (canEnchant(item, itemID)) {
                 return defaultSlot;
             }
             else {
@@ -62,13 +60,20 @@ public class ItemLimits {
         item.setItemMeta(meta);
     }
 
-    public static boolean canEnchant(ItemStack itemStack) {
-        ConfigurationSection section = EnchantmentSlots.instance.getConfig().
-                getConfigurationSection("settings.default-slots-by-item");
-        if (section != null && section.getKeys(false).contains(CheckValidHook.checkValid(itemStack))) {
-            return true;
+    public static List<String> enchantItems = new ArrayList<>();
+
+    public static boolean canEnchant(ItemStack itemStack, String itemID) {
+        if (enchantItems.isEmpty()) {
+            enchantItems = ConfigReader.getAutoAddSlotsItems();
+            if (enchantItems.isEmpty()) {
+                enchantItems.add("none");
+            }
         }
-        return ConfigReader.getAutoAddSlotsItems().contains(itemStack.getType().name().toLowerCase()) ||
-                    ConfigReader.getAutoAddSlotsItems().contains(itemStack.getType().name().toUpperCase());
+        for (String str : enchantItems) {
+            if (str.equalsIgnoreCase(itemStack.getType().name()) || str.equalsIgnoreCase(itemID)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

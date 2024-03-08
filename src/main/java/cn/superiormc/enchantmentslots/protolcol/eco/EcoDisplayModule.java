@@ -1,6 +1,7 @@
 package cn.superiormc.enchantmentslots.protolcol.eco;
 
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
+import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import com.willfp.eco.core.EcoPlugin;
 import com.willfp.eco.core.display.Display;
@@ -41,8 +42,10 @@ public class EcoDisplayModule extends DisplayModule {
         if (itemStack.getType().isAir()) {
             return;
         }
+        String itemID = CheckValidHook.checkValid(itemStack);
+        int defaultSlot = ConfigReader.getDefaultLimits(player, itemID);
         if (ConfigReader.getAutoAddLore()) {
-            ItemModify.addLore(player, itemStack);
+            ItemModify.addLore(itemStack, defaultSlot, itemID);
         }
         ItemModify.serverToClient(itemStack);
     }

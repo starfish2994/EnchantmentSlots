@@ -20,7 +20,8 @@ public class SubSetSlots {
                 return;
             }
             if (args.length == 1) {
-                int slot = ItemLimits.getMaxEnchantments(target, ConfigReader.getDefaultLimits((Player) sender, CheckValidHook.checkValid(target)));
+                String itemID = CheckValidHook.checkValid(target);
+                int slot = ItemLimits.getMaxEnchantments(target, ConfigReader.getDefaultLimits((Player) sender, itemID), itemID);
                 ItemLimits.setMaxEnchantments(target, slot + 1);
                 sender.sendMessage(Messages.getMessages("success-set")
                         .replace("%amount%", String.valueOf(slot + 1)));

@@ -57,14 +57,16 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
             if (mainHandItem.getType().isAir()) {
                 return "0";
             }
-            return String.valueOf(ItemLimits.getMaxEnchantments(mainHandItem, ConfigReader.getDefaultLimits(player, CheckValidHook.checkValid(mainHandItem))));
+            String itemID = CheckValidHook.checkValid(mainHandItem);
+            return String.valueOf(ItemLimits.getMaxEnchantments(mainHandItem, ConfigReader.getDefaultLimits(player, itemID), itemID));
         }
         else if (params.equals("has_empty_slot")) {
             ItemStack mainHandItem = player.getInventory().getItemInMainHand();
             if (mainHandItem.getType().isAir()) {
                 return "false";
             }
-            if (mainHandItem.getEnchantments().size() >= ItemLimits.getMaxEnchantments(mainHandItem, ConfigReader.getDefaultLimits(player, CheckValidHook.checkValid(mainHandItem)))) {
+            String itemID = CheckValidHook.checkValid(mainHandItem);
+            if (mainHandItem.getEnchantments().size() >= ItemLimits.getMaxEnchantments(mainHandItem, ConfigReader.getDefaultLimits(player, itemID), itemID)) {
                 return "false";
             }
             return "true";

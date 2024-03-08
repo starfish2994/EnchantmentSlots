@@ -20,6 +20,9 @@ import pers.neige.neigeitems.manager.ItemManager;
 public class CheckValidHook {
 
     public static String checkValid(ItemStack itemStack) {
+        if (!itemStack.hasItemMeta()) {
+            return itemStack.getType().name().toLowerCase();
+        }
         if (CommonUtil.checkPluginLoad("ItemsAdder")) {
             CustomStack customStack = CustomStack.byItemStack(itemStack);
             if (customStack != null) {
@@ -72,6 +75,6 @@ public class CheckValidHook {
                 return ItemManager.INSTANCE.isNiItem(itemStack).getId();
             }
         }
-        return itemStack.getType().getKey().getKey().toLowerCase();
+        return itemStack.getType().name().toLowerCase();
     }
 }

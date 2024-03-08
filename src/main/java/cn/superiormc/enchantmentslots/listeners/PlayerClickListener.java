@@ -1,6 +1,7 @@
 package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
+import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -38,7 +39,9 @@ public class PlayerClickListener implements Listener {
                     return;
                 }
             }
-            ItemModify.addLore(player, tempItemStack);
+            String itemID = CheckValidHook.checkValid(tempItemStack);
+            int defaultSlot = ConfigReader.getDefaultLimits(player, itemID);
+            ItemModify.addLore(tempItemStack, defaultSlot, itemID);
         }
     }
 }

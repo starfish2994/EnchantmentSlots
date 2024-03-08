@@ -2,6 +2,7 @@ package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
+import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
@@ -55,11 +56,16 @@ public class SetSlots extends GeneralPackets {
                 }
                 if (ConfigReader.getAutoAddLore() && (
                         !ConfigReader.getOnlyInInventory() || CommonUtil.inPlayerInventory(event.getPlayer(), slot))) {
-                    ItemModify.addLore(event.getPlayer(), serverItemStack);
+                    String itemID = CheckValidHook.checkValid(serverItemStack);
+                    int defaultSlot = ConfigReader.getDefaultLimits(event.getPlayer(), itemID);
+                    ItemModify.addLore(serverItemStack, defaultSlot, itemID);
                 }
                 if (CommonUtil.inPlayerInventory(event.getPlayer(), slot)) {
                     if (ConfigReader.getAutoAddSlotsLimit()) {
-                        ItemModify.addLore(event.getPlayer(), event.getPlayer().getInventory().getItem(spigotSlot));
+                        ItemStack targetItem = event.getPlayer().getInventory().getItem(spigotSlot);
+                        String itemID = CheckValidHook.checkValid(targetItem);
+                        int defaultSlot = ConfigReader.getDefaultLimits(event.getPlayer(), itemID);
+                        ItemModify.addLore(targetItem, defaultSlot, itemID);
                     }
                     if (ConfigReader.getRemoveExtraEnchants()) {
                         ItemStack tempItemStack = event.getPlayer().getInventory().getItem(spigotSlot);

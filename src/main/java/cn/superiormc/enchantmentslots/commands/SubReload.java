@@ -3,6 +3,7 @@ package cn.superiormc.enchantmentslots.commands;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.configs.Messages;
 import cn.superiormc.enchantmentslots.methods.ExtraSlotsItem;
+import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import org.bukkit.command.CommandSender;
 
 public class SubReload {
@@ -12,6 +13,7 @@ public class SubReload {
             EnchantmentSlots.instance.reloadConfig();
             Messages.init();
             ExtraSlotsItem.init();
+            ItemLimits.enchantItems.clear();
             sender.sendMessage(Messages.getMessages("plugin-reloaded"));
         }
         else {

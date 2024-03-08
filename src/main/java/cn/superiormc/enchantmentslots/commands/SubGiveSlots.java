@@ -49,14 +49,15 @@ public class SubGiveSlots {
                 sender.sendMessage(Messages.getMessages("error-no-item"));
                 return;
             }
-            int slot = ItemLimits.getMaxEnchantments(target, ConfigReader.getDefaultLimits((Player) sender, CheckValidHook.checkValid(target)));
+            String itemID = CheckValidHook.checkValid(target);
+            int slot = ItemLimits.getMaxEnchantments(target, ConfigReader.getDefaultLimits((Player) sender, itemID), itemID);
             if (args.length == 1) {
                 ItemLimits.setMaxEnchantments(target, slot + 1);
                 sender.sendMessage(Messages.getMessages("success-set")
                         .replace("%amount%", String.valueOf(slot+ 1)));
                 return;
             }
-            ItemLimits.setMaxEnchantments(target, ItemLimits.getMaxEnchantments(target, slot + Integer.parseInt(args[1])));
+            ItemLimits.setMaxEnchantments(target, ItemLimits.getMaxEnchantments(target, slot + Integer.parseInt(args[1]), itemID));
             sender.sendMessage(Messages.getMessages("success-set").replace("%amount%", args[1]));
         } else {
             sender.sendMessage(Messages.getMessages("help-main"));

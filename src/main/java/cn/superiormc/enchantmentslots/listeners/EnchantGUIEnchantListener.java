@@ -20,9 +20,10 @@ public class EnchantGUIEnchantListener implements Listener {
     public void onEnchantItem(PlayerEnchantItemEvent event) {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
-        int defaultSlot = ConfigReader.getDefaultLimits(player, CheckValidHook.checkValid(item));
-        ItemModify.addLore(item, defaultSlot);
-        int maxEnchantments = ItemLimits.getMaxEnchantments(item, defaultSlot);
+        String itemID = CheckValidHook.checkValid(item);
+        int defaultSlot = ConfigReader.getDefaultLimits(player, itemID);
+        ItemModify.addLore(item, defaultSlot, itemID);
+        int maxEnchantments = ItemLimits.getMaxEnchantments(item, defaultSlot, itemID);
         if (item.getEnchantments().size() >= maxEnchantments) {
             int buyLevel = event.getLevel();
             int nowLevel = event.getItem().getEnchantmentLevel(event.getEnchantment());

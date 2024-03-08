@@ -2,6 +2,7 @@ package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
+import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -38,7 +39,9 @@ public class WindowItem extends GeneralPackets {
                 if (singleItemStackStructureModifier.size() != 0) {
                     ItemStack serverItemStack = singleItemStackStructureModifier.read(0);
                     if (ConfigReader.getAutoAddLore()) {
-                        ItemModify.addLore(event.getPlayer(), serverItemStack);
+                        String itemID = CheckValidHook.checkValid(serverItemStack);
+                        int defaultSlot = ConfigReader.getDefaultLimits(event.getPlayer(), itemID);
+                        ItemModify.addLore(serverItemStack, defaultSlot, itemID);
                     }
                     ItemStack clientItemStack = ItemModify.serverToClient(serverItemStack);
                     // client 是加过 Lore 的，server 是没加过的！
@@ -55,7 +58,9 @@ public class WindowItem extends GeneralPackets {
                         continue;
                     }
                     if (ConfigReader.getAutoAddLore() && (!ConfigReader.getOnlyInInventory() || isPlayerInventory || index > serverItemStack.size() - 36)) {
-                        ItemModify.addLore(event.getPlayer(), itemStack);
+                        String itemID = CheckValidHook.checkValid(itemStack);
+                        int defaultSlot = ConfigReader.getDefaultLimits(event.getPlayer(), itemID);
+                        ItemModify.addLore(itemStack, defaultSlot, itemID);
                     }
                     clientItemStack.add(ItemModify.serverToClient(itemStack));
                     index ++;
