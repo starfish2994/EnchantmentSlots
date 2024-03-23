@@ -166,17 +166,17 @@ public class ConfigReader {
         Set<String> groupNameSet = conditionSection.getKeys(false);
         List<Integer> result = new ArrayList<>();
         for (String groupName : groupNameSet) {
-            if (section.getInt(groupName, -1) != -1 && Condition.getBoolean(player, conditionSection.getStringList(groupName))) {
+            if (groupName.equals("default") || (section.getInt(groupName, -1) != -1 &&
+                    Condition.getBoolean(player, conditionSection.getStringList(groupName)))) {
                 result.add(section.getInt(groupName));
-            }
-            else {
-                if (section.getInt("default", -1) != -1) {
-                    result.add(section.getInt("default"));
-                }
             }
         }
         if (result.isEmpty()) {
-            result.add(5);
+            if (section.getInt("default", -1) == -1) {
+                result.add(5);
+            } else {
+                result.add(section.getInt("default"));
+            }
         }
         return Collections.max(result);
     }
@@ -199,17 +199,13 @@ public class ConfigReader {
         Set<String> groupNameSet = conditionSection.getKeys(false);
         List<Integer> result = new ArrayList<>();
         for (String groupName : groupNameSet) {
-            if (section.getInt(groupName, -1) != -1 && Condition.getBoolean(player, conditionSection.getStringList(groupName))) {
+            if (groupName.equals("default") || (section.getInt(groupName, -1) != -1 &&
+                    Condition.getBoolean(player, conditionSection.getStringList(groupName)))) {
                 result.add(section.getInt(groupName));
-            }
-            else {
-                if (section.getInt("default", -1) != -1) {
-                    result.add(section.getInt("default"));
-                }
             }
         }
         if (result.isEmpty()) {
-            result.add(-1);
+            result.add(section.getInt("default"), -1);
         }
         return Collections.max(result);
     }

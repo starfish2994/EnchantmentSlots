@@ -3,10 +3,7 @@ package cn.superiormc.enchantmentslots.utils;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.PlayerInventory;
-
 import java.io.FileInputStream;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
