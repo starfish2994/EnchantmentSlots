@@ -6,7 +6,6 @@ import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
-import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
@@ -63,9 +62,11 @@ public class SetSlots extends GeneralPackets {
                 if (CommonUtil.inPlayerInventory(event.getPlayer(), slot)) {
                     if (ConfigReader.getAutoAddSlotsLimit()) {
                         ItemStack targetItem = event.getPlayer().getInventory().getItem(spigotSlot);
-                        String itemID = CheckValidHook.checkValid(targetItem);
-                        int defaultSlot = ConfigReader.getDefaultLimits(event.getPlayer(), itemID);
-                        ItemModify.addLore(targetItem, defaultSlot, itemID);
+                        if (targetItem != null && !targetItem.getType().isAir()) {
+                            String itemID = CheckValidHook.checkValid(targetItem);
+                            int defaultSlot = ConfigReader.getDefaultLimits(event.getPlayer(), itemID);
+                            ItemModify.addLore(targetItem, defaultSlot, itemID);
+                        }
                     }
                     if (ConfigReader.getRemoveExtraEnchants()) {
                         ItemStack tempItemStack = event.getPlayer().getInventory().getItem(spigotSlot);

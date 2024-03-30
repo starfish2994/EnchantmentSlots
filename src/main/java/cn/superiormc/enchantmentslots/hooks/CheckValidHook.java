@@ -20,6 +20,9 @@ import pers.neige.neigeitems.manager.ItemManager;
 public class CheckValidHook {
 
     public static String checkValid(ItemStack itemStack) {
+        if (itemStack == null) {
+            return "null";
+        }
         if (!itemStack.hasItemMeta()) {
             return itemStack.getType().name().toLowerCase();
         }
