@@ -4,6 +4,7 @@ import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
+import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -66,7 +67,7 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
                 return "false";
             }
             String itemID = CheckValidHook.checkValid(mainHandItem);
-            if (mainHandItem.getEnchantments().size() >= ItemLimits.getMaxEnchantments(mainHandItem, ConfigReader.getDefaultLimits(player, itemID), itemID)) {
+            if (ItemUtil.getEnchantments(mainHandItem, false).size() >= ItemLimits.getMaxEnchantments(mainHandItem, ConfigReader.getDefaultLimits(player, itemID), itemID)) {
                 return "false";
             }
             return "true";

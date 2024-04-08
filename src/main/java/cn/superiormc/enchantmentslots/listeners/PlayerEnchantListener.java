@@ -23,7 +23,7 @@ public class PlayerEnchantListener implements Listener {
             ItemModify.addLore(item, defaultSlot, itemID);
         }
         int maxEnchantments = ItemLimits.getMaxEnchantments(item, defaultSlot, itemID);
-        if (event.getEnchantsToAdd().size() + ItemUtil.getEnchantments(item).size() > maxEnchantments) {
+        if (event.getEnchantsToAdd().size() + ItemUtil.getEnchantments(item, false).size() > maxEnchantments) {
             event.setCancelled(true);
             if (ConfigReader.getCloseInventory()) {
                 player.closeInventory();

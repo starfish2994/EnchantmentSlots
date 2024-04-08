@@ -145,6 +145,7 @@ settings:
       enchants:
         # Other placeholder: {enchant_level_roman}, {raw_enchant_name}
         format: '&6  {enchant_name} {enchant_level}'
+        sort: true
       empty-slots:
         format: '&7  --- Empty Slot ---'
   default-slots:

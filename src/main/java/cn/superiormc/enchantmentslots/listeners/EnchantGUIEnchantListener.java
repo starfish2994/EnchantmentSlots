@@ -6,6 +6,7 @@ import cn.superiormc.enchantmentslots.configs.Messages;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
+import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import com.gmail.legamemc.enchantgui.api.event.PlayerEnchantItemEvent;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
@@ -41,7 +42,7 @@ public class EnchantGUIEnchantListener implements Listener {
                 lapis.setAmount(event.getCost().getLapis());
                 event.getPlayer().getInventory().addItem(lapis);
             }
-            if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("Vault") && event.getCost().getMoney() > 0) {
+            if (CommonUtil.checkPluginLoad("Vault") && event.getCost().getMoney() > 0) {
                 RegisteredServiceProvider<Economy> rsp = EnchantmentSlots.instance.getServer().getServicesManager().getRegistration(Economy.class);
                 if (rsp == null) {
                     return;

@@ -37,7 +37,7 @@ public class PlayerAnvilListener implements Listener {
             ItemStack result = inventory.getItem(2);
             if (result != null) {
                 int maxEnchantments = ItemLimits.getMaxEnchantments(result, defaultSlot, itemID);
-                if (ItemUtil.getEnchantments(result).size() > maxEnchantments) {
+                if (ItemUtil.getEnchantments(result, false).size() > maxEnchantments) {
                     event.setCancelled(true);
                     if (ConfigReader.getCloseInventory()) {
                         player.closeInventory();

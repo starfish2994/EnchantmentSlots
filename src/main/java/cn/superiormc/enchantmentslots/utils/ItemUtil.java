@@ -1,6 +1,7 @@
 package cn.superiormc.enchantmentslots.utils;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
+import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import com.google.common.base.Enums;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -96,12 +97,15 @@ public class ItemUtil {
     }
 
     @NotNull
-    public static Map<Enchantment, Integer> getEnchantments(@NotNull ItemStack itemStack) {
+    public static Map<Enchantment, Integer> getEnchantments(@NotNull ItemStack itemStack, boolean sort) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null) {
             return new HashMap<>();
         }
-        if (CommonUtil.checkPluginLoad("EcoEnchants") && Integer.parseInt(EnchantmentSlots.instance.getServer().getPluginManager().getPlugin("EcoEnchants").getDescription().
+        if (!ConfigReader.getEnchantSort()) {
+            sort = false;
+        }
+        if (sort && CommonUtil.checkPluginLoad("EcoEnchants") && Integer.parseInt(EnchantmentSlots.instance.getServer().getPluginManager().getPlugin("EcoEnchants").getDescription().
                 getVersion().split("\\.")[0]) > 10) {
             Collection<Enchantment> enchants = itemMeta.getEnchants().keySet();
             Collection<Enchantment> enchantments = EnchantSorter.INSTANCE.sortForDisplay(enchants);
@@ -112,7 +116,7 @@ public class ItemUtil {
                 }
             }
             return orderedEnchants;
-        } else if (CommonUtil.checkPluginLoad("ExcellentEnchants")) {
+        } else if (sort && CommonUtil.checkPluginLoad("ExcellentEnchants")) {
             Map<Enchantment, Integer> enchants = EnchantUtils.getCustomEnchantments(itemMeta)
                     .entrySet().stream()
                     .sorted(Comparator.comparing((Map.Entry<EnchantmentData, Integer> entry) -> entry.getKey().getRarity().getWeight())

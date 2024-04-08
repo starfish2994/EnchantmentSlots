@@ -2,23 +2,18 @@ package cn.superiormc.enchantmentslots.methods;
 
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.configs.Messages;
-import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import cn.superiormc.enchantmentslots.utils.NumberUtil;
 import cn.superiormc.enchantmentslots.utils.TextUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -39,53 +34,8 @@ public class ItemModify {
             return itemStack;
         }
         List<String> lore = new ArrayList<>();
-        Map<Enchantment, Integer> enchantments = ItemUtil.getEnchantments(itemStack);
-        if (ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack) && slot != 0) {
-            for (String line : ConfigReader.getDisplayLore()) {
-                if (line.equals("{enchants}")) {
-                    for (Enchantment enchantment : ItemUtil.getEnchantments(itemStack).keySet()) {
-                        String value = TextUtil.parse(
-                                ConfigReader.getEnchantPlaceholder().
-                                        replace("{enchant_name}", Messages.getEnchantName(itemStack, enchantment, true)).
-                                        replace("{enchant_raw_name}", Messages.getEnchantName(itemStack, enchantment, false)).
-                                        replace("{enchant_level}", String.valueOf(
-                                                enchantments.get(enchantment))).
-                                        replace("{enchant_level_roman}", NumberUtil.convertToRoman(
-                                                enchantments.get(enchantment)))).
-                                        replace("[enchant_name]", Messages.getEnchantName(itemStack, enchantment, true)).
-                                        replace("[enchant_raw_name]", Messages.getEnchantName(itemStack, enchantment, false)).
-                                        replace("[enchant_level]", String.valueOf(
-                                                enchantments.get(enchantment))).
-                                        replace("[enchant_level_roman]", NumberUtil.convertToRoman(
-                                                enchantments.get(enchantment)));
-                        value = lorePrefix + value;
-                        lore.add(value);
-                    }
-                    itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                    continue;
-                }
-                if (line.equals("{empty_slots}")) {
-                    int i = slot - itemStack.getEnchantments().size();
-                    while (i > 0) {
-                        String value = TextUtil.parse(ConfigReader.getEmptySlotPlaceholder());
-                        value = lorePrefix + value;
-                        lore.add(value);
-                        i--;
-                    }
-                    continue;
-                }
-                line = lorePrefix + line;
-                lore.add(TextUtil.parse(line)
-                        .replace("{slot_amount}", String.valueOf(slot))
-                        .replace("{enchant_amount}", String.valueOf(enchantments.size())));
-
-            }
-        }
-        if (itemMeta.hasLore()) {
-            List<String> tempLore = itemMeta.getLore();
-            lore.addAll(ConfigReader.editDisplayLore(tempLore, itemStack, slot));
-        }
-        if (!ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack) && slot != 0) {
+        Map<Enchantment, Integer> enchantments = ItemUtil.getEnchantments(itemStack, true);
+        if (ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack)) {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : enchantments.keySet()) {
@@ -110,7 +60,52 @@ public class ItemModify {
                     continue;
                 }
                 if (line.equals("{empty_slots}")) {
-                    int i = slot - itemStack.getEnchantments().size();
+                    int i = slot - enchantments.size();
+                    while (i > 0) {
+                        String value = TextUtil.parse(ConfigReader.getEmptySlotPlaceholder());
+                        value = lorePrefix + value;
+                        lore.add(value);
+                        i--;
+                    }
+                    continue;
+                }
+                line = lorePrefix + line;
+                lore.add(TextUtil.parse(line)
+                        .replace("{slot_amount}", String.valueOf(slot))
+                        .replace("{enchant_amount}", String.valueOf(enchantments.size())));
+
+            }
+        }
+        if (itemMeta.hasLore()) {
+            List<String> tempLore = itemMeta.getLore();
+            lore.addAll(ConfigReader.editDisplayLore(tempLore, itemStack, slot));
+        }
+        if (!ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack)) {
+            for (String line : ConfigReader.getDisplayLore()) {
+                if (line.equals("{enchants}")) {
+                    for (Enchantment enchantment : enchantments.keySet()) {
+                        String value = TextUtil.parse(
+                                ConfigReader.getEnchantPlaceholder().
+                                        replace("{enchant_name}", Messages.getEnchantName(itemStack, enchantment, true)).
+                                        replace("{enchant_raw_name}", Messages.getEnchantName(itemStack, enchantment, false)).
+                                        replace("{enchant_level}", String.valueOf(
+                                                enchantments.get(enchantment))).
+                                        replace("{enchant_level_roman}", NumberUtil.convertToRoman(
+                                                enchantments.get(enchantment)))).
+                                        replace("[enchant_name]", Messages.getEnchantName(itemStack, enchantment, true)).
+                                        replace("[enchant_raw_name]", Messages.getEnchantName(itemStack, enchantment, false)).
+                                        replace("[enchant_level]", String.valueOf(
+                                                enchantments.get(enchantment))).
+                                        replace("[enchant_level_roman]", NumberUtil.convertToRoman(
+                                                enchantments.get(enchantment)));
+                        value = lorePrefix + value;
+                        lore.add(value);
+                    }
+                    itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                    continue;
+                }
+                if (line.equals("{empty_slots}")) {
+                    int i = slot - enchantments.size();
                     while (i > 0) {
                         String value = TextUtil.parse(ConfigReader.getEmptySlotPlaceholder());
                         value = lorePrefix + value;
