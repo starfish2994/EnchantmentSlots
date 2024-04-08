@@ -2,8 +2,6 @@
 
 Welcome to use EnchantmentSlots, this is a spigot plugin that provide you enchantment slot feature.
 
-EnchantmentSlots v3 is no longer open source.
-
 Consider respect my work and buy the plugin here, you can get free support, subbmit suggestion service. [Click to buy](https://www.spigotmc.org/resources/enchantmentslots-add-enchantment-slot-feature-to-your-server-1-17-1-20.113048/)
 
 I am the copyright owner of this project, and the prerequisite for granting you a GPL v3 free license is that you have followed the following actions:
