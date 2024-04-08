@@ -46,14 +46,14 @@ public class ItemModify {
                     for (Enchantment enchantment : ItemUtil.getEnchantments(itemStack).keySet()) {
                         String value = TextUtil.parse(
                                 ConfigReader.getEnchantPlaceholder().
-                                        replace("{enchant_name}", Messages.getEnchantName(enchantment, true)).
-                                        replace("{enchant_raw_name}", Messages.getEnchantName(enchantment, false)).
+                                        replace("{enchant_name}", Messages.getEnchantName(itemStack, enchantment, true)).
+                                        replace("{enchant_raw_name}", Messages.getEnchantName(itemStack, enchantment, false)).
                                         replace("{enchant_level}", String.valueOf(
                                                 enchantments.get(enchantment))).
                                         replace("{enchant_level_roman}", NumberUtil.convertToRoman(
                                                 enchantments.get(enchantment)))).
-                                        replace("[enchant_name]", Messages.getEnchantName(enchantment, true)).
-                                        replace("[enchant_raw_name]", Messages.getEnchantName(enchantment, false)).
+                                        replace("[enchant_name]", Messages.getEnchantName(itemStack, enchantment, true)).
+                                        replace("[enchant_raw_name]", Messages.getEnchantName(itemStack, enchantment, false)).
                                         replace("[enchant_level]", String.valueOf(
                                                 enchantments.get(enchantment))).
                                         replace("[enchant_level_roman]", NumberUtil.convertToRoman(
@@ -91,14 +91,14 @@ public class ItemModify {
                     for (Enchantment enchantment : enchantments.keySet()) {
                         String value = TextUtil.parse(
                                 ConfigReader.getEnchantPlaceholder().
-                                        replace("{enchant_name}", Messages.getEnchantName(enchantment, true)).
-                                        replace("{enchant_raw_name}", Messages.getEnchantName(enchantment, false)).
+                                        replace("{enchant_name}", Messages.getEnchantName(itemStack, enchantment, true)).
+                                        replace("{enchant_raw_name}", Messages.getEnchantName(itemStack, enchantment, false)).
                                         replace("{enchant_level}", String.valueOf(
                                                 enchantments.get(enchantment))).
                                         replace("{enchant_level_roman}", NumberUtil.convertToRoman(
                                                 enchantments.get(enchantment)))).
-                                        replace("[enchant_name]", Messages.getEnchantName(enchantment, true)).
-                                        replace("[enchant_raw_name]", Messages.getEnchantName(enchantment, false)).
+                                        replace("[enchant_name]", Messages.getEnchantName(itemStack, enchantment, true)).
+                                        replace("[enchant_raw_name]", Messages.getEnchantName(itemStack, enchantment, false)).
                                         replace("[enchant_level]", String.valueOf(
                                                 enchantments.get(enchantment))).
                                         replace("[enchant_level_roman]", NumberUtil.convertToRoman(
@@ -184,6 +184,9 @@ public class ItemModify {
         meta.getPersistentDataContainer().set(ENCHANTMENT_SLOTS_KEY,
                 PersistentDataType.INTEGER,
                 defaultSlot);
+        if (ConfigReader.getAddHideFlag()) {
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
         item.setItemMeta(meta);
     }
 }

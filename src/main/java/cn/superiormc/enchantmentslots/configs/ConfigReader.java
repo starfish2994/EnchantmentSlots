@@ -23,6 +23,9 @@ public class ConfigReader {
     public static boolean getDebug() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.debug", false);
     }
+    public static boolean getAddHideFlag() {
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.add-hide-enchant-flag", false);
+    }
     public static boolean getAutoAddLore() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.item-can-be-enchanted.auto-add-lore", true);
     }
@@ -120,8 +123,8 @@ public class ConfigReader {
                 for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
                     tempLore.add(TextUtil.parse(
                             ConfigReader.getEnchantPlaceholder().
-                                    replace("{enchant_name}", Messages.getEnchantName(enchantment, true)).
-                                    replace("{enchant_raw_name}", Messages.getEnchantName(enchantment, false)).
+                                    replace("{enchant_name}", Messages.getEnchantName(itemStack, enchantment, true)).
+                                    replace("{enchant_raw_name}", Messages.getEnchantName(itemStack, enchantment, false)).
                                     replace("{enchant_level}", String.valueOf(
                                             itemStack.getEnchantments().get(enchantment))).
                                     replace("{enchant_level_roman}", NumberUtil.convertToRoman(
@@ -205,7 +208,7 @@ public class ConfigReader {
             }
         }
         if (result.isEmpty()) {
-            result.add(section.getInt("default"), -1);
+            result.add(section.getInt("default", -1));
         }
         return Collections.max(result);
     }

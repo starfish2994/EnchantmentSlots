@@ -1,8 +1,10 @@
 package cn.superiormc.enchantmentslots.utils;
 
+import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import com.google.common.base.Enums;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import com.willfp.ecoenchants.display.EnchantSorter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -14,12 +16,12 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
+import su.nightexpress.excellentenchants.api.enchantment.EnchantmentData;
+import su.nightexpress.excellentenchants.enchantment.util.EnchantUtils;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ItemUtil {
     
@@ -95,20 +97,55 @@ public class ItemUtil {
 
     @NotNull
     public static Map<Enchantment, Integer> getEnchantments(@NotNull ItemStack itemStack) {
-        Map<Enchantment, Integer> enchantments;
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null) {
             return new HashMap<>();
         }
-        if (itemMeta instanceof EnchantmentStorageMeta) {
-            EnchantmentStorageMeta storageMeta = (EnchantmentStorageMeta) itemMeta;
-            enchantments = storageMeta.getStoredEnchants();
-            if (enchantments.isEmpty()) {
+        if (CommonUtil.checkPluginLoad("EcoEnchants") && Integer.parseInt(EnchantmentSlots.instance.getServer().getPluginManager().getPlugin("EcoEnchants").getDescription().
+                getVersion().split("\\.")[0]) > 10) {
+            Collection<Enchantment> enchants = itemMeta.getEnchants().keySet();
+            Collection<Enchantment> enchantments = EnchantSorter.INSTANCE.sortForDisplay(enchants);
+            Map<Enchantment, Integer> orderedEnchants = new LinkedHashMap<>();
+            for (Enchantment enchantment : enchantments) {
+                if (enchants.contains(enchantment)) {
+                    orderedEnchants.put(enchantment, itemMeta.getEnchantLevel(enchantment));
+                }
+            }
+            return orderedEnchants;
+        } else if (CommonUtil.checkPluginLoad("ExcellentEnchants")) {
+            Map<Enchantment, Integer> enchants = EnchantUtils.getCustomEnchantments(itemMeta)
+                    .entrySet().stream()
+                    .sorted(Comparator.comparing((Map.Entry<EnchantmentData, Integer> entry) -> entry.getKey().getRarity().getWeight())
+                            .thenComparing(entry -> entry.getKey().getName()))
+                    .collect(Collectors.toMap(entry -> entry.getKey().getEnchantment(), Map.Entry::getValue, (old, newv) -> newv, LinkedHashMap::new));
+            Map<Enchantment, Integer> enchantments;
+            if (itemMeta instanceof EnchantmentStorageMeta) {
+                EnchantmentStorageMeta storageMeta = (EnchantmentStorageMeta) itemMeta;
+                enchantments = storageMeta.getStoredEnchants();
+                if (enchantments.isEmpty()) {
+                    enchantments = itemStack.getEnchantments();
+                }
+            } else {
                 enchantments = itemStack.getEnchantments();
             }
+            for (Enchantment singleEnch : enchantments.keySet()) {
+                if (!enchants.containsKey(singleEnch)) {
+                    enchants.put(singleEnch, enchantments.get(singleEnch));
+                }
+            }
+            return enchants;
         } else {
-            enchantments =  itemStack.getEnchantments();
+            Map<Enchantment, Integer> enchantments;
+            if (itemMeta instanceof EnchantmentStorageMeta) {
+                EnchantmentStorageMeta storageMeta = (EnchantmentStorageMeta) itemMeta;
+                enchantments = storageMeta.getStoredEnchants();
+                if (enchantments.isEmpty()) {
+                    enchantments = itemStack.getEnchantments();
+                }
+            } else {
+                enchantments = itemStack.getEnchantments();
+            }
+            return enchantments;
         }
-        return enchantments;
     }
 }

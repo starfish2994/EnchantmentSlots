@@ -1,6 +1,7 @@
 package cn.superiormc.enchantmentslots.configs;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
+import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import cn.superiormc.enchantmentslots.utils.TextUtil;
 import com.willfp.eco.util.StringUtils;
 import com.willfp.ecoenchants.enchant.EcoEnchant;
@@ -8,9 +9,10 @@ import com.willfp.ecoenchants.enchant.EcoEnchants;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
-import su.nexmedia.engine.utils.Colorizer;
-import su.nightexpress.excellentenchants.enchantment.impl.ExcellentEnchant;
+import org.bukkit.inventory.ItemStack;
+import su.nightexpress.excellentenchants.api.enchantment.EnchantmentData;
 import su.nightexpress.excellentenchants.enchantment.registry.EnchantRegistry;
+import su.nightexpress.nightcore.util.text.NightMessage;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,10 +68,10 @@ public class Messages {
         return TextUtil.parse(messageFile.getString(path));
     }
 
-    public static String getEnchantName(Enchantment enchantment, boolean showTierColor) {
-        if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("EcoEnchants")) {
+    public static String getEnchantName(ItemStack item, Enchantment enchantment, boolean showTierColor) {
+        if (CommonUtil.checkPluginLoad("EcoEnchants")) {
             try {
-                if (Integer.valueOf(EnchantmentSlots.instance.getServer().getPluginManager().getPlugin("EcoEnchants").getDescription().
+                if (Integer.parseInt(EnchantmentSlots.instance.getServer().getPluginManager().getPlugin("EcoEnchants").getDescription().
                         getVersion().split("\\.")[0]) > 10) {
                     EcoEnchant ecoEnchant = EcoEnchants.INSTANCE.getByID(enchantment.getKey().getKey());
                     if (ecoEnchant != null) {
@@ -88,14 +90,13 @@ public class Messages {
             } catch (Exception ep) {
                 return TextUtil.parse(ConfigReader.getEnchantmentName(enchantment));
             }
-        } else if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("ExcellentEnchants")) {
-            ExcellentEnchant excellentEnchant = EnchantRegistry.getByKey(enchantment.getKey());
+        } else if (CommonUtil.checkPluginLoad("ExcellentEnchants")) {
+            EnchantmentData excellentEnchant = EnchantRegistry.getByKey(enchantment.getKey());
             if (excellentEnchant != null) {
-                String name = excellentEnchant.getDisplayName();
                 if (showTierColor) {
-                    name = excellentEnchant.getTier().getColor() + name;
+                    return NightMessage.asLegacy(excellentEnchant.getNameFormatted(-1, excellentEnchant.getCharges(item)));
                 }
-                return Colorizer.apply(name);
+                return NightMessage.asLegacy(excellentEnchant.getName());
             }
         }
         return TextUtil.parse(ConfigReader.getEnchantmentName(enchantment));

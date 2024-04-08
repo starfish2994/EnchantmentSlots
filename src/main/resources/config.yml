@@ -1,6 +1,6 @@
 # EnchantmentSlots by @PQguanfang
 #
-# READ THE WIKI: simple.superiormc.cn/
+# READ THE WIKI: enchantmentslots.superiormc.cn
 
 # Settings
 settings:
@@ -78,6 +78,7 @@ settings:
   # This is when will the plugin trying adds enchantment slot NBT for an enchantable item which also means set fixed
   # enchantment slot for an item.
   set-slot-trigger:
+    add-hide-enchant-flag: false
     # This option support ProtocolLib only.
     # Enable this maybe improve plugin performance.
     SetSlotPacket:
