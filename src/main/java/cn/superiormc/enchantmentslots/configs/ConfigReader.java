@@ -3,7 +3,7 @@ package cn.superiormc.enchantmentslots.configs;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.Condition;
-import cn.superiormc.enchantmentslots.methods.ItemLimits;
+import cn.superiormc.enchantmentslots.methods.ItemModify;
 import cn.superiormc.enchantmentslots.utils.*;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.willfp.eco.core.display.DisplayPriority;
@@ -19,12 +19,6 @@ public class ConfigReader {
 
     public static boolean getDebug() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.debug", false);
-    }
-    public static boolean getAddHideFlag() {
-        return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.add-hide-enchant-flag", false);
-    }
-    public static boolean getEnchantSort() {
-        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.placeholder.enchants.sort", true);
     }
     public static boolean getAutoAddLore() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.item-can-be-enchanted.auto-add-lore", true);
@@ -51,6 +45,12 @@ public class ConfigReader {
     public static String getEnchantPlaceholder() {
         return EnchantmentSlots.instance.getConfig().getString("settings.add-lore.placeholder.enchants.format",
                 "&6  {enchant_name}");
+    }
+    public static boolean getEnchantSort() {
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.placeholder.enchants.sort", true);
+    }
+    public static boolean getEnchantHideOne() {
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.placeholder.enchants.level-hide-one", false);
     }
     public static String getEmptySlotPlaceholder() {
         return EnchantmentSlots.instance.getConfig().getString("settings.add-lore.placeholder.empty-slots.format",
@@ -93,19 +93,31 @@ public class ConfigReader {
         }
         return false;
     }
+    public static boolean getAddHideFlag() {
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.add-hide-enchant-flag", false);
+    }
+    public static boolean getSmithItemTrigger() {
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.SmithItemEvent.enabled", true);
+    }
+    public static boolean getSmithItemReset() {
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.SmithItemEvent.reset-previous-slot", true);
+    }
     public static boolean getEnchantItemTrigger() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.EnchantItemEvent.enabled", true);
+    }
+    public static boolean getEnchantCancel() {
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.EnchantItemEvent.cancel-if-reached-slot", true);
     }
     public static boolean getAnvilItemTrigger() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.AnvilItemEvent.enabled", true);
     }
-    public static boolean getAutoAddSlotsLimit() {
+    public static boolean getSetSlotPacketTrigger() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.SetSlotPacket.enabled",
                 EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.trigger.Packet.enabled", false));
     }
     public static boolean getRemoveExtraEnchants() {
-        return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.SetSlotPacket.remove-illegal-extra-enchant",
-                EnchantmentSlots.instance.getConfig().getBoolean("settings.remove-illegal-extra-enchant", false));
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.SetSlotPacket.remove-illegal-excess-enchant",
+                EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.SetSlotPacket.remove-illegal-extra-enchant", false));
     }
     public static List<String> getAutoAddSlotsItems() {
         if (EnchantmentSlots.instance.getConfig().getStringList("settings.item-can-be-enchanted.whitelist-items").isEmpty()) {
@@ -126,10 +138,8 @@ public class ConfigReader {
                             ConfigReader.getEnchantPlaceholder().
                                     replace("{enchant_name}", Messages.getEnchantName(itemStack, enchantment, true)).
                                     replace("{enchant_raw_name}", Messages.getEnchantName(itemStack, enchantment, false)).
-                                    replace("{enchant_level}", String.valueOf(
-                                            enchantments.get(enchantment))).
-                                    replace("{enchant_level_roman}", NumberUtil.convertToRoman(
-                                            enchantments.get(enchantment)))));
+                                    replace("{enchant_level}", ItemModify.getEnchantmentLevel(enchantment, enchantments.get(enchantment))).
+                                    replace("{enchant_level_roman}", NumberUtil.convertToRoman(ItemModify.getEnchantmentLevel(enchantment, enchantments.get(enchantment))))));
                 }
                 continue;
             }

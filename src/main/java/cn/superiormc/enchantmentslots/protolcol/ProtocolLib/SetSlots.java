@@ -53,26 +53,22 @@ public class SetSlots extends GeneralPackets {
                             "Packet Slot ID: " + slot + ", Window ID: " + windowID + ", Top Size: " +
                             event.getPlayer().getOpenInventory().getTopInventory().getSize() + ".");
                 }
-                if (ConfigReader.getAutoAddLore() && (
-                        !ConfigReader.getOnlyInInventory() || CommonUtil.inPlayerInventory(event.getPlayer(), slot))) {
-                    String itemID = CheckValidHook.checkValid(serverItemStack);
-                    int defaultSlot = ConfigReader.getDefaultLimits(event.getPlayer(), itemID);
-                    ItemModify.addLore(serverItemStack, defaultSlot, itemID);
-                }
+                boolean dontAddLore = false;
                 if (CommonUtil.inPlayerInventory(event.getPlayer(), slot)) {
-                    if (ConfigReader.getAutoAddSlotsLimit()) {
+                    if (ConfigReader.getSetSlotPacketTrigger()) {
                         ItemStack targetItem = event.getPlayer().getInventory().getItem(spigotSlot);
                         if (targetItem != null && !targetItem.getType().isAir()) {
                             String itemID = CheckValidHook.checkValid(targetItem);
                             int defaultSlot = ConfigReader.getDefaultLimits(event.getPlayer(), itemID);
                             ItemModify.addLore(targetItem, defaultSlot, itemID);
+                            dontAddLore = true;
                         }
                     }
                     if (ConfigReader.getRemoveExtraEnchants()) {
                         ItemStack tempItemStack = event.getPlayer().getInventory().getItem(spigotSlot);
                         if (tempItemStack != null && !tempItemStack.getType().isAir()) {
                             int maxEnchantments = ItemLimits.getRealMaxEnchantments(serverItemStack);
-                            if (tempItemStack.getEnchantments().size() >= maxEnchantments) {
+                            if (maxEnchantments > 0 && tempItemStack.getEnchantments().size() > maxEnchantments) {
                                 int removeAmount = tempItemStack.getEnchantments().size() - maxEnchantments;
                                 for (Enchantment enchant : tempItemStack.getEnchantments().keySet()) {
                                     if (removeAmount <= 0) {
@@ -89,6 +85,11 @@ public class SetSlots extends GeneralPackets {
                             }
                         }
                     }
+                }
+                if (!dontAddLore && ConfigReader.getAutoAddLore() && (!ConfigReader.getOnlyInInventory() || CommonUtil.inPlayerInventory(event.getPlayer(), slot))) {
+                    String itemID = CheckValidHook.checkValid(serverItemStack);
+                    int defaultSlot = ConfigReader.getDefaultLimits(event.getPlayer(), itemID);
+                    ItemModify.addLore(serverItemStack, defaultSlot, itemID);
                 }
                 ItemStack clientItemStack = ItemModify.serverToClient(serverItemStack);
                 // client 是加过 Lore 的，server 是没加过的！

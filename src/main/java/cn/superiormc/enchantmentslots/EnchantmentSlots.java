@@ -69,6 +69,9 @@ public final class EnchantmentSlots extends JavaPlugin {
             Bukkit.getPluginManager().registerEvents(new PlayerClickListener(), this);
         }
         Bukkit.getPluginManager().registerEvents(new PlayerInventoryListener(), this);
+        if (CommonUtil.getMajorVersion() >= 16) {
+            Bukkit.getPluginManager().registerEvents(new PlayerSmithListener(), this);
+        }
         if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("EnchantGui")) {
             Bukkit.getPluginManager().registerEvents(new EnchantGUIEnchantListener(), this);
         }

@@ -8,7 +8,7 @@ settings:
   item-can-be-enchanted:
     # Auto add enchantment slot lore for all item that can be enchanted.
     # If disabled, only item has enchantment slot NBT will display lore.
-    # Maybe lead to server lag.
+    # Maybe lead to server lag after enable.
     auto-add-lore: false
     whitelist-items:
       - wooden_pickaxe
@@ -82,12 +82,21 @@ settings:
     # This option support ProtocolLib only.
     # Enable this maybe improve plugin performance.
     SetSlotPacket:
-      enabled: false
-      remove-illegal-extra-enchant: true
+      enabled: true
+      # Only plugin has enchantment slot NBT will be checked.
+      remove-illegal-excess-enchant: true
     EnchantItemEvent:
       enabled: true
+      # Whether cancel the enchantment event or remove extra enchantment if
+      # item reached slot limit after enchant.
+      cancel-if-reached-slot: true
     AnvilItemEvent:
       enabled: true
+    SmithItemEvent:
+      enabled: true
+      # If set to true, we will reset old item enchantment slot and then regenerate new slot
+      # value for new item, enchantments won't affect by this option.
+      reset-previous-slot: true
     # Enable this maybe improve plugin performance.
     # Maybe has incompatible issue with other plugins.
     InventoryClickEvent:
@@ -96,7 +105,8 @@ settings:
   # If item don't have enchantment slot NBT, plugin will auto calculate it default slot as max slot.
   add-lore:
     # This option support ProtocolLib only.
-    only-in-player-inventory: false
+    # Enable this maybe improve plugin performance.
+    only-in-player-inventory: true
     # Support plugin:
     #   - eco (Recommend use if you are using EcoItems, EcoEnchants...)
     #   - ProtocolLib (Classic and stable choice)
@@ -139,18 +149,17 @@ settings:
     black-items:
       - book
       - enchanted_book
-    # Do not change this option when server started!
-    # Only change this if your server has stopped!
     placeholder:
       enchants:
         # Other placeholder: {enchant_level_roman}, {raw_enchant_name}
         format: '&6  {enchant_name} {enchant_level}'
         sort: true
+        level-hide-one: true
       empty-slots:
         format: '&7  --- Empty Slot ---'
   default-slots:
-    default: 5
-    vip: 10
+    default: 3
+    vip: 5
   #default-slots-by-item:
   #  diamond_sword:
   #    default: 20
@@ -166,7 +175,7 @@ settings:
   max-slots:
     default: 10
     vip: 15
-  # max-slots-by-item
+  # max-slots-by-item:
   # Similar to default-slots-by-item, remove the section to not use this feature.
   slots-conditions:
     vip:
@@ -175,8 +184,8 @@ settings:
   # If this item plugin don't have tier, will still use Item ID as identify.
   use-tier-identify-slots: false
   close-inventory-if-reached-limit: true
-  # Whether cancel add slot or just set item slot to max slot value if item reached max slot limit
-  # by using add slot items.
+  # Whether cancel add slot or just set item slot to max slot value and still consume add slot item
+  # if item reached max slot limit after using add slot items.
   cancel-add-slot-if-reached-max-slot: true
 
 add-slot-items:

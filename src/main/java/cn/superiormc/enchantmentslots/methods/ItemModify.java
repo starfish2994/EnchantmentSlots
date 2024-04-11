@@ -43,16 +43,12 @@ public class ItemModify {
                                 ConfigReader.getEnchantPlaceholder().
                                         replace("{enchant_name}", Messages.getEnchantName(itemStack, enchantment, true)).
                                         replace("{enchant_raw_name}", Messages.getEnchantName(itemStack, enchantment, false)).
-                                        replace("{enchant_level}", String.valueOf(
-                                                enchantments.get(enchantment))).
-                                        replace("{enchant_level_roman}", NumberUtil.convertToRoman(
-                                                enchantments.get(enchantment)))).
+                                        replace("{enchant_level}", getEnchantmentLevel(enchantment, enchantments.get(enchantment))).
+                                        replace("{enchant_level_roman}", NumberUtil.convertToRoman(getEnchantmentLevel(enchantment, enchantments.get(enchantment)))).
                                         replace("[enchant_name]", Messages.getEnchantName(itemStack, enchantment, true)).
                                         replace("[enchant_raw_name]", Messages.getEnchantName(itemStack, enchantment, false)).
-                                        replace("[enchant_level]", String.valueOf(
-                                                enchantments.get(enchantment))).
-                                        replace("[enchant_level_roman]", NumberUtil.convertToRoman(
-                                                enchantments.get(enchantment)));
+                                        replace("[enchant_level]", getEnchantmentLevel(enchantment, enchantments.get(enchantment))).
+                                        replace("[enchant_level_roman]", NumberUtil.convertToRoman(getEnchantmentLevel(enchantment, enchantments.get(enchantment)))));
                         value = lorePrefix + value;
                         lore.add(value);
                     }
@@ -88,16 +84,13 @@ public class ItemModify {
                                 ConfigReader.getEnchantPlaceholder().
                                         replace("{enchant_name}", Messages.getEnchantName(itemStack, enchantment, true)).
                                         replace("{enchant_raw_name}", Messages.getEnchantName(itemStack, enchantment, false)).
-                                        replace("{enchant_level}", String.valueOf(
-                                                enchantments.get(enchantment))).
+                                        replace("{enchant_level}", getEnchantmentLevel(enchantment, enchantments.get(enchantment))).
                                         replace("{enchant_level_roman}", NumberUtil.convertToRoman(
-                                                enchantments.get(enchantment)))).
+                                                getEnchantmentLevel(enchantment, enchantments.get(enchantment)))).
                                         replace("[enchant_name]", Messages.getEnchantName(itemStack, enchantment, true)).
                                         replace("[enchant_raw_name]", Messages.getEnchantName(itemStack, enchantment, false)).
-                                        replace("[enchant_level]", String.valueOf(
-                                                enchantments.get(enchantment))).
-                                        replace("[enchant_level_roman]", NumberUtil.convertToRoman(
-                                                enchantments.get(enchantment)));
+                                        replace("[enchant_level]", getEnchantmentLevel(enchantment, enchantments.get(enchantment))).
+                                        replace("[enchant_level_roman]", NumberUtil.convertToRoman(getEnchantmentLevel(enchantment, enchantments.get(enchantment)))));
                         value = lorePrefix + value;
                         lore.add(value);
                     }
@@ -158,12 +151,12 @@ public class ItemModify {
         return itemStack;
     }
 
-    public static void addLore(ItemStack item, int defaultSlot, String itemID) {
+    public static ItemStack removeAndAddLore(ItemStack item, int defaultSlot, String itemID) {
         if (item == null || item.getType().isAir()) {
-            return;
+            return item;
         }
         if (!ItemLimits.canEnchant(item, itemID)) {
-            return;
+            return item;
         }
         if (!item.hasItemMeta()) {
             ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
@@ -171,10 +164,36 @@ public class ItemModify {
         }
         ItemMeta meta = item.getItemMeta();
         if (meta == null) {
-            return;
+            return item;
+        }
+        meta.getPersistentDataContainer().remove(ENCHANTMENT_SLOTS_KEY);
+        meta.getPersistentDataContainer().set(ENCHANTMENT_SLOTS_KEY,
+                PersistentDataType.INTEGER,
+                defaultSlot);
+        if (ConfigReader.getAddHideFlag()) {
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public static ItemStack addLore(ItemStack item, int defaultSlot, String itemID) {
+        if (item == null || item.getType().isAir()) {
+            return item;
+        }
+        if (!ItemLimits.canEnchant(item, itemID)) {
+            return item;
+        }
+        if (!item.hasItemMeta()) {
+            ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
+            item.setItemMeta(tempMeta);
+        }
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) {
+            return item;
         }
         if (meta.getPersistentDataContainer().has(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER)) {
-            return;
+            return item;
         }
         meta.getPersistentDataContainer().set(ENCHANTMENT_SLOTS_KEY,
                 PersistentDataType.INTEGER,
@@ -183,5 +202,13 @@ public class ItemModify {
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
         item.setItemMeta(meta);
+        return item;
+    }
+
+    public static String getEnchantmentLevel(Enchantment enchantment, int level) {
+        if (ConfigReader.getEnchantHideOne() && level == enchantment.getMaxLevel() && enchantment.getMaxLevel() == 1) {
+            return "";
+        }
+        return String.valueOf(level);
     }
 }
