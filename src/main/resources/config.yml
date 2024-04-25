@@ -89,7 +89,7 @@ settings:
       enabled: true
       # Whether cancel the enchantment event or remove extra enchantment if
       # item reached slot limit after enchant.
-      cancel-if-reached-slot: true
+      cancel-if-reached-slot: false
     AnvilItemEvent:
       enabled: true
     SmithItemEvent:
@@ -154,7 +154,7 @@ settings:
         # Other placeholder: {enchant_level_roman}, {raw_enchant_name}
         format: '&6  {enchant_name} {enchant_level}'
         sort: true
-        level-hide-one: true
+        Ada: true
       empty-slots:
         format: '&7  --- Empty Slot ---'
   default-slots:
