@@ -23,6 +23,9 @@ public class ConfigReader {
     public static boolean getAutoAddLore() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.item-can-be-enchanted.auto-add-lore", true);
     }
+    public static String getEnchantLevel(int level) {
+        return EnchantmentSlots.instance.getConfig().getString("enchant-level." + level, String.valueOf(level));
+    }
     public static String getEnchantmentName(Enchantment enchantment) {
         return EnchantmentSlots.instance.getConfig().getString("enchant-name." + enchantment.getKey().getKey(), enchantment.getKey().getKey());
     }
@@ -139,7 +142,7 @@ public class ConfigReader {
                                     replace("{enchant_name}", Messages.getEnchantName(itemStack, enchantment, true)).
                                     replace("{enchant_raw_name}", Messages.getEnchantName(itemStack, enchantment, false)).
                                     replace("{enchant_level}", ItemModify.getEnchantmentLevel(enchantment, enchantments.get(enchantment))).
-                                    replace("{enchant_level_roman}", NumberUtil.convertToRoman(ItemModify.getEnchantmentLevel(enchantment, enchantments.get(enchantment))))));
+                                    replace("{enchant_level_roman}", ItemModify.getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment)))));
                 }
                 continue;
             }

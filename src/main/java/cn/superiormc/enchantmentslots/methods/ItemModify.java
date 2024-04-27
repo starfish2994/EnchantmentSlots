@@ -44,11 +44,11 @@ public class ItemModify {
                                         replace("{enchant_name}", Messages.getEnchantName(itemStack, enchantment, true)).
                                         replace("{enchant_raw_name}", Messages.getEnchantName(itemStack, enchantment, false)).
                                         replace("{enchant_level}", getEnchantmentLevel(enchantment, enchantments.get(enchantment))).
-                                        replace("{enchant_level_roman}", NumberUtil.convertToRoman(getEnchantmentLevel(enchantment, enchantments.get(enchantment)))).
+                                        replace("{enchant_level_roman}", getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment)))).
                                         replace("[enchant_name]", Messages.getEnchantName(itemStack, enchantment, true)).
                                         replace("[enchant_raw_name]", Messages.getEnchantName(itemStack, enchantment, false)).
                                         replace("[enchant_level]", getEnchantmentLevel(enchantment, enchantments.get(enchantment))).
-                                        replace("[enchant_level_roman]", NumberUtil.convertToRoman(getEnchantmentLevel(enchantment, enchantments.get(enchantment)))));
+                                        replace("[enchant_level_roman]", getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment)));
                         value = lorePrefix + value;
                         lore.add(value);
                     }
@@ -85,12 +85,11 @@ public class ItemModify {
                                         replace("{enchant_name}", Messages.getEnchantName(itemStack, enchantment, true)).
                                         replace("{enchant_raw_name}", Messages.getEnchantName(itemStack, enchantment, false)).
                                         replace("{enchant_level}", getEnchantmentLevel(enchantment, enchantments.get(enchantment))).
-                                        replace("{enchant_level_roman}", NumberUtil.convertToRoman(
-                                                getEnchantmentLevel(enchantment, enchantments.get(enchantment)))).
+                                        replace("{enchant_level_roman}", getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment))).
                                         replace("[enchant_name]", Messages.getEnchantName(itemStack, enchantment, true)).
                                         replace("[enchant_raw_name]", Messages.getEnchantName(itemStack, enchantment, false)).
                                         replace("[enchant_level]", getEnchantmentLevel(enchantment, enchantments.get(enchantment))).
-                                        replace("[enchant_level_roman]", NumberUtil.convertToRoman(getEnchantmentLevel(enchantment, enchantments.get(enchantment)))));
+                                        replace("[enchant_level_roman]", getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment))));
                         value = lorePrefix + value;
                         lore.add(value);
                     }
@@ -209,6 +208,13 @@ public class ItemModify {
         if (ConfigReader.getEnchantHideOne() && level == enchantment.getMaxLevel() && enchantment.getMaxLevel() == 1) {
             return "";
         }
-        return String.valueOf(level);
+        return ConfigReader.getEnchantLevel(level);
+    }
+
+    public static String getEnchantmentLevelRoman(Enchantment enchantment, int level) {
+        if (ConfigReader.getEnchantHideOne() && level == enchantment.getMaxLevel() && enchantment.getMaxLevel() == 1) {
+            return "";
+        }
+        return NumberUtil.convertToRoman(level);
     }
 }

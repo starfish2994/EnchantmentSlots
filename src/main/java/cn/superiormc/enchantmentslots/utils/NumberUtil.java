@@ -22,12 +22,7 @@ public class NumberUtil {
         romanNumerals.put(1, "I");
     }
 
-    public static String convertToRoman(String input) {
-        if (input.isEmpty()) {
-            return "";
-        }
-
-        int number = Integer.parseInt(input);
+    public static String convertToRoman(int number) {
         StringBuilder romanNumber = new StringBuilder();
 
         for (Map.Entry<Integer, String> entry : romanNumerals.entrySet()) {

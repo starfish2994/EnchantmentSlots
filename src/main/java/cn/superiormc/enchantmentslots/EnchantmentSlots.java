@@ -58,7 +58,11 @@ public final class EnchantmentSlots extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        ProtocolLibrary.getProtocolManager().removePacketListeners(this);
+        if (EnchantmentSlots.instance.getConfig().getString("settings.add-lore.use-listener-plugin",
+                EnchantmentSlots.instance.getConfig().getString("settings.use-listener-plugin", "ProtocolLib")).equals("ProtocolLib"))
+        {
+            ProtocolLibrary.getProtocolManager().removePacketListeners(this);
+        }
         Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fPlugin is disabled. Author: PQguanfang.");
     }
 

@@ -220,6 +220,12 @@ add-slot-items:
     apply-items:
       - 'diamond_sword'
 
+# Enchant Level
+enchant-level:
+  1: ①
+  2: ②
+  3: ③
+
 # Enchant Name
 enchant-name:
   # Default providing vanilla enchantments here.
