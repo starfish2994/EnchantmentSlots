@@ -5,6 +5,7 @@ import cn.superiormc.enchantmentslots.commands.MainTab;
 import cn.superiormc.enchantmentslots.configs.Messages;
 import cn.superiormc.enchantmentslots.listeners.*;
 import cn.superiormc.enchantmentslots.methods.ExtraSlotsItem;
+import cn.superiormc.enchantmentslots.methods.ItemModify;
 import cn.superiormc.enchantmentslots.papi.PlaceholderAPIExpansion;
 import cn.superiormc.enchantmentslots.protolcol.GeneralProtolcol;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
@@ -58,9 +59,7 @@ public final class EnchantmentSlots extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if (EnchantmentSlots.instance.getConfig().getString("settings.add-lore.use-listener-plugin",
-                EnchantmentSlots.instance.getConfig().getString("settings.use-listener-plugin", "ProtocolLib")).equals("ProtocolLib"))
-        {
+        if (ItemModify.lorePrefix.equals("§y")){
             ProtocolLibrary.getProtocolManager().removePacketListeners(this);
         }
         Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fPlugin is disabled. Author: PQguanfang.");

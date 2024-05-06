@@ -30,13 +30,15 @@ public class Messages {
     private static File tempFile;
 
     public static void init() {
-        file = new File(EnchantmentSlots.instance.getDataFolder(), "message.yml");
+        file = new File(EnchantmentSlots.instance.getDataFolder() + "/languages/" + ConfigReader.getLanguage() + ".yml");
         if (!file.exists()){
-            File tempVal1 = new File("message.yml");
+            File tempVal1 = new File("languages/en_US.yml");
             EnchantmentSlots.instance.saveResource(tempVal1.getPath(), false);
+            File tempVal2 = new File("languages/zh_CN.yml");
+            EnchantmentSlots.instance.saveResource(tempVal2.getPath(), false);
         }
         messageFile = YamlConfiguration.loadConfiguration(file);
-        InputStream is = EnchantmentSlots.instance.getResource("message.yml");
+        InputStream is = EnchantmentSlots.instance.getResource("languages/en_US.yml");
         if (is == null) {
             return;
         }

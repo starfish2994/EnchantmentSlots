@@ -17,6 +17,9 @@ import java.util.*;
 
 public class ConfigReader {
 
+    public static String getLanguage(){
+        return EnchantmentSlots.instance.getConfig().getString("language", "en_US");
+    }
     public static boolean getDebug() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.debug", false);
     }

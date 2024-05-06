@@ -1,0 +1,30 @@
+plugin-reloaded: "&#98FB98[EnchantmentSlots] &f插件已重启!"
+help-main: |
+  &#98FB98&lEnchantmentSlots &7Made by @PQguanfang
+  &f/es help &7- 查看帮助.
+help-main-admin: |
+  &#98FB98&lEnchantmentSlots &7Made by @PQguanfang
+  &f/es help &7- 查看帮助.
+  &f/es reload &7- 重启插件.
+  &f/es setslots <数量> &7- 将手上物品的附魔槽位设置指定值.
+  &f/es giveslots <数量> &7- 添加手上物品的附魔槽位.
+  &f/es giveslots <物品ID> <玩家> &7- 给予指定玩家扩槽器.
+help-main-console: |
+  &#98FB98&lEnchantmentSlots &7Made by @PQguanfang
+  &f/es help &7- 查看帮助.
+  &f/es reload &7- 重启插件.
+  &f/es giveslots <物品ID> <玩家> &7- 给予指定玩家扩槽器.
+give-extra-slot-item: "&#98FB98[EnchantmentSlots] &a给予玩家 %player% 扩槽器 %item% x%amount%"
+success-add: "&#98FB98[EnchantmentSlots] &a给手上物品添加了 %amount% 额外的附魔槽位!"
+success-set: "&#98FB98[EnchantmentSlots] &a将手上物品的附魔槽位设置为 %amount%!"
+slots-limit-reached: "&#98FB98[EnchantmentSlots] &c你的物品已经达到了附魔上限!"
+max-slots-reached: "&#98FB98[EnchantmentSlots] &c你的物品无法继续扩槽!"
+slots-limit-reached-enchant: "&#98FB98[EnchantmentSlots] &c您实际获得的附魔可能与附魔台显示的不同，这是由于您的物品在附魔后达到了附魔限制，而插件自动删除了多出的附魔导致的."
+slots-limit-reached-after-smith: "&#98FB98[EnchantmentSlots] &c您目前无法锻造此物品，因为在锻造后，该物品的附魔将超出附魔槽位限制!"
+error-args: "&#98FB98[EnchantmentSlots] &c用法错误，请使用 /es help!"
+error-miss-permission: "&#98FB98[EnchantmentSlots] &c你没有足够的权限!"
+error-in-game: "&#98FB98[EnchantmentSlots] &c你必须在游戏中使用该命令!"
+error-no-item: "&#98FB98[EnchantmentSlots] &c你的手上没有物品!"
+error-item-not-found: "&#98FB98[EnchantmentSlots] &c找不到这个名字的扩槽器!"
+error-player-not-found: "&#98FB98[EnchantmentSlots] &c找不到玩家 %player%!"
+error-creative-mode: "&#98FB98[EnchantmentSlots] &c这个功能目前不支持创造模式使用!"

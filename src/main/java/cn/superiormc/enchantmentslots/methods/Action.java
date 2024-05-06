@@ -59,7 +59,7 @@ public class Action {
                     if (PotionEffectType.getByName(singleAction.substring(8).split(";;")[0].toUpperCase()) == null) {
                         continue;
                     }
-                    PotionEffect effect = new PotionEffect(PotionEffectType.getByName(singleAction.split(";;")[0].toUpperCase()),
+                    PotionEffect effect = new PotionEffect(PotionEffectType.getByName(singleAction.substring(8).split(";;")[0].toUpperCase()),
                             Integer.parseInt(singleAction.substring(8).split(";;")[2]),
                             Integer.parseInt(singleAction.substring(8).split(";;")[1]) - 1,
                             true,
@@ -74,11 +74,11 @@ public class Action {
                     EntityType entity = EntityType.valueOf(singleAction.substring(14).split(";;")[0].toUpperCase());
                     player.getLocation().getWorld().spawnEntity(player.getLocation(), entity);
                 } else if (singleAction.split(";;").length == 5) {
-                    World world = Bukkit.getWorld(singleAction.substring(18).split(";;")[1]);
+                    World world = Bukkit.getWorld(singleAction.substring(14).split(";;")[1]);
                     Location location = new Location(world,
-                            Double.parseDouble(singleAction.substring(18).split(";;")[2]),
-                            Double.parseDouble(singleAction.substring(18).split(";;")[3]),
-                            Double.parseDouble(singleAction.substring(18).split(";;")[4]));
+                            Double.parseDouble(singleAction.substring(14).split(";;")[2]),
+                            Double.parseDouble(singleAction.substring(14).split(";;")[3]),
+                            Double.parseDouble(singleAction.substring(14).split(";;")[4]));
                     EntityType entity = EntityType.valueOf(singleAction.substring(14).split(";;")[0].toUpperCase());
                     if (location.getWorld() == null) {
                         continue;

@@ -2,6 +2,9 @@
 #
 # READ THE WIKI: enchantmentslots.superiormc.cn
 
+# Languages
+language: en_US
+
 # Settings
 settings:
   debug: false

@@ -1,7 +1,7 @@
 name: EnchantmentSlots
 version: '${project.version}'
 main: cn.superiormc.enchantmentslots.EnchantmentSlots
-api-version: 1.13
+api-version: 1.14
 softdepend:
   - EcoEnchants
   - ExcellentEnchants

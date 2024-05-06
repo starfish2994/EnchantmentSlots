@@ -31,11 +31,11 @@ public class PlayerAnvilListener implements Listener {
             }
             String itemID = CheckValidHook.checkValid(item);
             int defaultSlot = ConfigReader.getDefaultLimits(player, itemID);
-            if (ConfigReader.getAnvilItemTrigger()) {
-                ItemModify.addLore(item, defaultSlot, itemID);
-            }
             ItemStack result = inventory.getItem(2);
             if (result != null) {
+                if (ConfigReader.getAnvilItemTrigger()) {
+                    ItemModify.addLore(result, defaultSlot, itemID);
+                }
                 int maxEnchantments = ItemLimits.getMaxEnchantments(result, defaultSlot, itemID);
                 if (ItemUtil.getEnchantments(result, false).size() > maxEnchantments) {
                     event.setCancelled(true);
