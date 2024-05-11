@@ -88,8 +88,11 @@ public class ExtraSlotsItem {
         return resultItem;
     }
 
-    public boolean canApply(ItemStack item) {
-        return applyItems.isEmpty() || applyItems.contains(CheckValidHook.checkValid(item));
+    public boolean canApply(Player player, ItemStack item) {
+        if (!Condition.getBoolean(player, section.getStringList("conditions"))) {
+            return false;
+        }
+        return applyItems.isEmpty() || applyItems.contains("*") || applyItems.contains(CheckValidHook.checkValid(item));
     }
 
     public int getAddSlot() {

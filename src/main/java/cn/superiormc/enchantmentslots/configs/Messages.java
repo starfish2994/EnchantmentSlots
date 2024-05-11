@@ -4,7 +4,8 @@ import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import cn.superiormc.enchantmentslots.utils.TextUtil;
 import com.willfp.eco.util.StringUtils;
-import com.willfp.ecoenchants.enchant.EcoEnchant;
+import com.willfp.ecoenchants.display.EnchantmentFormattingKt;
+import com.willfp.ecoenchants.enchant.EcoEnchantLike;
 import com.willfp.ecoenchants.enchant.EcoEnchants;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -75,13 +76,12 @@ public class Messages {
             try {
                 if (Integer.parseInt(EnchantmentSlots.instance.getServer().getPluginManager().getPlugin("EcoEnchants").getDescription().
                         getVersion().split("\\.")[0]) > 10) {
-                    EcoEnchant ecoEnchant = EcoEnchants.INSTANCE.getByID(enchantment.getKey().getKey());
+                    EcoEnchantLike ecoEnchant = EcoEnchants.INSTANCE.getByID(enchantment.getKey().getKey());
                     if (ecoEnchant != null) {
-                        String name = ecoEnchant.getRawDisplayName();
                         if (showTierColor) {
-                            name = ecoEnchant.getType().getFormat() + name;
+                            return EnchantmentFormattingKt.getFormattedName(ecoEnchant, 0, true);
                         }
-                        return StringUtils.format(name);
+                        return StringUtils.format(ecoEnchant.getRawDisplayName());
                     }
                 } else {
                     com.willfp.ecoenchants.enchants.EcoEnchant ecoEnchant = com.willfp.ecoenchants.enchants.EcoEnchants.getByKey(enchantment.getKey());
@@ -89,7 +89,7 @@ public class Messages {
                         return ecoEnchant.getDisplayName();
                     }
                 }
-            } catch (Exception ep) {
+            } catch (Throwable throwable) {
                 return TextUtil.parse(ConfigReader.getEnchantmentName(enchantment));
             }
         } else if (CommonUtil.checkPluginLoad("ExcellentEnchants")) {

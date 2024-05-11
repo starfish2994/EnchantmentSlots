@@ -15,7 +15,7 @@ public class TextUtil {
 
     public static String parse(Player player, String text) {
         if (CommonUtil.checkPluginLoad("PlaceholderAPI")) {
-            return PlaceholderAPI.setPlaceholders(player, text);
+            return parse(PlaceholderAPI.setPlaceholders(player, text));
         }
         else {
             return parse(text);

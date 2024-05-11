@@ -157,7 +157,7 @@ settings:
         # Other placeholder: {enchant_level_roman}, {raw_enchant_name}
         format: '&6  {enchant_name} {enchant_level}'
         sort: true
-        Ada: true
+        level-hide-one: true
       empty-slots:
         format: '&7  --- Empty Slot ---'
   default-slots:
@@ -200,12 +200,16 @@ add-slot-items:
       - '&fApply for all items but have only 50% success rate!'
     add-slots: 1
     chance: 50
+    conditions:
+      - 'none'
     success-actions:
       - 'sound: block.note_block.harp;;1;;1'
       - 'message: &#98FB98[EnchantmentSlots] &aAdd {amount} extra enchantment slot to your item!'
     fail-actions:
       - 'sound: block.note_block.bass;;1;;1'
       - 'message: &#98FB98[EnchantmentSlots] &cYou are not very lucky, slot item has broken!'
+    apply-items:
+      - '*'
   B:
     material: PAPER
     custom-model-data: 5
@@ -214,6 +218,8 @@ add-slot-items:
       - '&fDrag this item into your item to use!'
       - '&f100% success but only work for diamond sword.'
     add-slots: 5
+    conditions:
+      - 'none'
     success-actions:
       - 'sound: block.note_block.harp;;1;;1'
       - 'message: &#98FB98[EnchantmentSlots] &aAdd {amount} extra enchantment slot to your item!'
@@ -228,6 +234,9 @@ enchant-level:
   1: ①
   2: ②
   3: ③
+  4: ④
+  5: ⑤
+  6: ⑥
 
 # Enchant Name
 enchant-name:

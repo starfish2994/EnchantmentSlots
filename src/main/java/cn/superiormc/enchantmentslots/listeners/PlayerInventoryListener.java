@@ -41,7 +41,7 @@ public class PlayerInventoryListener implements Listener {
             return;
         }
         ExtraSlotsItem item = ExtraSlotsItem.getExtraSlotItemValue(extraItem);
-        if (item == null || !item.canApply(targetItem)) {
+        if (item == null || !item.canApply(player, targetItem)) {
             return;
         }
         int value = item.getAddSlot();
