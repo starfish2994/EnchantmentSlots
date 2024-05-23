@@ -134,7 +134,7 @@ public class ConfigReader {
     public static List<String> getDisplayLore() {
         return EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.display-value");
     }
-    public static List<String> editDisplayLore(List<String> lore, ItemStack itemStack, int slot) {
+    public static List<String> editDisplayLore(List<String> lore, ItemStack itemStack, Player player, int slot) {
         List<String> tempLore = new ArrayList<>();
         Map<Enchantment, Integer> enchantments = ItemUtil.getEnchantments(itemStack, true);
         for (String str : lore) {
@@ -142,8 +142,8 @@ public class ConfigReader {
                 for (Enchantment enchantment : enchantments.keySet()) {
                     tempLore.add(TextUtil.parse(
                             ConfigReader.getEnchantPlaceholder().
-                                    replace("{enchant_name}", Messages.getEnchantName(itemStack, enchantment, true)).
-                                    replace("{enchant_raw_name}", Messages.getEnchantName(itemStack, enchantment, false)).
+                                    replace("{enchant_name}", Messages.getEnchantName(itemStack, enchantment, player, true)).
+                                    replace("{enchant_raw_name}", Messages.getEnchantName(itemStack, enchantment, player, false)).
                                     replace("{enchant_level}", ItemModify.getEnchantmentLevel(enchantment, enchantments.get(enchantment))).
                                     replace("{enchant_level_roman}", ItemModify.getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment)))));
                 }

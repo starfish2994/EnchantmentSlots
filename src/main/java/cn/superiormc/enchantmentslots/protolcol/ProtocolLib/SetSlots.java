@@ -91,7 +91,7 @@ public class SetSlots extends GeneralPackets {
                     int defaultSlot = ConfigReader.getDefaultLimits(event.getPlayer(), itemID);
                     ItemModify.addLore(serverItemStack, defaultSlot, itemID);
                 }
-                ItemStack clientItemStack = ItemModify.serverToClient(serverItemStack);
+                ItemStack clientItemStack = ItemModify.serverToClient(serverItemStack, event.getPlayer());
                 // client 是加过 Lore 的，server 是没加过的！
                 itemStackStructureModifier.write(0, clientItemStack);
             }

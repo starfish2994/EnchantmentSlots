@@ -111,7 +111,7 @@ settings:
     # Enable this maybe improve plugin performance.
     only-in-player-inventory: true
     # Support plugin:
-    #   - eco (Recommend use if you are using EcoItems, EcoEnchants...)
+    #   - eco (Do not change unless you are know what you are doing)
     #   - ProtocolLib (Classic and stable choice)
     use-listener-plugin: ProtocolLib
     # ProtocolLib Support value:

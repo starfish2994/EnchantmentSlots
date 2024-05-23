@@ -2,11 +2,13 @@ package cn.superiormc.enchantmentslots.methods;
 
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.configs.Messages;
+import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import cn.superiormc.enchantmentslots.utils.NumberUtil;
 import cn.superiormc.enchantmentslots.utils.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -24,7 +26,7 @@ public class ItemModify {
 
     public static String lorePrefix = "";
 
-    public static ItemStack serverToClient(@NotNull ItemStack itemStack) {
+    public static ItemStack serverToClient(@NotNull ItemStack itemStack, Player player) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null) {
             return itemStack;
@@ -39,16 +41,11 @@ public class ItemModify {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : enchantments.keySet()) {
-                        String value = TextUtil.parse(
-                                ConfigReader.getEnchantPlaceholder().
-                                        replace("{enchant_name}", Messages.getEnchantName(itemStack, enchantment, true)).
-                                        replace("{enchant_raw_name}", Messages.getEnchantName(itemStack, enchantment, false)).
-                                        replace("{enchant_level}", getEnchantmentLevel(enchantment, enchantments.get(enchantment))).
-                                        replace("{enchant_level_roman}", getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment)))).
-                                        replace("[enchant_name]", Messages.getEnchantName(itemStack, enchantment, true)).
-                                        replace("[enchant_raw_name]", Messages.getEnchantName(itemStack, enchantment, false)).
-                                        replace("[enchant_level]", getEnchantmentLevel(enchantment, enchantments.get(enchantment))).
-                                        replace("[enchant_level_roman]", getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment)));
+                        String value = TextUtil.parse(CommonUtil.modifyString(ConfigReader.getEnchantPlaceholder()
+                                ,"enchant_name", Messages.getEnchantName(itemStack, enchantment, player, true)
+                                ,"enchant_raw_name", Messages.getEnchantName(itemStack, enchantment, player, false)
+                                ,"enchant_level", getEnchantmentLevel(enchantment, enchantments.get(enchantment))
+                                ,"enchant_level_roman", getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment))));
                         value = lorePrefix + value;
                         lore.add(value);
                     }
@@ -74,22 +71,17 @@ public class ItemModify {
         }
         if (itemMeta.hasLore()) {
             List<String> tempLore = itemMeta.getLore();
-            lore.addAll(ConfigReader.editDisplayLore(tempLore, itemStack, slot));
+            lore.addAll(ConfigReader.editDisplayLore(tempLore, itemStack, player, slot));
         }
         if (!ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack)) {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : enchantments.keySet()) {
-                        String value = TextUtil.parse(
-                                ConfigReader.getEnchantPlaceholder().
-                                        replace("{enchant_name}", Messages.getEnchantName(itemStack, enchantment, true)).
-                                        replace("{enchant_raw_name}", Messages.getEnchantName(itemStack, enchantment, false)).
-                                        replace("{enchant_level}", getEnchantmentLevel(enchantment, enchantments.get(enchantment))).
-                                        replace("{enchant_level_roman}", getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment))).
-                                        replace("[enchant_name]", Messages.getEnchantName(itemStack, enchantment, true)).
-                                        replace("[enchant_raw_name]", Messages.getEnchantName(itemStack, enchantment, false)).
-                                        replace("[enchant_level]", getEnchantmentLevel(enchantment, enchantments.get(enchantment))).
-                                        replace("[enchant_level_roman]", getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment))));
+                        String value = TextUtil.parse(CommonUtil.modifyString(ConfigReader.getEnchantPlaceholder()
+                                        ,"enchant_name", Messages.getEnchantName(itemStack, enchantment, player, true)
+                                        ,"enchant_raw_name", Messages.getEnchantName(itemStack, enchantment, player, false)
+                                        ,"enchant_level", getEnchantmentLevel(enchantment, enchantments.get(enchantment))
+                                        ,"enchant_level_roman", getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment))));
                         value = lorePrefix + value;
                         lore.add(value);
                     }

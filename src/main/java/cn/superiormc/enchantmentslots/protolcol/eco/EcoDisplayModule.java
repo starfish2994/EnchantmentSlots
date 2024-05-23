@@ -23,19 +23,6 @@ public class EcoDisplayModule extends DisplayModule {
 
     @Override
     public void display(@NotNull ItemStack itemStack, @Nullable Player player, @NotNull Object... args) {
-        //try {
-        //    Class<?> yourClass = Display.class; // 替换为包含 REGISTERED_MODULES 的类
-        //    Field field = yourClass.getDeclaredField("REGISTERED_MODULES");
-        //    field.setAccessible(true); // 设置私有变量的可访问性
-        //    Map<Integer, List<DisplayModule>> registeredModules = (Map<Integer, List<DisplayModule>>) field.get(null);
-        //    for (int b : registeredModules.keySet()) {
-        //        for (DisplayModule displayModule : registeredModules.get(b)) {
-        //            Bukkit.getConsoleSender().sendMessage(displayModule.getPluginName() + "  " + b);
-        //        }
-        //    }
-        //} catch (NoSuchFieldException | IllegalAccessException e) {
-        //    e.printStackTrace();
-        //}
         if (player == null) {
             return;
         }
@@ -47,6 +34,6 @@ public class EcoDisplayModule extends DisplayModule {
         if (ConfigReader.getAutoAddLore()) {
             ItemModify.addLore(itemStack, defaultSlot, itemID);
         }
-        ItemModify.serverToClient(itemStack);
+        ItemModify.serverToClient(itemStack, player);
     }
 }

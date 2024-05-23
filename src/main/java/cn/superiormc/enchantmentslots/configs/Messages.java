@@ -1,15 +1,19 @@
 package cn.superiormc.enchantmentslots.configs;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
+import cn.superiormc.enchantmentslots.hooks.EcoEnchantsHook;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import cn.superiormc.enchantmentslots.utils.TextUtil;
 import com.willfp.eco.util.StringUtils;
 import com.willfp.ecoenchants.display.EnchantmentFormattingKt;
 import com.willfp.ecoenchants.enchant.EcoEnchantLike;
 import com.willfp.ecoenchants.enchant.EcoEnchants;
+import com.willfp.libreforge.Holder;
+import com.willfp.libreforge.ItemProvidedHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import su.nightexpress.excellentenchants.api.enchantment.EnchantmentData;
 import su.nightexpress.excellentenchants.enchantment.registry.EnchantRegistry;
@@ -71,26 +75,14 @@ public class Messages {
         return TextUtil.parse(messageFile.getString(path));
     }
 
-    public static String getEnchantName(ItemStack item, Enchantment enchantment, boolean showTierColor) {
+    public static String getEnchantName(ItemStack item, Enchantment enchantment, Player player, boolean showTierColor) {
         if (CommonUtil.checkPluginLoad("EcoEnchants")) {
-            try {
-                if (Integer.parseInt(EnchantmentSlots.instance.getServer().getPluginManager().getPlugin("EcoEnchants").getDescription().
-                        getVersion().split("\\.")[0]) > 10) {
-                    EcoEnchantLike ecoEnchant = EcoEnchants.INSTANCE.getByID(enchantment.getKey().getKey());
-                    if (ecoEnchant != null) {
-                        if (showTierColor) {
-                            return EnchantmentFormattingKt.getFormattedName(ecoEnchant, 0, true);
-                        }
-                        return StringUtils.format(ecoEnchant.getRawDisplayName());
-                    }
-                } else {
-                    com.willfp.ecoenchants.enchants.EcoEnchant ecoEnchant = com.willfp.ecoenchants.enchants.EcoEnchants.getByKey(enchantment.getKey());
-                    if (ecoEnchant != null) {
-                        return ecoEnchant.getDisplayName();
-                    }
+            EcoEnchantLike ecoEnchant = EcoEnchants.INSTANCE.getByID(enchantment.getKey().getKey());
+            if (ecoEnchant != null) {
+                if (showTierColor) {
+                    return EcoEnchantsHook.getEcoEnchantName(ecoEnchant, item, player);
                 }
-            } catch (Throwable throwable) {
-                return TextUtil.parse(ConfigReader.getEnchantmentName(enchantment));
+                return StringUtils.format(ecoEnchant.getRawDisplayName());
             }
         } else if (CommonUtil.checkPluginLoad("ExcellentEnchants")) {
             EnchantmentData excellentEnchant = EnchantRegistry.getByKey(enchantment.getKey());

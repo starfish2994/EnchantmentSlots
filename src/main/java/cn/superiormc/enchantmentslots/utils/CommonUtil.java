@@ -13,7 +13,11 @@ import java.util.regex.Pattern;
 
 public class CommonUtil {
 
-    public static boolean checkPluginLoad(String pluginName){
+    public static boolean checkPluginLoad(String pluginName) {
+        if (pluginName.equals("EcoEnchants") && EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled(pluginName)) {
+            return Integer.parseInt(EnchantmentSlots.instance.getServer().getPluginManager().getPlugin("EcoEnchants").getDescription().
+                    getVersion().split("\\.")[0]) > 10;
+        }
         return EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled(pluginName);
     }
 
@@ -51,6 +55,20 @@ public class CommonUtil {
         } finally {
             player.setOp(playerIsOp);
         }
+    }
+
+    public static String modifyString(String text, String... args) {
+        for (int i = 0 ; i < args.length ; i += 2) {
+            String var1 = "{" + args[i] + "}";
+            String var2 = "[" + args[i] + "]";
+            if (args[i + 1] == null) {
+                text = text.replace(var1, "").replace(var2, "");
+            }
+            else {
+                text = text.replace(var1, args[i + 1]).replace(var2, args[i + 1]);
+            }
+        }
+        return text;
     }
 
     public static boolean checkJarFiles() {

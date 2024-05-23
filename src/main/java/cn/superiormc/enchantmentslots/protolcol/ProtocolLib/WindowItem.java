@@ -43,7 +43,7 @@ public class WindowItem extends GeneralPackets {
                         int defaultSlot = ConfigReader.getDefaultLimits(event.getPlayer(), itemID);
                         ItemModify.addLore(serverItemStack, defaultSlot, itemID);
                     }
-                    ItemStack clientItemStack = ItemModify.serverToClient(serverItemStack);
+                    ItemStack clientItemStack = ItemModify.serverToClient(serverItemStack, event.getPlayer());
                     // client 是加过 Lore 的，server 是没加过的！
                     singleItemStackStructureModifier.write(0, clientItemStack);
                 }
@@ -62,7 +62,7 @@ public class WindowItem extends GeneralPackets {
                         int defaultSlot = ConfigReader.getDefaultLimits(event.getPlayer(), itemID);
                         ItemModify.addLore(itemStack, defaultSlot, itemID);
                     }
-                    clientItemStack.add(ItemModify.serverToClient(itemStack));
+                    clientItemStack.add(ItemModify.serverToClient(itemStack, event.getPlayer()));
                     index ++;
                 }
                 // client 是加过 Lore 的，server 是没加过的！

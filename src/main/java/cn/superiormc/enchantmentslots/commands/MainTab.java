@@ -1,6 +1,7 @@
 package cn.superiormc.enchantmentslots.commands;
 
 import cn.superiormc.enchantmentslots.methods.ExtraSlotsItem;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -37,6 +38,18 @@ public class MainTab implements TabCompleter {
                     strings.add("5");
                     strings.add("10");
                     strings.addAll(ExtraSlotsItem.slotsItemMap.keySet());
+                }
+            }
+        } else if (args.length == 3) {
+            if (args[0].equals("giveslots")) {
+                if (sender.hasPermission("enchantmentslots.giveslots")) {
+                    strings.add("[Player Name]");
+                }
+            }
+        } else if (args.length == 4) {
+            if (args[0].equals("giveslots")) {
+                if (sender.hasPermission("enchantmentslots.giveslots")) {
+                    strings.add("[Amount]");
                 }
             }
         }

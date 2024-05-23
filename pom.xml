@@ -6,7 +6,7 @@
 
     <groupId>cn.superiormc</groupId>
     <artifactId>EnchantmentSlots</artifactId>
-    <version>3.4.1</version>
+    <version>3.4.2</version>
     <packaging>jar</packaging>
 
     <name>EnchantmentSlots</name>
@@ -123,15 +123,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.willfp...</groupId>
-            <artifactId>EcoEnchants</artifactId>
-            <version>11.1.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.willfp</groupId>
             <artifactId>EcoEnchants</artifactId>
-            <version>10.50.1</version>
+            <version>12.5.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -187,8 +181,9 @@
         <dependency>
             <groupId>com.willfp</groupId>
             <artifactId>libreforge</artifactId>
-            <version>4.51.0</version>
-            <scope>provided</scope>
+            <version>4.58.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/libreforge-4.58.1.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.willfp</groupId>
