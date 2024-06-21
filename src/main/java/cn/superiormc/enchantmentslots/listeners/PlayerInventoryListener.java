@@ -41,11 +41,11 @@ public class PlayerInventoryListener implements Listener {
             return;
         }
         ExtraSlotsItem item = ExtraSlotsItem.getExtraSlotItemValue(extraItem);
-        if (item == null || !item.canApply(player, targetItem)) {
+        String itemID = CheckValidHook.checkValid(targetItem);
+        if (item == null || !item.canApply(player, itemID)) {
             return;
         }
         int value = item.getAddSlot();
-        String itemID = CheckValidHook.checkValid(targetItem);
         int baseValue = ItemLimits.getMaxEnchantments(targetItem, ConfigReader.getDefaultLimits(player, itemID), itemID);
         if (baseValue == 0) {
             return;

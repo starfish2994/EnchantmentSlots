@@ -26,14 +26,20 @@ public class PlayerSmithListener implements Listener {
         }
         String itemID = CheckValidHook.checkValid(item);
         int defaultSlot = ConfigReader.getDefaultLimits(player, itemID);
+        int maxEnchantments = ItemLimits.getMaxEnchantments(item, defaultSlot, itemID);
         if (ConfigReader.getSmithItemTrigger()) {
+            if (ConfigReader.getSmithItemGreater() && maxEnchantments > defaultSlot) {
+                defaultSlot = maxEnchantments;
+            }
             if (ConfigReader.getSmithItemReset()) {
                 event.getInventory().setResult(ItemModify.removeAndAddLore(item, defaultSlot, itemID));
             } else {
                 event.getInventory().setResult(ItemModify.addLore(item, defaultSlot, itemID));
             }
+            if (defaultSlot != maxEnchantments) {
+                maxEnchantments = defaultSlot;
+            }
         }
-        int maxEnchantments = ItemLimits.getMaxEnchantments(item, defaultSlot, itemID);
         if (ItemUtil.getEnchantments(item, false).size() > maxEnchantments) {
             event.setCancelled(true);
             if (ConfigReader.getCloseInventory()) {

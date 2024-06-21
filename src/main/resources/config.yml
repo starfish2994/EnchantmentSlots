@@ -78,6 +78,7 @@ settings:
       - netherite_boots
       - enchanted_book
       - book
+    blacklist-items: []
   # This is when will the plugin trying adds enchantment slot NBT for an enchantable item which also means set fixed
   # enchantment slot for an item.
   set-slot-trigger:
@@ -100,6 +101,9 @@ settings:
       # If set to true, we will reset old item enchantment slot and then regenerate new slot
       # value for new item, enchantments won't affect by this option.
       reset-previous-slot: true
+      # If set to true, if new generated slot value smaller than existed slot value, we will still
+      #      # keep use existed value as new upgraded item's slot limit.
+      keep-greater-slot: true
     # Enable this maybe improve plugin performance.
     # Maybe has incompatible issue with other plugins.
     InventoryClickEvent:
@@ -228,6 +232,8 @@ add-slot-items:
       - 'message: &#98FB98[EnchantmentSlots] &cYou are not very lucky, slot item has broken!'
     apply-items:
       - 'diamond_sword'
+    #black-items:
+    #  - 'iron_sword'
 
 # Enchant Level
 enchant-level:

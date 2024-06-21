@@ -105,6 +105,9 @@ public class ConfigReader {
     public static boolean getSmithItemTrigger() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.SmithItemEvent.enabled", true);
     }
+    public static boolean getSmithItemGreater() {
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.SmithItemEvent.keep-greater-slot", true);
+    }
     public static boolean getSmithItemReset() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.SmithItemEvent.reset-previous-slot", true);
     }
@@ -125,11 +128,14 @@ public class ConfigReader {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.SetSlotPacket.remove-illegal-excess-enchant",
                 EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.SetSlotPacket.remove-illegal-extra-enchant", false));
     }
-    public static List<String> getAutoAddSlotsItems() {
+    public static List<String> getItemCanBeEnchantedWhiteList() {
         if (EnchantmentSlots.instance.getConfig().getStringList("settings.item-can-be-enchanted.whitelist-items").isEmpty()) {
             return EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.trigger.Packet.whitelist-items");
         }
         return EnchantmentSlots.instance.getConfig().getStringList("settings.item-can-be-enchanted.whitelist-items");
+    }
+    public static List<String> getItemCanBeEnchantedBlackList() {
+        return EnchantmentSlots.instance.getConfig().getStringList("settings.item-can-be-enchanted.blacklist-items");
     }
     public static List<String> getDisplayLore() {
         return EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.display-value");

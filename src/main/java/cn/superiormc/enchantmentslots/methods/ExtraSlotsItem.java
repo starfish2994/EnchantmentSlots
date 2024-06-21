@@ -63,6 +63,8 @@ public class ExtraSlotsItem {
 
     private List<String> applyItems;
 
+    private List<String> blackItems;
+
     private ConfigurationSection section;
 
     public ExtraSlotsItem(String id, ConfigurationSection section) {
@@ -74,6 +76,7 @@ public class ExtraSlotsItem {
             chance = 0;
         }
         this.applyItems = section.getStringList("apply-items");
+        this.blackItems = section.getStringList("black-items");
         this.addSlot = section.getInt("add-slots", 1);
         this.section = section;
     }
@@ -88,11 +91,14 @@ public class ExtraSlotsItem {
         return resultItem;
     }
 
-    public boolean canApply(Player player, ItemStack item) {
+    public boolean canApply(Player player, String itemID) {
         if (!Condition.getBoolean(player, section.getStringList("conditions"))) {
             return false;
         }
-        return applyItems.isEmpty() || applyItems.contains("*") || applyItems.contains(CheckValidHook.checkValid(item));
+        if (!blackItems.isEmpty() && blackItems.contains(itemID)) {
+            return false;
+        }
+        return applyItems.isEmpty() || applyItems.contains("*") || applyItems.contains(itemID);
     }
 
     public int getAddSlot() {

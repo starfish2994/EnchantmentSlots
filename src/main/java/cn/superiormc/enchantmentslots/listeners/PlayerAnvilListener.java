@@ -14,6 +14,7 @@ import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 
 public class PlayerAnvilListener implements Listener {
+
     @EventHandler
     public void onAnvilItem(InventoryClickEvent event) {
         if (event.getInventory() instanceof AnvilInventory) {
@@ -38,9 +39,14 @@ public class PlayerAnvilListener implements Listener {
                 }
                 int maxEnchantments = ItemLimits.getMaxEnchantments(result, defaultSlot, itemID);
                 if (ItemUtil.getEnchantments(result, false).size() > maxEnchantments) {
+                    inventory.setRepairCost(0);
                     event.setCancelled(true);
                     if (ConfigReader.getCloseInventory()) {
                         player.closeInventory();
+                    }
+                    player.giveExp(-1);
+                    if (player.getTotalExperience() > 0) {
+                        player.giveExp(1);
                     }
                     player.sendMessage(Messages.getMessages("slots-limit-reached"));
                 }

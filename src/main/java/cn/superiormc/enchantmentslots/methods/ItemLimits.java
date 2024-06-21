@@ -60,19 +60,45 @@ public class ItemLimits {
         item.setItemMeta(meta);
     }
 
-    public static List<String> enchantItems = new ArrayList<>();
+    public static List<String> enchantItems = null;
+
+    public static List<String> blackItems = null;
 
     public static boolean canEnchant(ItemStack itemStack, String itemID) {
-        if (enchantItems.isEmpty()) {
-            enchantItems = ConfigReader.getAutoAddSlotsItems();
+        if (itemID == null) {
+            itemID = "-null";
+        }
+        if (enchantItems == null) {
+            enchantItems = ConfigReader.getItemCanBeEnchantedWhiteList();
             if (enchantItems.isEmpty()) {
-                enchantItems.add("none");
+                enchantItems = new ArrayList<>();
             }
         }
-        for (String str : enchantItems) {
-            if (str.equalsIgnoreCase(itemStack.getType().name()) || str.equalsIgnoreCase(itemID)) {
-                return true;
+        if (blackItems == null) {
+            blackItems = ConfigReader.getItemCanBeEnchantedBlackList();
+            if (blackItems.isEmpty()) {
+                blackItems = new ArrayList<>();
             }
+        }
+        if (!enchantItems.isEmpty()) {
+            for (String tempVal1 : enchantItems) {
+                if (tempVal1.equalsIgnoreCase(itemStack.getType().name()) || tempVal1.equalsIgnoreCase(itemID)) {
+                    for (String tempVal2 : blackItems) {
+                        if (tempVal2.equalsIgnoreCase(itemID)) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            }
+            return false;
+        } else if (!blackItems.isEmpty()) {
+            for (String tempVal2 : blackItems) {
+                if (tempVal2.equalsIgnoreCase(itemStack.getType().name()) || tempVal2.equalsIgnoreCase(itemID)) {
+                    return false;
+                }
+            }
+            return true;
         }
         return false;
     }
