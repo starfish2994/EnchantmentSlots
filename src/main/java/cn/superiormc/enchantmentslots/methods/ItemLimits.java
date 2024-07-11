@@ -3,6 +3,7 @@ package cn.superiormc.enchantmentslots.methods;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -16,6 +17,9 @@ public class ItemLimits {
     public static final NamespacedKey ENCHANTMENT_SLOTS_KEY = new NamespacedKey(EnchantmentSlots.instance, "enchantment_slots");
 
     public static int getMaxEnchantments(ItemStack item, int defaultSlot, String itemID) {
+        if (EnchantmentSlots.freeVersion && item.getType() != Material.DIAMOND_SWORD) {
+            return 0;
+        }
         if (!item.hasItemMeta()) {
             ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
             if (tempMeta == null) {
@@ -36,6 +40,9 @@ public class ItemLimits {
     }
 
     public static int getRealMaxEnchantments(ItemStack item) {
+        if (EnchantmentSlots.freeVersion && item.getType() != Material.DIAMOND_SWORD) {
+            return 0;
+        }
         if (!item.hasItemMeta()) {
             ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
             if (tempMeta == null) {
@@ -51,6 +58,9 @@ public class ItemLimits {
     }
 
     public static void setMaxEnchantments(ItemStack item, int maxEnchantments) {
+        if (EnchantmentSlots.freeVersion && item.getType() != Material.DIAMOND_SWORD) {
+            return;
+        }
         if (!item.hasItemMeta()) {
             ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
             item.setItemMeta(tempMeta);
@@ -64,7 +74,10 @@ public class ItemLimits {
 
     public static List<String> blackItems = null;
 
-    public static boolean canEnchant(ItemStack itemStack, String itemID) {
+    public static boolean canEnchant(ItemStack item, String itemID) {
+        if (EnchantmentSlots.freeVersion && item.getType() != Material.DIAMOND_SWORD) {
+            return false;
+        }
         if (itemID == null) {
             itemID = "-null";
         }
@@ -82,7 +95,7 @@ public class ItemLimits {
         }
         if (!enchantItems.isEmpty()) {
             for (String tempVal1 : enchantItems) {
-                if (tempVal1.equalsIgnoreCase(itemStack.getType().name()) || tempVal1.equalsIgnoreCase(itemID)) {
+                if (tempVal1.equalsIgnoreCase(item.getType().name()) || tempVal1.equalsIgnoreCase(itemID)) {
                     for (String tempVal2 : blackItems) {
                         if (tempVal2.equalsIgnoreCase(itemID)) {
                             return false;
@@ -94,7 +107,7 @@ public class ItemLimits {
             return false;
         } else if (!blackItems.isEmpty()) {
             for (String tempVal2 : blackItems) {
-                if (tempVal2.equalsIgnoreCase(itemStack.getType().name()) || tempVal2.equalsIgnoreCase(itemID)) {
+                if (tempVal2.equalsIgnoreCase(item.getType().name()) || tempVal2.equalsIgnoreCase(itemID)) {
                     return false;
                 }
             }

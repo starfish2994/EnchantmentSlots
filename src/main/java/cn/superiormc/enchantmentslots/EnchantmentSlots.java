@@ -30,6 +30,8 @@ public final class EnchantmentSlots extends JavaPlugin {
 
     public static String getUserName = "%%__USERNAME__%%";
 
+    public static boolean freeVersion = false;
+
     @Override
     public void onEnable() {
         instance = this;

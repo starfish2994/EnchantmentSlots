@@ -1,5 +1,6 @@
 package cn.superiormc.enchantmentslots.methods;
 
+import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.configs.Messages;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
@@ -7,6 +8,7 @@ import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import cn.superiormc.enchantmentslots.utils.NumberUtil;
 import cn.superiormc.enchantmentslots.utils.TextUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -26,24 +28,27 @@ public class ItemModify {
 
     public static String lorePrefix = "";
 
-    public static ItemStack serverToClient(@NotNull ItemStack itemStack, Player player) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        if (itemMeta == null) {
-            return itemStack;
+    public static ItemStack serverToClient(@NotNull ItemStack item, Player player) {
+        if (EnchantmentSlots.freeVersion && item.getType() != Material.DIAMOND_SWORD) {
+            return item;
         }
-        int slot = ItemLimits.getRealMaxEnchantments(itemStack);
+        ItemMeta itemMeta = item.getItemMeta();
+        if (itemMeta == null) {
+            return item;
+        }
+        int slot = ItemLimits.getRealMaxEnchantments(item);
         if (slot == 0) {
-            return itemStack;
+            return item;
         }
         List<String> lore = new ArrayList<>();
-        Map<Enchantment, Integer> enchantments = ItemUtil.getEnchantments(itemStack, true);
-        if (ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack)) {
+        Map<Enchantment, Integer> enchantments = ItemUtil.getEnchantments(item, true);
+        if (ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(item)) {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : enchantments.keySet()) {
                         String value = TextUtil.parse(CommonUtil.modifyString(ConfigReader.getEnchantPlaceholder()
-                                ,"enchant_name", Messages.getEnchantName(itemStack, enchantment, player, true)
-                                ,"enchant_raw_name", Messages.getEnchantName(itemStack, enchantment, player, false)
+                                ,"enchant_name", Messages.getEnchantName(item, enchantment, player, true)
+                                ,"enchant_raw_name", Messages.getEnchantName(item, enchantment, player, false)
                                 ,"enchant_level", getEnchantmentLevel(enchantment, enchantments.get(enchantment))
                                 ,"enchant_level_roman", getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment))));
                         value = lorePrefix + value;
@@ -71,15 +76,15 @@ public class ItemModify {
         }
         if (itemMeta.hasLore()) {
             List<String> tempLore = itemMeta.getLore();
-            lore.addAll(ConfigReader.editDisplayLore(tempLore, itemStack, player, slot));
+            lore.addAll(ConfigReader.editDisplayLore(tempLore, item, player, slot));
         }
-        if (!ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(itemStack)) {
+        if (!ConfigReader.getAtFirstOrLast() && !ConfigReader.getBlackItems(item)) {
             for (String line : ConfigReader.getDisplayLore()) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : enchantments.keySet()) {
                         String value = TextUtil.parse(CommonUtil.modifyString(ConfigReader.getEnchantPlaceholder()
-                                        ,"enchant_name", Messages.getEnchantName(itemStack, enchantment, player, true)
-                                        ,"enchant_raw_name", Messages.getEnchantName(itemStack, enchantment, player, false)
+                                        ,"enchant_name", Messages.getEnchantName(item, enchantment, player, true)
+                                        ,"enchant_raw_name", Messages.getEnchantName(item, enchantment, player, false)
                                         ,"enchant_level", getEnchantmentLevel(enchantment, enchantments.get(enchantment))
                                         ,"enchant_level_roman", getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment))));
                         value = lorePrefix + value;
@@ -108,20 +113,20 @@ public class ItemModify {
             }
         }
         itemMeta.setLore(lore);
-        itemStack.setItemMeta(itemMeta);
-        return itemStack;
+        item.setItemMeta(itemMeta);
+        return item;
     }
 
-    public static ItemStack clientToServer(@NotNull ItemStack itemStack) {
-        int slot = ItemLimits.getRealMaxEnchantments(itemStack);
+    public static ItemStack clientToServer(@NotNull ItemStack item) {
+        int slot = ItemLimits.getRealMaxEnchantments(item);
         if (slot == 0) {
-            return itemStack;
+            return item;
         }
-        if (!itemStack.hasItemMeta()) {
-            ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(itemStack.getType());
-            itemStack.setItemMeta(tempMeta);
+        if (!item.hasItemMeta()) {
+            ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
+            item.setItemMeta(tempMeta);
         }
-        ItemMeta itemMeta = itemStack.getItemMeta();
+        ItemMeta itemMeta = item.getItemMeta();
         List<String> lore = new ArrayList<>();
         List<String> newLore = new ArrayList<>();
         if (itemMeta.hasLore()) {
@@ -138,8 +143,8 @@ public class ItemModify {
         } else {
             itemMeta.setLore(newLore);
         }
-        itemStack.setItemMeta(itemMeta);
-        return itemStack;
+        item.setItemMeta(itemMeta);
+        return item;
     }
 
     public static ItemStack removeAndAddLore(ItemStack item, int defaultSlot, String itemID) {

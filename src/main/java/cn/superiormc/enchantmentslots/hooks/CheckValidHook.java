@@ -3,6 +3,7 @@ package cn.superiormc.enchantmentslots.hooks;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
+import com.ssomar.executableitems.executableitems.manager.ExecutableItemsManager;
 import com.willfp.eco.core.items.Items;
 import com.willfp.ecoarmor.sets.ArmorSet;
 import com.willfp.ecoarmor.sets.ArmorUtils;
@@ -77,6 +78,12 @@ public class CheckValidHook {
             if (ItemManager.INSTANCE.isNiItem(itemStack) != null) {
                 return ItemManager.INSTANCE.isNiItem(itemStack).getId();
             }
+        }
+        else if (CommonUtil.checkPluginLoad("ExecutableItems")) {
+            if (ExecutableItemsManager.getInstance().getObject(itemStack).isPresent()) {
+                return ExecutableItemsManager.getInstance().getObject(itemStack).get().getId();
+            }
+            return null;
         }
         return itemStack.getType().name().toLowerCase();
     }

@@ -8,9 +8,9 @@ import java.util.List;
 
 public class Condition {
 
-    public static boolean getBoolean(Player player, List<String> condition) {
+    public static boolean getBoolean(Player player, List<String> conditions) {
         boolean conditionTrueOrFasle = true;
-        for (String singleCondition : condition){
+        for (String singleCondition : conditions){
             if (singleCondition.startsWith("none")){
                 return true;
             } else if (singleCondition.startsWith("world: "))
