@@ -13,7 +13,8 @@ public class SubReload {
             EnchantmentSlots.instance.reloadConfig();
             Messages.init();
             ExtraSlotsItem.init();
-            ItemLimits.enchantItems.clear();
+            ItemLimits.enchantItems = null;
+            ItemLimits.blackItems = null;
             sender.sendMessage(Messages.getMessages("plugin-reloaded"));
         }
         else {

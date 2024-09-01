@@ -78,6 +78,7 @@ settings:
       - netherite_boots
       - enchanted_book
       - book
+      - mace
     blacklist-items: []
   # This is when will the plugin trying adds enchantment slot NBT for an enchantable item which also means set fixed
   # enchantment slot for an item.
@@ -96,6 +97,8 @@ settings:
       cancel-if-reached-slot: false
     AnvilItemEvent:
       enabled: true
+      # If your item has display issue after use anvil, you can try to enable this.
+      update-item: false
     SmithItemEvent:
       enabled: true
       # If set to true, we will reset old item enchantment slot and then regenerate new slot
@@ -139,10 +142,6 @@ settings:
     at-first-or-last: false
     # Do not change this option when server started!
     # Only change this if your server has stopped!
-    # Plugin will try deletes all lore that similar to below if you enable register-remove-lore option!
-    # If you want to use empty line, use '&7   ' instead!
-    # - '&7   ' is right, the more space you have, the more safe it is.
-    # - '' is wrong. It will make item lose all empty line you set by other plugins!
     display-value:
       - "&#ff3300Enchantment Slots: {enchant_amount}/{slot_amount}"
       - "{enchants}"
@@ -173,7 +172,7 @@ settings:
   #    vip: 30
   #  # You can type third plugin item ID here.
   #  # For now, EnchantmentSlots support:
-  #  # MMOItems, EcoItems, EcoArmor, MythicMobs, NeigeItems, ItemsAdder, Oraxen.
+  #  # MMOItems, EcoItems, EcoArmor, MythicMobs, NeigeItems, ItemsAdder, Oraxen, ExecutableItems.
   #  superior_sword:
   #    default: 100
   #    vip: 200
@@ -270,6 +269,8 @@ enchant-name:
   fire_aspect: 'Fire Aspect'
   looting: 'Looting'
   sweeping: 'Sweeping'
+  # For 1.21+
+  sweeping_edge: 'Sweeping Edge'
   efficiency: 'Efficiency'
   silk_touch: 'Silk Touch'
   unbreaking: 'Unbreaking'
@@ -290,3 +291,6 @@ enchant-name:
   mending: 'Mending'
   vanishing_curse: 'Vanishing Curse'
   soul_speed: 'Soul Speed'
+  wind_burst: 'Wind Burst'
+  breach: 'Breach'
+  density: 'Density'

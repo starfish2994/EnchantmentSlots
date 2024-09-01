@@ -48,6 +48,9 @@ public class PlayerAnvilListener implements Listener {
                     if (player.getTotalExperience() > 0) {
                         player.giveExp(1);
                     }
+                    if (ConfigReader.getAnvilItemUpdate()) {
+                        item.setAmount(item.getAmount());
+                    }
                     player.sendMessage(Messages.getMessages("slots-limit-reached"));
                 }
             }

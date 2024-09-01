@@ -32,6 +32,8 @@ public final class EnchantmentSlots extends JavaPlugin {
 
     public static boolean freeVersion = false;
 
+    public static boolean eeLegacy = false;
+
     @Override
     public void onEnable() {
         instance = this;
@@ -49,6 +51,11 @@ public final class EnchantmentSlots extends JavaPlugin {
             if (PlaceholderAPIExpansion.papi.register()){
                 Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fFinished hook!");
             }
+        }
+        if (CommonUtil.checkPluginLoad("ExcellentEnchants") && CommonUtil.getClass("su.nightexpress.excellentenchants.api.enchantment.EnchantmentData")) {
+            eeLegacy = true;
+            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §7Seems that you are using ExcellentEnchants old version, enabled compatibility mode, " +
+                    "this mode will be removed in future updates, please consider update it to latest.");
         }
         if (getUserName.equals("%%__USERNAME__%%")) {
             checkPurchase(getUser);

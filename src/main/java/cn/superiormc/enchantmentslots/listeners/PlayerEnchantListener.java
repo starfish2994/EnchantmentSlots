@@ -29,22 +29,24 @@ public class PlayerEnchantListener implements Listener {
         }
         int maxEnchantments = ItemLimits.getMaxEnchantments(item, defaultSlot, itemID);
         if (event.getEnchantsToAdd().size() + ItemUtil.getEnchantments(item, false).size() > maxEnchantments) {
-            Bukkit.getScheduler().runTask(EnchantmentSlots.instance, () -> {
-                int removeAmount = item.getEnchantments().size() - maxEnchantments;
+            int removeAmount = item.getEnchantments().size() - maxEnchantments;
                 if (!ConfigReader.getEnchantCancel() && item.getType() != Material.BOOK && removeAmount < event.getEnchantsToAdd().size()) {
-                    for (Enchantment enchant : item.getEnchantments().keySet()) {
-                        if (removeAmount <= 0) {
-                            break;
+                    Bukkit.getScheduler().runTask(EnchantmentSlots.instance, () -> {
+                        int realRemoveAmount = removeAmount;
+                        for (Enchantment enchant : item.getEnchantments().keySet()) {
+                            if (realRemoveAmount <= 0) {
+                                break;
+                            }
+                            ItemMeta meta = item.getItemMeta();
+                            if (meta == null) {
+                                break;
+                            }
+                            meta.removeEnchant(enchant);
+                            item.setItemMeta(meta);
+                            realRemoveAmount--;
                         }
-                        ItemMeta meta = item.getItemMeta();
-                        if (meta == null) {
-                            break;
-                        }
-                        meta.removeEnchant(enchant);
-                        item.setItemMeta(meta);
-                        removeAmount--;
-                    }
-                    player.sendMessage(Messages.getMessages("slots-limit-reached-enchant"));
+                        player.sendMessage(Messages.getMessages("slots-limit-reached-enchant"));
+                    });
                 } else {
                     event.setCancelled(true);
                     if (ConfigReader.getCloseInventory()) {
@@ -52,7 +54,6 @@ public class PlayerEnchantListener implements Listener {
                     }
                     player.sendMessage(Messages.getMessages("slots-limit-reached"));
                 }
-            });
         }
 
     }

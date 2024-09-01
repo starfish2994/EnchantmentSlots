@@ -68,9 +68,9 @@ public class ItemModify {
                     continue;
                 }
                 line = lorePrefix + line;
-                lore.add(TextUtil.parse(line)
-                        .replace("{slot_amount}", String.valueOf(slot))
-                        .replace("{enchant_amount}", String.valueOf(enchantments.size())));
+                lore.add(TextUtil.parse(CommonUtil.modifyString(line,
+                        "slot_amount", String.valueOf(slot),
+                        "enchant_amount", String.valueOf(enchantments.size()))));
 
             }
         }
@@ -104,11 +104,9 @@ public class ItemModify {
                     continue;
                 }
                 line = lorePrefix + line;
-                lore.add(TextUtil.parse(line)
-                        .replace("{slot_amount}", String.valueOf(slot))
-                        .replace("{enchant_amount}", String.valueOf(enchantments.size()))
-                        .replace("[slot_amount]", String.valueOf(slot))
-                        .replace("[enchant_amount]", String.valueOf(enchantments.size())));
+                lore.add(TextUtil.parse(CommonUtil.modifyString(line,
+                        "slot_amount", String.valueOf(slot),
+                        "enchant_amount", String.valueOf(enchantments.size()))));
 
             }
         }

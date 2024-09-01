@@ -5,16 +5,14 @@ import cn.superiormc.enchantmentslots.hooks.EcoEnchantsHook;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import cn.superiormc.enchantmentslots.utils.TextUtil;
 import com.willfp.eco.util.StringUtils;
-import com.willfp.ecoenchants.display.EnchantmentFormattingKt;
 import com.willfp.ecoenchants.enchant.EcoEnchantLike;
 import com.willfp.ecoenchants.enchant.EcoEnchants;
-import com.willfp.libreforge.Holder;
-import com.willfp.libreforge.ItemProvidedHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import su.nightexpress.excellentenchants.api.enchantment.CustomEnchantment;
 import su.nightexpress.excellentenchants.api.enchantment.EnchantmentData;
 import su.nightexpress.excellentenchants.enchantment.registry.EnchantRegistry;
 import su.nightexpress.nightcore.util.text.NightMessage;
@@ -76,23 +74,39 @@ public class Messages {
     }
 
     public static String getEnchantName(ItemStack item, Enchantment enchantment, Player player, boolean showTierColor) {
-        if (CommonUtil.checkPluginLoad("EcoEnchants")) {
-            EcoEnchantLike ecoEnchant = EcoEnchants.INSTANCE.getByID(enchantment.getKey().getKey());
-            if (ecoEnchant != null) {
-                if (showTierColor) {
-                    return EcoEnchantsHook.getEcoEnchantName(ecoEnchant, item, player);
+        try {
+            if (!ConfigReader.hasEnchantmentName(enchantment)) {
+                if (CommonUtil.checkPluginLoad("EcoEnchants")) {
+                    EcoEnchantLike ecoEnchant = EcoEnchants.INSTANCE.getByID(enchantment.getKey().getKey());
+                    if (ecoEnchant != null) {
+                        if (showTierColor) {
+                            return EcoEnchantsHook.getEcoEnchantName(ecoEnchant, item, player);
+                        }
+                        return StringUtils.format(ecoEnchant.getRawDisplayName());
+                    }
+                } else if (CommonUtil.checkPluginLoad("ExcellentEnchants")) {
+                    if (!EnchantmentSlots.eeLegacy) {
+                        CustomEnchantment excellentEnchant = su.nightexpress.excellentenchants.registry.EnchantRegistry.getByKey(enchantment.getKey());
+                        if (excellentEnchant != null) {
+                            if (showTierColor) {
+                                return NightMessage.asLegacy(excellentEnchant.getFormattedName());
+                            }
+                            return NightMessage.asLegacy(excellentEnchant.getDisplayName());
+                        }
+                    } else {
+                        EnchantmentData excellentEnchant = EnchantRegistry.getByKey(enchantment.getKey());
+                        if (excellentEnchant != null) {
+                            if (showTierColor) {
+                                return NightMessage.asLegacy(excellentEnchant.getNameFormatted(-1, excellentEnchant.getCharges(item)).replace(" -1", ""));
+                            }
+                            return NightMessage.asLegacy(excellentEnchant.getName());
+                        }
+                    }
                 }
-                return StringUtils.format(ecoEnchant.getRawDisplayName());
             }
-        } else if (CommonUtil.checkPluginLoad("ExcellentEnchants")) {
-            EnchantmentData excellentEnchant = EnchantRegistry.getByKey(enchantment.getKey());
-            if (excellentEnchant != null) {
-                if (showTierColor) {
-                    return NightMessage.asLegacy(excellentEnchant.getNameFormatted(-1, excellentEnchant.getCharges(item)));
-                }
-                return NightMessage.asLegacy(excellentEnchant.getName());
-            }
+            return TextUtil.parse(ConfigReader.getEnchantmentName(enchantment));
+        } catch (Throwable throwable) {
+            return TextUtil.parse(ConfigReader.getEnchantmentName(enchantment));
         }
-        return TextUtil.parse(ConfigReader.getEnchantmentName(enchantment));
     }
 }

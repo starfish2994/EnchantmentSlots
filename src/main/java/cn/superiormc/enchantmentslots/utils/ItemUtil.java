@@ -116,7 +116,7 @@ public class ItemUtil {
                 }
             }
             return orderedEnchants;
-        } else if (sort && CommonUtil.checkPluginLoad("ExcellentEnchants")) {
+        } else if (sort && CommonUtil.checkPluginLoad("ExcellentEnchants") && EnchantmentSlots.eeLegacy) {
             Map<Enchantment, Integer> enchants = EnchantUtils.getCustomEnchantments(itemMeta)
                     .entrySet().stream()
                     .sorted(Comparator.comparing((Map.Entry<EnchantmentData, Integer> entry) -> entry.getKey().getRarity().getWeight())

@@ -15,6 +15,7 @@ softdepend:
   - ProtocolLib
   - eco
   - EnchantGui
+  - ExecutableItems
 commands:
   enchantmentslots:
     aliases:

@@ -106,4 +106,14 @@ public class CommonUtil {
             return true;
         }
     }
+
+    public static boolean getClass(String className) {
+        try {
+            Class.forName(className);
+            return true;
+        }
+        catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
 }

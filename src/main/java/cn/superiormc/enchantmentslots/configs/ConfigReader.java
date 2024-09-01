@@ -29,6 +29,9 @@ public class ConfigReader {
     public static String getEnchantLevel(int level) {
         return EnchantmentSlots.instance.getConfig().getString("enchant-level." + level, String.valueOf(level));
     }
+    public static boolean hasEnchantmentName(Enchantment enchantment) {
+        return EnchantmentSlots.instance.getConfig().contains("enchant-name." + enchantment.getKey().getKey());
+    }
     public static String getEnchantmentName(Enchantment enchantment) {
         return EnchantmentSlots.instance.getConfig().getString("enchant-name." + enchantment.getKey().getKey(), enchantment.getKey().getKey());
     }
@@ -120,6 +123,9 @@ public class ConfigReader {
     public static boolean getAnvilItemTrigger() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.AnvilItemEvent.enabled", true);
     }
+    public static boolean getAnvilItemUpdate() {
+        return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.AnvilItemEvent.update-item", false);
+    }
     public static boolean getSetSlotPacketTrigger() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.set-slot-trigger.SetSlotPacket.enabled",
                 EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.trigger.Packet.enabled", false));
@@ -144,18 +150,18 @@ public class ConfigReader {
         List<String> tempLore = new ArrayList<>();
         Map<Enchantment, Integer> enchantments = ItemUtil.getEnchantments(itemStack, true);
         for (String str : lore) {
-            if (str.contains("{enchants}")) {
+            if (str.contains("{enchants}") || str.contains("[enchants]")) {
                 for (Enchantment enchantment : enchantments.keySet()) {
-                    tempLore.add(TextUtil.parse(
-                            ConfigReader.getEnchantPlaceholder().
-                                    replace("{enchant_name}", Messages.getEnchantName(itemStack, enchantment, player, true)).
-                                    replace("{enchant_raw_name}", Messages.getEnchantName(itemStack, enchantment, player, false)).
-                                    replace("{enchant_level}", ItemModify.getEnchantmentLevel(enchantment, enchantments.get(enchantment))).
-                                    replace("{enchant_level_roman}", ItemModify.getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment)))));
+                    tempLore.add(TextUtil.parse(CommonUtil.modifyString(
+                            ConfigReader.getEnchantPlaceholder(),
+                            "enchant_name", Messages.getEnchantName(itemStack, enchantment, player, true),
+                            "enchant_raw_name", Messages.getEnchantName(itemStack, enchantment, player, false),
+                            "enchant_level", ItemModify.getEnchantmentLevel(enchantment, enchantments.get(enchantment)),
+                            "enchant_level_roman", ItemModify.getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment)))));
                 }
                 continue;
             }
-            if (str.contains("{empty_slots}")) {
+            if (str.contains("{empty_slots}") || str.contains("[empty_slots]")) {
                 int i = slot - enchantments.size();
                 while (i > 0) {
                     tempLore.add(TextUtil.parse(ConfigReader.getEmptySlotPlaceholder()));
@@ -163,9 +169,8 @@ public class ConfigReader {
                 }
                 continue;
             }
-            tempLore.add(str
-                    .replace("{slot_amount}", String.valueOf(slot))
-                    .replace("{enchant_amount}", String.valueOf(enchantments.size())));
+            tempLore.add(CommonUtil.modifyString(str, "slot_amount", String.valueOf(slot),
+                    "enchant_amount", String.valueOf(enchantments.size())));
         }
         return tempLore;
     }

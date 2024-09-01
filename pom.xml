@@ -6,7 +6,7 @@
 
     <groupId>cn.superiormc</groupId>
     <artifactId>EnchantmentSlots</artifactId>
-    <version>3.4.5</version>
+    <version>3.4.11</version>
     <packaging>jar</packaging>
 
     <name>EnchantmentSlots</name>
@@ -129,11 +129,18 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>su.nightexpress</groupId>
+            <groupId>su.nightexpress.</groupId>
             <artifactId>ExcellentEnchant</artifactId>
-            <version>3.6.4</version>
+            <version>4.0.0</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/ExcellentEnchants-4.0.0.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>su.nightexpress</groupId>
+            <artifactId>ExcellentEnchant</artifactId>
+            <version>4.2.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ExcellentEnchants-4.2.1.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>net.Indyuce</groupId>
