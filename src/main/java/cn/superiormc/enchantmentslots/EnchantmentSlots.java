@@ -30,8 +30,6 @@ public final class EnchantmentSlots extends JavaPlugin {
 
     public static String getUserName = "%%__USERNAME__%%";
 
-    public static boolean freeVersion = false;
-
     public static boolean eeLegacy = false;
 
     @Override

@@ -1,5 +1,6 @@
 package cn.superiormc.enchantmentslots.hooks;
 
+import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import com.ssomar.executableitems.executableitems.manager.ExecutableItemsManager;

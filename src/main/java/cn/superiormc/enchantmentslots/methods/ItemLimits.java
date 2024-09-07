@@ -17,9 +17,6 @@ public class ItemLimits {
     public static final NamespacedKey ENCHANTMENT_SLOTS_KEY = new NamespacedKey(EnchantmentSlots.instance, "enchantment_slots");
 
     public static int getMaxEnchantments(ItemStack item, int defaultSlot, String itemID) {
-        if (EnchantmentSlots.freeVersion && item.getType() != Material.DIAMOND_SWORD) {
-            return 0;
-        }
         if (!item.hasItemMeta()) {
             ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
             if (tempMeta == null) {
@@ -40,9 +37,6 @@ public class ItemLimits {
     }
 
     public static int getRealMaxEnchantments(ItemStack item) {
-        if (EnchantmentSlots.freeVersion && item.getType() != Material.DIAMOND_SWORD) {
-            return 0;
-        }
         if (!item.hasItemMeta()) {
             ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
             if (tempMeta == null) {
@@ -58,9 +52,6 @@ public class ItemLimits {
     }
 
     public static void setMaxEnchantments(ItemStack item, int maxEnchantments) {
-        if (EnchantmentSlots.freeVersion && item.getType() != Material.DIAMOND_SWORD) {
-            return;
-        }
         if (!item.hasItemMeta()) {
             ItemMeta tempMeta = Bukkit.getItemFactory().getItemMeta(item.getType());
             item.setItemMeta(tempMeta);
@@ -75,9 +66,6 @@ public class ItemLimits {
     public static List<String> blackItems = null;
 
     public static boolean canEnchant(ItemStack item, String itemID) {
-        if (EnchantmentSlots.freeVersion && item.getType() != Material.DIAMOND_SWORD) {
-            return false;
-        }
         if (itemID == null) {
             itemID = "-null";
         }

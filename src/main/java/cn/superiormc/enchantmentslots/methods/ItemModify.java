@@ -29,9 +29,6 @@ public class ItemModify {
     public static String lorePrefix = "";
 
     public static ItemStack serverToClient(@NotNull ItemStack item, Player player) {
-        if (EnchantmentSlots.freeVersion && item.getType() != Material.DIAMOND_SWORD) {
-            return item;
-        }
         ItemMeta itemMeta = item.getItemMeta();
         if (itemMeta == null) {
             return item;
