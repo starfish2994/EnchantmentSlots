@@ -54,9 +54,9 @@ public class SetSlots extends GeneralPackets {
                             event.getPlayer().getOpenInventory().getTopInventory().getSize() + ".");
                 }
                 boolean dontAddLore = false;
-                if (CommonUtil.inPlayerInventory(event.getPlayer(), slot)) {
+                if (CommonUtil.inPlayerInventory(event.getPlayer(), slot) && (ConfigReader.getSetSlotPacketTrigger() || ConfigReader.getRemoveExtraEnchants())) {
+                    ItemStack targetItem = event.getPlayer().getInventory().getItem(spigotSlot);
                     if (ConfigReader.getSetSlotPacketTrigger()) {
-                        ItemStack targetItem = event.getPlayer().getInventory().getItem(spigotSlot);
                         if (targetItem != null && !targetItem.getType().isAir()) {
                             String itemID = CheckValidHook.checkValid(targetItem);
                             int defaultSlot = ConfigReader.getDefaultLimits(event.getPlayer(), itemID);
@@ -65,21 +65,20 @@ public class SetSlots extends GeneralPackets {
                         }
                     }
                     if (ConfigReader.getRemoveExtraEnchants()) {
-                        ItemStack tempItemStack = event.getPlayer().getInventory().getItem(spigotSlot);
-                        if (tempItemStack != null && !tempItemStack.getType().isAir()) {
+                        if (targetItem != null && !targetItem.getType().isAir()) {
                             int maxEnchantments = ItemLimits.getRealMaxEnchantments(serverItemStack);
-                            if (maxEnchantments > 0 && tempItemStack.getEnchantments().size() > maxEnchantments) {
-                                int removeAmount = tempItemStack.getEnchantments().size() - maxEnchantments;
-                                for (Enchantment enchant : tempItemStack.getEnchantments().keySet()) {
+                            if (maxEnchantments > 0 && targetItem.getEnchantments().size() > maxEnchantments) {
+                                int removeAmount = targetItem.getEnchantments().size() - maxEnchantments;
+                                for (Enchantment enchant : targetItem.getEnchantments().keySet()) {
                                     if (removeAmount <= 0) {
                                         break;
                                     }
-                                    ItemMeta meta = tempItemStack.getItemMeta();
+                                    ItemMeta meta = targetItem.getItemMeta();
                                     if (meta == null) {
                                         break;
                                     }
                                     meta.removeEnchant(enchant);
-                                    tempItemStack.setItemMeta(meta);
+                                    targetItem.setItemMeta(meta);
                                     removeAmount--;
                                 }
                             }

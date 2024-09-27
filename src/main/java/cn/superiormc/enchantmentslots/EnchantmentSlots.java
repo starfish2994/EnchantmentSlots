@@ -30,11 +30,24 @@ public final class EnchantmentSlots extends JavaPlugin {
 
     public static String getUserName = "%%__USERNAME__%%";
 
+    public static int majorVersion;
+
+    public static int miniorVersion;
+
+    public static boolean newSkullMethod;
+
     public static boolean eeLegacy = false;
 
     @Override
     public void onEnable() {
         instance = this;
+        try {
+            String[] versionParts = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
+            majorVersion = versionParts.length > 1 ? Integer.parseInt(versionParts[1]) : 0;
+            miniorVersion = versionParts.length > 2 ? Integer.parseInt(versionParts[2]) : 0;
+        } catch (Throwable throwable) {
+            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[MythicChanger] §cError: Can not get your Minecraft version! Default set to 1.0.0.");
+        }
         saveDefaultConfig();
         registerEvents();
         registerCommands();
@@ -61,6 +74,11 @@ public final class EnchantmentSlots extends JavaPlugin {
         if (!getUserName.isEmpty() && !getUserName.contains("%")) {
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fLicense to: " + getUserName + ".");
         }
+        if (!CommonUtil.checkClass("com.mojang.authlib.properties.Property", "getValue") && CommonUtil.getMinorVersion(21, 1)) {
+            newSkullMethod = true;
+            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fNew AuthLib found, enabled new skull get method!");
+        }
+        Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fYour Minecraft version is: 1." + majorVersion + "." + miniorVersion + "!");
         Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fPlugin is loaded. Author: PQguanfang.");
     }
 
@@ -79,7 +97,7 @@ public final class EnchantmentSlots extends JavaPlugin {
             Bukkit.getPluginManager().registerEvents(new PlayerClickListener(), this);
         }
         Bukkit.getPluginManager().registerEvents(new PlayerInventoryListener(), this);
-        if (CommonUtil.getMajorVersion() >= 16) {
+        if (CommonUtil.getMajorVersion(16)) {
             Bukkit.getPluginManager().registerEvents(new PlayerSmithListener(), this);
         }
         if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("EnchantGui")) {

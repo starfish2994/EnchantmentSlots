@@ -1,8 +1,6 @@
 package cn.superiormc.enchantmentslots.protolcol;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.configs.ConfigReader;
-import cn.superiormc.enchantmentslots.listeners.PlayerClickListener;
 import cn.superiormc.enchantmentslots.protolcol.ProtocolLib.*;
 import cn.superiormc.enchantmentslots.protolcol.eco.EcoDisplayModule;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
@@ -20,6 +18,7 @@ public abstract class GeneralProtolcol {
             new SetCreativeSlots();
             new SetSlots();
             new WindowItem();
+            new WindowMerchant();
             ItemModify.lorePrefix = "§y";
         } else if (plugin.equals("eco") &&
                 CommonUtil.checkPluginLoad("eco")) {

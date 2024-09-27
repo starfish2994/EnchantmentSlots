@@ -5,11 +5,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.CraftingInventory;
 import java.io.FileInputStream;
+import java.lang.reflect.Method;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CommonUtil {
 
@@ -21,13 +20,13 @@ public class CommonUtil {
         return EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled(pluginName);
     }
 
-    public static int getMajorVersion() {
-        String version = Bukkit.getVersion();
-        Matcher matcher = Pattern.compile("MC: \\d\\.(\\d+)").matcher(version);
-        if (matcher.find()) {
-            return Integer.parseInt(matcher.group(1));
-        }
-        return 20;
+    public static boolean getMajorVersion(int version) {
+        return EnchantmentSlots.majorVersion >= version;
+    }
+
+    public static boolean getMinorVersion(int majorVersion, int minorVersion) {
+        return EnchantmentSlots.majorVersion > majorVersion || (EnchantmentSlots.majorVersion == majorVersion &&
+                EnchantmentSlots.miniorVersion >= minorVersion);
     }
 
     public static boolean inPlayerInventory(Player player, int slot) {
@@ -113,6 +112,23 @@ public class CommonUtil {
             return true;
         }
         catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
+    public static boolean checkClass(String className, String methodName) {
+        try {
+            Class<?> targetClass = Class.forName(className);
+            Method[] methods = targetClass.getDeclaredMethods();
+
+            for (Method method : methods) {
+                if (method.getName().equals(methodName)) {
+                    return true;
+                }
+            }
+
+            return false;
+        } catch (ClassNotFoundException e) {
             return false;
         }
     }

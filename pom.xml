@@ -6,7 +6,7 @@
 
     <groupId>cn.superiormc</groupId>
     <artifactId>EnchantmentSlots</artifactId>
-    <version>3.4.12</version>
+    <version>3.5.2</version>
     <packaging>jar</packaging>
 
     <name>EnchantmentSlots</name>
@@ -94,9 +94,16 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.19.1-R0.1-SNAPSHOT</version>
+            <groupId>cn.superiormc</groupId>
+            <artifactId>ManyouItems</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ManyouItems-1.0.0.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.21-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

@@ -3,6 +3,7 @@ package cn.superiormc.enchantmentslots.utils;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import com.google.common.base.Enums;
+import com.google.common.collect.MultimapBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.willfp.ecoenchants.display.EnchantSorter;
@@ -20,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import su.nightexpress.excellentenchants.api.enchantment.EnchantmentData;
 import su.nightexpress.excellentenchants.enchantment.util.EnchantUtils;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -51,7 +53,7 @@ public class ItemUtil {
         if (!loreKey.isEmpty()) {
             meta.setLore(TextUtil.getListWithColor(loreKey));
         }
-        if (CommonUtil.getMajorVersion() >= 14) {
+        if (CommonUtil.getMajorVersion(14)) {
             int customModelDataKey = section.getInt("custom-model-data", section.getInt("cmd", -1));
             if (customModelDataKey > 0) {
                 meta.setCustomModelData(customModelDataKey);
@@ -64,6 +66,9 @@ public class ItemUtil {
                 ItemFlag itemFlag = Enums.getIfPresent(ItemFlag.class, flag).orNull();
                 if (itemFlag != null) {
                     meta.addItemFlags(itemFlag);
+                }
+                if (CommonUtil.getMinorVersion(20, 6) && itemFlag == ItemFlag.HIDE_ATTRIBUTES && meta.getAttributeModifiers() == null) {
+                    meta.setAttributeModifiers(MultimapBuilder.hashKeys().hashSetValues().build());
                 }
             }
         }
@@ -80,17 +85,36 @@ public class ItemUtil {
             SkullMeta skullMeta = (SkullMeta) meta;
             String skullTextureNameKey = section.getString("skull-meta", section.getString("skull"));
             if (skullTextureNameKey != null) {
-                GameProfile profile = new GameProfile(UUID.randomUUID(), "");
-                profile.getProperties().put("textures", new Property("textures", skullTextureNameKey));
-                try {
-                    Method mtd = skullMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
-                    mtd.setAccessible(true);
-                    mtd.invoke(skullMeta, profile);
-                } catch (Exception exception) {
-                    Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §cError: Can not parse skull texture in a item!");
+                if (EnchantmentSlots.newSkullMethod) {
+                    try {
+                        Class<?> profileClass = Class.forName("net.minecraft.world.item.component.ResolvableProfile");
+                        Constructor<?> constroctor = profileClass.getConstructor(GameProfile.class);
+                        GameProfile profile = new GameProfile(UUID.randomUUID(), "");
+                        profile.getProperties().put("textures", new Property("textures", skullTextureNameKey));
+                        try {
+                            Method mtd = skullMeta.getClass().getDeclaredMethod("setProfile", profileClass);
+                            mtd.setAccessible(true);
+                            mtd.invoke(skullMeta, constroctor.newInstance(profile));
+                        } catch (Exception exception) {
+                            exception.printStackTrace();
+                            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[ManyouItems] §cError: Can not parse skull texture in a item!");
+                        }
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    GameProfile profile = new GameProfile(UUID.randomUUID(), "");
+                    profile.getProperties().put("textures", new Property("textures", skullTextureNameKey));
+                    try {
+                        Method mtd = skullMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
+                        mtd.setAccessible(true);
+                        mtd.invoke(skullMeta, profile);
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                        Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[ManyouItems] §cError: Can not parse skull texture in a item!");
+                    }
                 }
             }
-            item.setItemMeta(skullMeta);
         }
         item.setItemMeta(meta);
         return item;
