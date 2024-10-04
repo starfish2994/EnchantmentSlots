@@ -50,14 +50,15 @@ public class WindowItem extends GeneralPackets {
                 StructureModifier<List<ItemStack>> itemStackStructureModifier = packet.getItemListModifier();
                 List<ItemStack> serverItemStack = itemStackStructureModifier.read(0);
                 List<ItemStack> clientItemStack = new ArrayList<>();
-                boolean isPlayerInventory = event.getPacket().getIntegers().read(0) == 0 || serverItemStack.size() % 9 != 0;
                 int index = 1;
                 for (ItemStack itemStack : serverItemStack) {
                     if (itemStack.getType().isAir()) {
                         clientItemStack.add(itemStack);
+                        index ++;
                         continue;
                     }
-                    if (ConfigReader.getAutoAddLore() && (!ConfigReader.getOnlyInInventory() || isPlayerInventory || index > serverItemStack.size() - 36)) {
+                    boolean isPlayerInventory = event.getPacket().getIntegers().read(0) == 0 || index > serverItemStack.size() - 36;
+                    if (ConfigReader.getAutoAddLore() && ConfigReader.getOnlyInPlayerInventory(event.getPlayer(), isPlayerInventory)) {
                         String itemID = CheckValidHook.checkValid(itemStack);
                         int defaultSlot = ConfigReader.getDefaultLimits(event.getPlayer(), itemID);
                         ItemModify.addLore(itemStack, defaultSlot, itemID);

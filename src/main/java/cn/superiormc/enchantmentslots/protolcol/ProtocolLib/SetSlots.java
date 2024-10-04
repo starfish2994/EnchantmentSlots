@@ -85,7 +85,8 @@ public class SetSlots extends GeneralPackets {
                         }
                     }
                 }
-                if (!dontAddLore && ConfigReader.getAutoAddLore() && (!ConfigReader.getOnlyInInventory() || CommonUtil.inPlayerInventory(event.getPlayer(), slot))) {
+                if (!dontAddLore && ConfigReader.getAutoAddLore() && ConfigReader.getOnlyInPlayerInventory(event.getPlayer(),
+                        CommonUtil.inPlayerInventory(event.getPlayer(), slot))) {
                     String itemID = CheckValidHook.checkValid(serverItemStack);
                     int defaultSlot = ConfigReader.getDefaultLimits(event.getPlayer(), itemID);
                     ItemModify.addLore(serverItemStack, defaultSlot, itemID);

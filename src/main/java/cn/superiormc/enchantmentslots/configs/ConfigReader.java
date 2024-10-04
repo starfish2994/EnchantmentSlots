@@ -11,6 +11,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -38,9 +40,16 @@ public class ConfigReader {
     public static boolean getCloseInventory() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.close-inventory-if-reached-limit", true);
     }
-    public static boolean getOnlyInInventory() {
-        return EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.only-in-player-inventory",
-                EnchantmentSlots.instance.getConfig().getBoolean("settings.only-in-player-inventory", true));
+    public static boolean getOnlyInPlayerInventory(Player player, boolean playerInInventory) {
+        if (EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.only-in-player-inventory",
+                EnchantmentSlots.instance.getConfig().getBoolean("settings.only-in-player-inventory", true))) {
+            return true;
+        }
+        InventoryView view = player.getOpenInventory();
+        if (view.getType().equals(InventoryType.CHEST)) {
+            return playerInInventory || view.getTitle().equals("Chest");
+        }
+        return playerInInventory || EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.check-chests-only");
     }
     public static boolean getCancelMaxLimits() {
         return EnchantmentSlots.instance.getConfig().getBoolean("settings.cancel-add-slot-if-reached-max-slot", true);

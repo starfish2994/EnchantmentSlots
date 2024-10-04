@@ -117,6 +117,8 @@ settings:
     # This option support ProtocolLib only.
     # Enable this maybe improve plugin performance.
     only-in-player-inventory: true
+    # Whether only-in-player-inventory option only checks chest UI.
+    check-chests-only: true
     # Support plugin:
     #   - eco (Do not change unless you are know what you are doing)
     #   - ProtocolLib (Classic and stable choice)

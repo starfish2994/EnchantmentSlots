@@ -23,8 +23,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>16</source>
+                    <target>16</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -90,6 +90,10 @@
             <id>auxilor</id>
             <url>https://repo.auxilor.io/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>sonatype-oss-snapshots1</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -99,6 +103,11 @@
             <version>1.0.0</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/ManyouItems-1.0.0.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-serializer-json-legacy-impl</artifactId>
+            <version>4.18.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.papermc.paper</groupId>
