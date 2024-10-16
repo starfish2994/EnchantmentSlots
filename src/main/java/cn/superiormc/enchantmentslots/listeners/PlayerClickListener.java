@@ -1,9 +1,10 @@
 package cn.superiormc.enchantmentslots.listeners;
 
-import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
+import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -18,17 +19,16 @@ public class PlayerClickListener implements Listener {
         if (event.isCancelled()) {
             return;
         }
-        if (ConfigReader.getDebug()) {
+        if (ConfigManager.configManager.getBoolean("debug", false)) {
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §f" +
                     "Found WindowsClick packet.");
         }
-        if (!(event.getWhoClicked() instanceof Player)) {
+        if (!(event.getWhoClicked() instanceof Player player)) {
             return;
         }
         if (event.getClickedInventory() == null) {
             return;
         }
-        Player player = (Player) event.getWhoClicked();
         if (event.getClickedInventory().equals(player.getOpenInventory().getBottomInventory())) {
             ItemStack tempItemStack = event.getCurrentItem();
             if (tempItemStack == null || tempItemStack.getType().isAir()) {
@@ -37,9 +37,13 @@ public class PlayerClickListener implements Listener {
                     return;
                 }
             }
-            String itemID = CheckValidHook.checkValid(tempItemStack);
-            int defaultSlot = ConfigReader.getDefaultLimits(player, itemID);
-            ItemModify.addLore(tempItemStack, defaultSlot, itemID);
+            boolean isBook = ConfigManager.configManager.getBoolean("settings.set-slot-trigger.black-book",
+                    true) && (tempItemStack.getType().equals(Material.BOOK) || tempItemStack.getType().equals(Material.ENCHANTED_BOOK));
+            if (!isBook) {
+                String itemID = CheckValidHook.checkValid(tempItemStack);
+                int defaultSlot = ConfigManager.configManager.getDefaultLimits(player, itemID);
+                ItemModify.setSlot(tempItemStack, defaultSlot, itemID);
+            }
         }
     }
 }

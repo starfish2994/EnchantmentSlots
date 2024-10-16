@@ -1,7 +1,7 @@
 package cn.superiormc.enchantmentslots.listeners;
 
-import cn.superiormc.enchantmentslots.configs.ConfigReader;
-import cn.superiormc.enchantmentslots.configs.Messages;
+import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.managers.LanguageManager;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
@@ -17,41 +17,39 @@ public class PlayerAnvilListener implements Listener {
 
     @EventHandler
     public void onAnvilItem(InventoryClickEvent event) {
-        if (event.getInventory() instanceof AnvilInventory) {
+        if (event.getInventory() instanceof AnvilInventory inventory) {
             if (event.getSlot() != 2) {
                 return;
             }
-            if (!(event.getWhoClicked() instanceof Player)) {
+            if (!(event.getWhoClicked() instanceof Player player)) {
                 return;
             }
-            Player player = (Player)event.getWhoClicked();
-            AnvilInventory inventory = (AnvilInventory) event.getInventory();
             ItemStack item = inventory.getItem(0);
             if (item == null) {
                 return;
             }
             String itemID = CheckValidHook.checkValid(item);
-            int defaultSlot = ConfigReader.getDefaultLimits(player, itemID);
+            int defaultSlot = ConfigManager.configManager.getDefaultLimits(player, itemID);
             ItemStack result = inventory.getItem(2);
             if (result != null) {
-                if (ConfigReader.getAnvilItemTrigger()) {
-                    ItemModify.addLore(result, defaultSlot, itemID);
+                if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.AnvilItemEvent.enabled", true)) {
+                    ItemModify.setSlot(result, defaultSlot, itemID);
                 }
                 int maxEnchantments = ItemLimits.getMaxEnchantments(result, defaultSlot, itemID);
                 if (ItemUtil.getEnchantments(result, false).size() > maxEnchantments) {
                     inventory.setRepairCost(0);
                     event.setCancelled(true);
-                    if (ConfigReader.getCloseInventory()) {
+                    if (ConfigManager.configManager.getBoolean("settings.close-inventory-if-reached-limit", true)) {
                         player.closeInventory();
                     }
                     player.giveExp(-1);
                     if (player.getTotalExperience() > 0) {
                         player.giveExp(1);
                     }
-                    if (ConfigReader.getAnvilItemUpdate()) {
+                    if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.AnvilItemEvent.update-item", false)) {
                         item.setAmount(item.getAmount());
                     }
-                    player.sendMessage(Messages.getMessages("slots-limit-reached"));
+                    LanguageManager.languageManager.sendStringText(player, "slots-limit-reached");
                 }
             }
         }

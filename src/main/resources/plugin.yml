@@ -16,6 +16,9 @@ softdepend:
   - eco
   - EnchantGui
   - ExecutableItems
+  - InteractiveChat
+  - TrChat
+  - QuickShop-Hikari
 commands:
   enchantmentslots:
     aliases:

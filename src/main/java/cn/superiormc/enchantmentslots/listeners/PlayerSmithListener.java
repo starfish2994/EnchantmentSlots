@@ -1,13 +1,11 @@
 package cn.superiormc.enchantmentslots.listeners;
 
-import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.configs.ConfigReader;
-import cn.superiormc.enchantmentslots.configs.Messages;
+import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.managers.LanguageManager;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,25 +15,24 @@ import org.bukkit.inventory.ItemStack;
 public class PlayerSmithListener implements Listener {
     @EventHandler
     public void onSmithItem(SmithItemEvent event) {
-        if (!(event.getWhoClicked() instanceof Player)) {
+        if (!(event.getWhoClicked() instanceof Player player)) {
             return;
         }
-        Player player = (Player) event.getWhoClicked();
         ItemStack item = event.getInventory().getResult();
         if (item == null || item.getType().isAir()) {
             return;
         }
         String itemID = CheckValidHook.checkValid(item);
-        int defaultSlot = ConfigReader.getDefaultLimits(player, itemID);
+        int defaultSlot = ConfigManager.configManager.getDefaultLimits(player, itemID);
         int maxEnchantments = ItemLimits.getMaxEnchantments(item, defaultSlot, itemID);
-        if (ConfigReader.getSmithItemTrigger()) {
-            if (ConfigReader.getSmithItemGreater() && maxEnchantments > defaultSlot) {
+        if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.SmithItemEvent.enabled", true)) {
+            if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.SmithItemEvent.keep-greater-slot", true) && maxEnchantments > defaultSlot) {
                 defaultSlot = maxEnchantments;
             }
-            if (ConfigReader.getSmithItemReset()) {
-                event.getInventory().setResult(ItemModify.removeAndAddLore(item, defaultSlot, itemID));
+            if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.SmithItemEvent.reset-previous-slot", true)) {
+                event.getInventory().setResult(ItemModify.resetSlot(item, defaultSlot, itemID));
             } else {
-                event.getInventory().setResult(ItemModify.addLore(item, defaultSlot, itemID));
+                event.getInventory().setResult(ItemModify.setSlot(item, defaultSlot, itemID));
             }
             if (defaultSlot != maxEnchantments) {
                 maxEnchantments = defaultSlot;
@@ -43,10 +40,10 @@ public class PlayerSmithListener implements Listener {
         }
         if (ItemUtil.getEnchantments(item, false).size() > maxEnchantments) {
             event.setCancelled(true);
-            if (ConfigReader.getCloseInventory()) {
+            if (ConfigManager.configManager.getBoolean("settings.close-inventory-if-reached-limit", true)) {
                 player.closeInventory();
             }
-            player.sendMessage(Messages.getMessages("slots-limit-reached-after-smith"));
+            LanguageManager.languageManager.sendStringText(player, "slots-limit-reached-after-smith");
         }
     }
 }

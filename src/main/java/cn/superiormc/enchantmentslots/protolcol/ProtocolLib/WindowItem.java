@@ -1,8 +1,8 @@
 package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
+import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -24,10 +24,10 @@ public class WindowItem extends GeneralPackets {
 
     @Override
     protected void initPacketAdapter() {
-        packetAdapter = new PacketAdapter(EnchantmentSlots.instance, ConfigReader.getPriority(), PacketType.Play.Server.WINDOW_ITEMS) {
+        packetAdapter = new PacketAdapter(EnchantmentSlots.instance, ConfigManager.configManager.getPriority(), PacketType.Play.Server.WINDOW_ITEMS) {
             @Override
             public void onPacketSending(PacketEvent event) {
-                if (ConfigReader.getDebug()) {
+                if (ConfigManager.configManager.getBoolean("debug", false)) {
                     Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §f" +
                             "Found WindowsItem packet. Window ID: " + event.getPacket().getIntegers().read(0));
                 }
@@ -38,10 +38,10 @@ public class WindowItem extends GeneralPackets {
                 StructureModifier<ItemStack> singleItemStackStructureModifier = packet.getItemModifier();
                 if (singleItemStackStructureModifier.size() != 0) {
                     ItemStack serverItemStack = singleItemStackStructureModifier.read(0);
-                    if (ConfigReader.getAutoAddLore()) {
+                    if (ConfigManager.configManager.getBoolean("settings.item-can-be-enchanted.auto-add-lore", false)) {
                         String itemID = CheckValidHook.checkValid(serverItemStack);
-                        int defaultSlot = ConfigReader.getDefaultLimits(event.getPlayer(), itemID);
-                        ItemModify.addLore(serverItemStack, defaultSlot, itemID);
+                        int defaultSlot = ConfigManager.configManager.getDefaultLimits(event.getPlayer(), itemID);
+                        ItemModify.setSlot(serverItemStack, defaultSlot, itemID);
                     }
                     ItemStack clientItemStack = ItemModify.serverToClient(serverItemStack, event.getPlayer());
                     // client 是加过 Lore 的，server 是没加过的！
@@ -58,10 +58,10 @@ public class WindowItem extends GeneralPackets {
                         continue;
                     }
                     boolean isPlayerInventory = event.getPacket().getIntegers().read(0) == 0 || index > serverItemStack.size() - 36;
-                    if (ConfigReader.getAutoAddLore() && ConfigReader.getOnlyInPlayerInventory(event.getPlayer(), isPlayerInventory)) {
+                    if (ConfigManager.configManager.getBoolean("settings.item-can-be-enchanted.auto-add-lore", false) && ConfigManager.configManager.getOnlyInPlayerInventory(event.getPlayer(), isPlayerInventory)) {
                         String itemID = CheckValidHook.checkValid(itemStack);
-                        int defaultSlot = ConfigReader.getDefaultLimits(event.getPlayer(), itemID);
-                        ItemModify.addLore(itemStack, defaultSlot, itemID);
+                        int defaultSlot = ConfigManager.configManager.getDefaultLimits(event.getPlayer(), itemID);
+                        ItemModify.setSlot(itemStack, defaultSlot, itemID);
                     }
                     clientItemStack.add(ItemModify.serverToClient(itemStack, event.getPlayer()));
                     index ++;

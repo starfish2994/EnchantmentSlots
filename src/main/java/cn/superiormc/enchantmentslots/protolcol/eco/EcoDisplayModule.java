@@ -1,7 +1,7 @@
 package cn.superiormc.enchantmentslots.protolcol.eco;
 
-import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
+import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import com.willfp.eco.core.EcoPlugin;
 import com.willfp.eco.core.display.Display;
@@ -14,7 +14,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class EcoDisplayModule extends DisplayModule {
     public static void init() {
-        Display.registerDisplayModule(new EcoDisplayModule(EcoPlugin.getPlugin("eco"), ConfigReader.getEcoPriority()));
+        Display.registerDisplayModule(new EcoDisplayModule(EcoPlugin.getPlugin("eco"),
+                ConfigManager.configManager.getEcoPriority()));
     }
 
     protected EcoDisplayModule(@NotNull EcoPlugin plugin, @NotNull DisplayPriority priority) {
@@ -30,9 +31,9 @@ public class EcoDisplayModule extends DisplayModule {
             return;
         }
         String itemID = CheckValidHook.checkValid(itemStack);
-        int defaultSlot = ConfigReader.getDefaultLimits(player, itemID);
-        if (ConfigReader.getAutoAddLore()) {
-            ItemModify.addLore(itemStack, defaultSlot, itemID);
+        int defaultSlot = ConfigManager.configManager.getDefaultLimits(player, itemID);
+        if (ConfigManager.configManager.getBoolean("settings.item-can-be-enchanted.auto-add-lore", false)) {
+            ItemModify.setSlot(itemStack, defaultSlot, itemID);
         }
         ItemModify.serverToClient(itemStack, player);
     }

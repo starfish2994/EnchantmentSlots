@@ -6,7 +6,7 @@
 
     <groupId>cn.superiormc</groupId>
     <artifactId>EnchantmentSlots</artifactId>
-    <version>3.5.2</version>
+    <version>4.0.0</version>
     <packaging>jar</packaging>
 
     <name>EnchantmentSlots</name>
@@ -91,8 +91,12 @@
             <url>https://repo.auxilor.io/repository/maven-public/</url>
         </repository>
         <repository>
-            <id>sonatype-oss-snapshots1</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+            <id>loohp-repo</id>
+            <url>https://repo.loohpjames.com/repository</url>
+        </repository>
+        <repository>
+            <id>codemc</id>
+            <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
     </repositories>
 
@@ -103,11 +107,6 @@
             <version>1.0.0</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/ManyouItems-1.0.0.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-serializer-json-legacy-impl</artifactId>
-            <version>4.18.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.papermc.paper</groupId>
@@ -263,6 +262,26 @@
             <version>7.24.7.9</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/ExecutableItems-7.24.7.9.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.loohp</groupId>
+            <artifactId>InteractiveChat</artifactId>
+            <version>4.2.12.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>me.arasple.mc.trchat</groupId>
+            <artifactId>TrChat</artifactId>
+            <version>2.1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/TrChat-2.1.0.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.ghostchu</groupId>
+            <artifactId>quickshop-bukkit</artifactId>
+            <version>6.2.0.6</version>
+            <scope>provided</scope>
+            <classifier>shaded</classifier>
         </dependency>
     </dependencies>
 </project>

@@ -1,8 +1,8 @@
 package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.configs.ConfigReader;
-import cn.superiormc.enchantmentslots.configs.Messages;
+import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.managers.LanguageManager;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
@@ -22,8 +22,8 @@ public class EnchantGUIEnchantListener implements Listener {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
         String itemID = CheckValidHook.checkValid(item);
-        int defaultSlot = ConfigReader.getDefaultLimits(player, itemID);
-        ItemModify.addLore(item, defaultSlot, itemID);
+        int defaultSlot = ConfigManager.configManager.getDefaultLimits(player, itemID);
+        ItemModify.setSlot(item, defaultSlot, itemID);
         int maxEnchantments = ItemLimits.getMaxEnchantments(item, defaultSlot, itemID);
         if (item.getEnchantments().size() >= maxEnchantments) {
             int buyLevel = event.getLevel();
@@ -50,10 +50,10 @@ public class EnchantGUIEnchantListener implements Listener {
                 Economy eco = rsp.getProvider();
                 eco.withdrawPlayer(player, event.getCost().getMoney());
             }
-            if (ConfigReader.getCloseInventory()) {
+            if (ConfigManager.configManager.getBoolean("settings.close-inventory-if-reached-limit", true)) {
                 player.closeInventory();
             }
-            player.sendMessage(Messages.getMessages("slots-limit-reached"));
+            LanguageManager.languageManager.sendStringText(player, "slots-limit-reached");
         }
     }
 }

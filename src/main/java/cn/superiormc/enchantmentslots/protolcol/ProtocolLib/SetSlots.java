@@ -1,8 +1,8 @@
 package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
+import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
@@ -12,6 +12,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.reflect.StructureModifier;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -22,10 +23,10 @@ public class SetSlots extends GeneralPackets {
     }
     @Override
     protected void initPacketAdapter(){
-        packetAdapter = new PacketAdapter(EnchantmentSlots.instance, ConfigReader.getPriority(), PacketType.Play.Server.SET_SLOT) {
+        packetAdapter = new PacketAdapter(EnchantmentSlots.instance, ConfigManager.configManager.getPriority(), PacketType.Play.Server.SET_SLOT) {
             @Override
             public void onPacketSending(PacketEvent event) {
-                if (ConfigReader.getDebug()) {
+                if (ConfigManager.configManager.getBoolean("debug", false)) {
                     Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §f" +
                             "Found SetSlots packet.");
                 }
@@ -48,23 +49,32 @@ public class SetSlots extends GeneralPackets {
                 } else {
                     spigotSlot = slot;
                 }
-                if (ConfigReader.getDebug()) {
+                if (ConfigManager.configManager.getBoolean("debug", false)) {
                     Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §f" +
                             "Packet Slot ID: " + slot + ", Window ID: " + windowID + ", Top Size: " +
                             event.getPlayer().getOpenInventory().getTopInventory().getSize() + ".");
                 }
                 boolean dontAddLore = false;
-                if (CommonUtil.inPlayerInventory(event.getPlayer(), slot) && (ConfigReader.getSetSlotPacketTrigger() || ConfigReader.getRemoveExtraEnchants())) {
+                if (CommonUtil.inPlayerInventory(event.getPlayer(), slot) && (ConfigManager.configManager.getBoolean(
+                        "settings.set-slot-trigger.SetSlotPacket.enabled", true)) ||
+                        ConfigManager.configManager.getBoolean(
+                                "settings.set-slot-trigger.SetSlotPacket.remove-illegal-excess-enchant",
+                                true)) {
                     ItemStack targetItem = event.getPlayer().getInventory().getItem(spigotSlot);
-                    if (ConfigReader.getSetSlotPacketTrigger()) {
+                    if (ConfigManager.configManager.getBoolean(
+                            "settings.set-slot-trigger.SetSlotPacket.enabled", true)) {
                         if (targetItem != null && !targetItem.getType().isAir()) {
-                            String itemID = CheckValidHook.checkValid(targetItem);
-                            int defaultSlot = ConfigReader.getDefaultLimits(event.getPlayer(), itemID);
-                            ItemModify.addLore(targetItem, defaultSlot, itemID);
-                            dontAddLore = true;
+                            boolean isBook = ConfigManager.configManager.getBoolean("settings.set-slot-trigger.black-book",
+                                    true) && (targetItem.getType().equals(Material.BOOK) || targetItem.getType().equals(Material.ENCHANTED_BOOK));
+                            if (!isBook) {
+                                String itemID = CheckValidHook.checkValid(targetItem);
+                                int defaultSlot = ConfigManager.configManager.getDefaultLimits(event.getPlayer(), itemID);
+                                ItemModify.setSlot(targetItem, defaultSlot, itemID);
+                                dontAddLore = true;
+                            }
                         }
                     }
-                    if (ConfigReader.getRemoveExtraEnchants()) {
+                    if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.SetSlotPacket.remove-illegal-excess-enchant", true)) {
                         if (targetItem != null && !targetItem.getType().isAir()) {
                             int maxEnchantments = ItemLimits.getRealMaxEnchantments(serverItemStack);
                             if (maxEnchantments > 0 && targetItem.getEnchantments().size() > maxEnchantments) {
@@ -85,11 +95,12 @@ public class SetSlots extends GeneralPackets {
                         }
                     }
                 }
-                if (!dontAddLore && ConfigReader.getAutoAddLore() && ConfigReader.getOnlyInPlayerInventory(event.getPlayer(),
+                if (!dontAddLore && ConfigManager.configManager.getBoolean("settings.item-can-be-enchanted.auto-add-lore", false) &&
+                        ConfigManager.configManager.getOnlyInPlayerInventory(event.getPlayer(),
                         CommonUtil.inPlayerInventory(event.getPlayer(), slot))) {
                     String itemID = CheckValidHook.checkValid(serverItemStack);
-                    int defaultSlot = ConfigReader.getDefaultLimits(event.getPlayer(), itemID);
-                    ItemModify.addLore(serverItemStack, defaultSlot, itemID);
+                    int defaultSlot = ConfigManager.configManager.getDefaultLimits(event.getPlayer(), itemID);
+                    ItemModify.setSlot(serverItemStack, defaultSlot, itemID);
                 }
                 ItemStack clientItemStack = ItemModify.serverToClient(serverItemStack, event.getPlayer());
                 // client 是加过 Lore 的，server 是没加过的！

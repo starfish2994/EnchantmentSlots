@@ -1,4 +1,4 @@
-package cn.superiormc.enchantmentslots.methods;
+package cn.superiormc.enchantmentslots.objects;
 
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import cn.superiormc.enchantmentslots.utils.TextUtil;
@@ -13,10 +13,15 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.Collection;
 import java.util.List;
 
-public class Action {
+public class ObjectAction {
 
+    private final List<String> actions;
 
-    public static void doAction(Player player, List<String> actions, int amount) {
+    public ObjectAction(List<String> actions) {
+        this.actions = actions;
+    }
+
+    public void doAction(Player player, int amount) {
         if (player == null) {
             return;
         }

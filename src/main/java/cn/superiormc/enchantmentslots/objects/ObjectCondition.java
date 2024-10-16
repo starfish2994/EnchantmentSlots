@@ -1,4 +1,4 @@
-package cn.superiormc.enchantmentslots.methods;
+package cn.superiormc.enchantmentslots.objects;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -6,9 +6,15 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class Condition {
+public class ObjectCondition {
 
-    public static boolean getBoolean(Player player, List<String> conditions) {
+    private final List<String> conditions;
+
+    public ObjectCondition(List<String> conditions) {
+        this.conditions = conditions;
+    }
+
+    public boolean getBoolean(Player player) {
         boolean conditionTrueOrFasle = true;
         for (String singleCondition : conditions){
             if (singleCondition.startsWith("none")){
@@ -116,5 +122,10 @@ public class Condition {
             }
         }
         return conditionTrueOrFasle;
+    }
+
+    public static boolean getBoolean(Player player, List<String> conditions) {
+        ObjectCondition condition = new ObjectCondition(conditions);
+        return condition.getBoolean(player);
     }
 }

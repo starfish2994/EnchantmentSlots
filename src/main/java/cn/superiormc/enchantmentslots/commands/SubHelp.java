@@ -1,18 +1,27 @@
 package cn.superiormc.enchantmentslots.commands;
 
-import cn.superiormc.enchantmentslots.configs.Messages;
-import org.bukkit.command.CommandSender;
+import cn.superiormc.enchantmentslots.managers.LanguageManager;
 import org.bukkit.entity.Player;
 
-public class SubHelp {
+public class SubHelp extends AbstractCommand {
 
-    public static void SubHelpCommand(CommandSender sender) {
-        if (!(sender instanceof Player)){
-            sender.sendMessage(Messages.getMessages("help-main-console"));
-        } else if (sender.hasPermission("enchantmentslots.admin")) {
-            sender.sendMessage(Messages.getMessages("help-main-admin"));
-        } else {
-            sender.sendMessage(Messages.getMessages("help-main"));
+    public SubHelp() {
+        this.id = "help";
+        this.onlyInGame = false;
+        this.requiredArgLength = new Integer[]{1};
+    }
+
+    @Override
+    public void executeCommandInGame(String[] args, Player player) {
+        if (player.hasPermission("mythictotem.admin")) {
+            LanguageManager.languageManager.sendStringText(player, "help-main-admin");
+            return;
         }
+        LanguageManager.languageManager.sendStringText(player, "help-main");
+    }
+
+    @Override
+    public void executeCommandInConsole(String[] args) {
+        LanguageManager.languageManager.sendStringText("help-main-console");
     }
 }

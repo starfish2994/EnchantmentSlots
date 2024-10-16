@@ -1,8 +1,8 @@
 package cn.superiormc.enchantmentslots.papi;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.configs.ConfigReader;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
+import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -59,7 +59,7 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
                 return "0";
             }
             String itemID = CheckValidHook.checkValid(mainHandItem);
-            return String.valueOf(ItemLimits.getMaxEnchantments(mainHandItem, ConfigReader.getDefaultLimits(player, itemID), itemID));
+            return String.valueOf(ItemLimits.getMaxEnchantments(mainHandItem, ConfigManager.configManager.getDefaultLimits(player, itemID), itemID));
         }
         else if (params.equals("has_empty_slot")) {
             ItemStack mainHandItem = player.getInventory().getItemInMainHand();
@@ -67,7 +67,8 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
                 return "false";
             }
             String itemID = CheckValidHook.checkValid(mainHandItem);
-            if (ItemUtil.getEnchantments(mainHandItem, false).size() >= ItemLimits.getMaxEnchantments(mainHandItem, ConfigReader.getDefaultLimits(player, itemID), itemID)) {
+            if (ItemUtil.getEnchantments(mainHandItem, false).size() >= ItemLimits.getMaxEnchantments(mainHandItem,
+                    ConfigManager.configManager.getDefaultLimits(player, itemID), itemID)) {
                 return "false";
             }
             return "true";

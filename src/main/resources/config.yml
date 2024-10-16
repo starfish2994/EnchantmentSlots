@@ -5,9 +5,10 @@
 # Languages
 language: en_US
 
+debug: false
+
 # Settings
 settings:
-  debug: false
   item-can-be-enchanted:
     # Auto add enchantment slot lore for all item that can be enchanted.
     # If disabled, only item has enchantment slot NBT will display lore.
@@ -84,6 +85,7 @@ settings:
   # enchantment slot for an item.
   set-slot-trigger:
     add-hide-enchant-flag: false
+    black-book: true
     # This option support ProtocolLib only.
     # Enable this maybe improve plugin performance.
     SetSlotPacket:

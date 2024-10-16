@@ -1,37 +1,38 @@
 package cn.superiormc.enchantmentslots.commands;
 
-import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.configs.ConfigReader;
-import cn.superiormc.enchantmentslots.configs.Messages;
+import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.managers.LanguageManager;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class SubSetSlots {
+public class SubSetSlots extends AbstractCommand {
 
-    public static void SubSetSlotsCommand(CommandSender sender, String[] args) {
-        if (!(sender instanceof Player)){
-            sender.sendMessage(Messages.getMessages("error-in-game"));
-        } else if (sender.hasPermission("enchantmentslots.setslots")) {
-            ItemStack target = ((Player) sender).getInventory().getItemInMainHand();
-            if (target.getType().isAir()) {
-                sender.sendMessage(Messages.getMessages("error-no-item"));
-                return;
-            }
-            if (args.length == 1) {
-                String itemID = CheckValidHook.checkValid(target);
-                int slot = ItemLimits.getMaxEnchantments(target, ConfigReader.getDefaultLimits((Player) sender, itemID), itemID);
-                ItemLimits.setMaxEnchantments(target, slot + 1);
-                sender.sendMessage(Messages.getMessages("success-set")
-                        .replace("%amount%", String.valueOf(slot + 1)));
-                return;
-            }
-            ItemLimits.setMaxEnchantments(target, Integer.parseInt(args[1]));
-            sender.sendMessage(Messages.getMessages("success-set").replace("%amount%", args[1]));
-        } else {
-            sender.sendMessage(Messages.getMessages("help-main"));
+    public SubSetSlots() {
+        this.id = "setslots";
+        this.requiredPermission =  "enchantmentslots." + id;
+        this.onlyInGame = true;
+        this.requiredArgLength = new Integer[]{1, 2, 3, 4};
+        this.requiredConsoleArgLength = new Integer[]{3, 4};
+        this.premiumOnly = true;
+    }
+
+    @Override
+    public void executeCommandInGame(String[] args, Player player) {
+        ItemStack target = player.getInventory().getItemInMainHand();
+        if (target.getType().isAir()) {
+            LanguageManager.languageManager.sendStringText("error-item-not-found");
+            return;
         }
+        if (args.length == 1) {
+            String itemID = CheckValidHook.checkValid(target);
+            int slot = ItemLimits.getMaxEnchantments(target, ConfigManager.configManager.getDefaultLimits(player, itemID), itemID);
+            ItemLimits.setMaxEnchantments(target, slot + 1);
+            LanguageManager.languageManager.sendStringText(player, "success-set", "amount", String.valueOf(slot + 1));
+            return;
+        }
+        ItemLimits.setMaxEnchantments(target, Integer.parseInt(args[1]));
+        LanguageManager.languageManager.sendStringText(player, "success-set", "amount", args[1]);
     }
 }

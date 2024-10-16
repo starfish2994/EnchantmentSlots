@@ -1,67 +1,88 @@
 package cn.superiormc.enchantmentslots.commands;
 
-import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.configs.ConfigReader;
-import cn.superiormc.enchantmentslots.configs.Messages;
+import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.managers.LanguageManager;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
-import cn.superiormc.enchantmentslots.methods.ExtraSlotsItem;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
+import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class SubGiveSlots {
+public class SubGiveSlots extends AbstractCommand {
 
-    public static void SubGiveSlotsCommand(CommandSender sender, String[] args) {
-        if (sender.hasPermission("enchantmentslots.giveslots")) {
-            // giveslots <ID> <玩家名称>
-            if (args.length >= 3) {
-                ItemStack item = ExtraSlotsItem.getExtraSlotItem(args[1]);
-                if (item == null) {
-                    sender.sendMessage(Messages.getMessages("error-item-not-found"));
-                    return;
-                }
-                Player player = Bukkit.getPlayer(args[2]);
-                if (player == null) {
-                    sender.sendMessage(Messages.getMessages("error-player-not-found").replace(
-                            "%player%", args[2]
-                    ));
-                    return;
-                }
-                int amount = 1;
-                if (args.length == 4) {
-                    amount = Integer.parseInt(args[3]);
-                }
-                item.setAmount(amount);
-                player.getInventory().addItem(item);
-                sender.sendMessage(Messages.getMessages("give-extra-slot-item").
-                        replace("%player%", player.getName()).
-                        replace("%item%", args[1]).
-                        replace("%amount%", String.valueOf(amount)));
+    public SubGiveSlots() {
+        this.id = "giveslots";
+        this.requiredPermission =  "enchantmentslots." + id;
+        this.onlyInGame = false;
+        this.requiredArgLength = new Integer[]{1, 2, 3, 4};
+        this.requiredConsoleArgLength = new Integer[]{3, 4};
+        this.premiumOnly = true;
+    }
+
+    @Override
+    public void executeCommandInGame(String[] args, Player player) {
+        if (args.length <= 2) {
+            ItemStack targetItem = player.getInventory().getItemInMainHand();
+            if (targetItem.getType().isAir()) {
+                LanguageManager.languageManager.sendStringText(player, "error-no-item");
                 return;
             }
-            if (!(sender instanceof Player)){
-                sender.sendMessage(Messages.getMessages("error-in-game"));
-                return;
-            }
-            ItemStack target = ((Player) sender).getInventory().getItemInMainHand();
-            if (target.getType().isAir()) {
-                sender.sendMessage(Messages.getMessages("error-no-item"));
-                return;
-            }
-            String itemID = CheckValidHook.checkValid(target);
-            int slot = ItemLimits.getMaxEnchantments(target, ConfigReader.getDefaultLimits((Player) sender, itemID), itemID);
+            String itemID = CheckValidHook.checkValid(targetItem);
+            int slot = ItemLimits.getMaxEnchantments(targetItem, ConfigManager.configManager.getDefaultLimits(player, itemID), itemID);
             if (args.length == 1) {
-                ItemLimits.setMaxEnchantments(target, slot + 1);
-                sender.sendMessage(Messages.getMessages("success-set")
-                        .replace("%amount%", String.valueOf(slot+ 1)));
+                ItemLimits.setMaxEnchantments(targetItem, slot + 1);
+                LanguageManager.languageManager.sendStringText(player, "success-set", "amount", String.valueOf(slot+ 1));
                 return;
             }
-            ItemLimits.setMaxEnchantments(target, ItemLimits.getMaxEnchantments(target, slot + Integer.parseInt(args[1]), itemID));
-            sender.sendMessage(Messages.getMessages("success-set").replace("%amount%", args[1]));
-        } else {
-            sender.sendMessage(Messages.getMessages("help-main"));
+            ItemLimits.setMaxEnchantments(targetItem, ItemLimits.getMaxEnchantments(targetItem, slot + Integer.parseInt(args[1]), itemID));
+            LanguageManager.languageManager.sendStringText("success-set", "amount", args[1]);
+            return;
         }
+        ItemStack item = ConfigManager.configManager.getExtraSlotItem(args[1]);
+        if (item == null) {
+            LanguageManager.languageManager.sendStringText(player, "error-item-not-found");
+            return;
+        }
+        Player target = Bukkit.getPlayer(args[2]);
+        if (target == null) {
+
+            LanguageManager.languageManager.sendStringText(player, "error-player-not-found", "player", args[2]);
+            return;
+        }
+        int amount = 1;
+        if (args.length == 4) {
+            amount = Integer.parseInt(args[3]);
+        }
+        item.setAmount(amount);
+        CommonUtil.giveOrDrop(target, item);
+        LanguageManager.languageManager.sendStringText(player, "give-extra-slot-item",
+                "player", target.getName(),
+                "item", args[1],
+                "amount", String.valueOf(amount));
+    }
+
+    @Override
+    public void executeCommandInConsole(String[] args) {
+        ItemStack item = ConfigManager.configManager.getExtraSlotItem(args[1]);
+        if (item == null) {
+            LanguageManager.languageManager.sendStringText("error-item-not-found");
+            return;
+        }
+        Player target = Bukkit.getPlayer(args[2]);
+        if (target == null) {
+            LanguageManager.languageManager.sendStringText("error-player-not-found", "player", args[2]);
+            return;
+        }
+        int amount = 1;
+        if (args.length == 4) {
+            amount = Integer.parseInt(args[3]);
+        }
+        item.setAmount(amount);
+        CommonUtil.giveOrDrop(target, item);
+        LanguageManager.languageManager.sendStringText("give-extra-slot-item",
+                "player", target.getName(),
+                "item", args[1],
+                "amount", String.valueOf(amount));
     }
 }

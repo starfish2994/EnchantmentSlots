@@ -1,7 +1,6 @@
 package cn.superiormc.enchantmentslots.hooks;
 
-import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.configs.ConfigReader;
+import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import com.ssomar.executableitems.executableitems.manager.ExecutableItemsManager;
 import com.willfp.eco.core.items.Items;
@@ -42,7 +41,7 @@ public class CheckValidHook {
         if (CommonUtil.checkPluginLoad("MMOItems")) {
             String tempVal1 = MMOItems.getID(itemStack);
             if (tempVal1 != null && !tempVal1.isEmpty()) {
-                if (ConfigReader.getUseTiers()) {
+                if (ConfigManager.configManager.getBoolean("settings.use-tier-identify-slots", false)) {
                     ItemTier tempVal2 = ItemTier.ofItem(NBTItem.get(itemStack));
                     if (tempVal2 != null) {
                         return tempVal2.getId();

@@ -1,8 +1,8 @@
 package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.configs.ConfigReader;
-import cn.superiormc.enchantmentslots.configs.Messages;
+import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.managers.LanguageManager;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
@@ -23,14 +23,14 @@ public class PlayerEnchantListener implements Listener {
         Player player = event.getEnchanter();
         ItemStack item = event.getItem();
         String itemID = CheckValidHook.checkValid(item);
-        int defaultSlot = ConfigReader.getDefaultLimits(player, itemID);
-        if (ConfigReader.getEnchantItemTrigger()) {
-            ItemModify.addLore(item, defaultSlot, itemID);
+        int defaultSlot = ConfigManager.configManager.getDefaultLimits(player, itemID);
+        if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.EnchantItemEvent.enabled", true)) {
+            ItemModify.setSlot(item, defaultSlot, itemID);
         }
         int maxEnchantments = ItemLimits.getMaxEnchantments(item, defaultSlot, itemID);
         if (event.getEnchantsToAdd().size() + ItemUtil.getEnchantments(item, false).size() > maxEnchantments) {
             int removeAmount = item.getEnchantments().size() - maxEnchantments;
-                if (!ConfigReader.getEnchantCancel() && item.getType() != Material.BOOK && removeAmount < event.getEnchantsToAdd().size()) {
+                if (!ConfigManager.configManager.getBoolean("settings.set-slot-trigger.EnchantItemEvent.cancel-if-reached-slot", true) && item.getType() != Material.BOOK && removeAmount < event.getEnchantsToAdd().size()) {
                     Bukkit.getScheduler().runTask(EnchantmentSlots.instance, () -> {
                         int realRemoveAmount = removeAmount;
                         for (Enchantment enchant : item.getEnchantments().keySet()) {
@@ -45,14 +45,14 @@ public class PlayerEnchantListener implements Listener {
                             item.setItemMeta(meta);
                             realRemoveAmount--;
                         }
-                        player.sendMessage(Messages.getMessages("slots-limit-reached-enchant"));
+                        LanguageManager.languageManager.sendStringText(player, "slots-limit-reached-enchant");
                     });
                 } else {
                     event.setCancelled(true);
-                    if (ConfigReader.getCloseInventory()) {
+                    if (ConfigManager.configManager.getBoolean("settings.close-inventory-if-reached-limit", true)) {
                         player.closeInventory();
                     }
-                    player.sendMessage(Messages.getMessages("slots-limit-reached"));
+                    LanguageManager.languageManager.sendStringText(player, "slots-limit-reached");
                 }
         }
 

@@ -1,15 +1,13 @@
 package cn.superiormc.enchantmentslots.utils;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.configs.ConfigReader;
+import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.managers.ErrorManager;
 import com.google.common.base.Enums;
 import com.google.common.collect.MultimapBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.willfp.ecoenchants.display.EnchantSorter;
-import net.kyori.adventure.nbt.api.BinaryTagHolder;
-import net.kyori.adventure.text.event.HoverEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
@@ -99,7 +97,7 @@ public class ItemUtil {
                             mtd.invoke(skullMeta, constroctor.newInstance(profile));
                         } catch (Exception exception) {
                             exception.printStackTrace();
-                            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[ManyouItems] §cError: Can not parse skull texture in a item!");
+                            ErrorManager.errorManager.sendErrorMessage("§x§9§8§F§B§9§8[ManyouItems] §cError: Can not parse skull texture in a item!");
                         }
                     } catch (Exception e) {
                         throw new RuntimeException(e);
@@ -113,7 +111,7 @@ public class ItemUtil {
                         mtd.invoke(skullMeta, profile);
                     } catch (Exception exception) {
                         exception.printStackTrace();
-                        Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[ManyouItems] §cError: Can not parse skull texture in a item!");
+                        ErrorManager.errorManager.sendErrorMessage("§x§9§8§F§B§9§8[ManyouItems] §cError: Can not parse skull texture in a item!");
                     }
                 }
             }
@@ -128,7 +126,7 @@ public class ItemUtil {
         if (itemMeta == null) {
             return new HashMap<>();
         }
-        if (!ConfigReader.getEnchantSort()) {
+        if (!ConfigManager.configManager.getBoolean("settings.add-lore.placeholder.enchants.sort", true)) {
             sort = false;
         }
         if (sort && CommonUtil.checkPluginLoad("EcoEnchants") && Integer.parseInt(EnchantmentSlots.instance.getServer().getPluginManager().getPlugin("EcoEnchants").getDescription().

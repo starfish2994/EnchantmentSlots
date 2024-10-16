@@ -1,24 +1,35 @@
 package cn.superiormc.enchantmentslots.commands;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.configs.Messages;
-import cn.superiormc.enchantmentslots.methods.ExtraSlotsItem;
+import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.managers.LanguageManager;
+import cn.superiormc.enchantmentslots.objects.ObjectExtraSlotsItem;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
-import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-public class SubReload {
+public class SubReload extends AbstractCommand {
 
-    public static void SubReloadCommand(CommandSender sender) {
-        if (sender.hasPermission("enchantmentslots.admin")) {
-            EnchantmentSlots.instance.reloadConfig();
-            Messages.init();
-            ExtraSlotsItem.init();
-            ItemLimits.enchantItems = null;
-            ItemLimits.blackItems = null;
-            sender.sendMessage(Messages.getMessages("plugin-reloaded"));
-        }
-        else {
-            sender.sendMessage(Messages.getMessages("error-miss-permission"));
-        }
+    public SubReload() {
+        this.id = "reload";
+        this.requiredPermission =  "enchantmentslots.admin";
+        this.onlyInGame = false;
+        this.requiredArgLength = new Integer[]{1};
     }
+
+    @Override
+    public void executeCommandInGame(String[] args, Player player) {
+        EnchantmentSlots.instance.reloadConfig();
+        new LanguageManager();
+        new ConfigManager();
+        LanguageManager.languageManager.sendStringText(player, "plugin-reloaded");
+    }
+
+    @Override
+    public void executeCommandInConsole(String[] args) {
+        EnchantmentSlots.instance.reloadConfig();
+        new LanguageManager();
+        new ConfigManager();
+        LanguageManager.languageManager.sendStringText("plugin-reloaded");
+    }
+
 }

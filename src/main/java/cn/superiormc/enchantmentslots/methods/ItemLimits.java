@@ -1,16 +1,12 @@
 package cn.superiormc.enchantmentslots.methods;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.configs.ConfigReader;
+import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ItemLimits {
 
@@ -26,7 +22,7 @@ public class ItemLimits {
         }
         ItemMeta meta = item.getItemMeta();
         if (!meta.getPersistentDataContainer().has(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER)) {
-            if (canEnchant(item, itemID)) {
+            if (ConfigManager.configManager.canEnchant(item, itemID)) {
                 return defaultSlot;
             }
             else {
@@ -59,48 +55,5 @@ public class ItemLimits {
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER, maxEnchantments);
         item.setItemMeta(meta);
-    }
-
-    public static List<String> enchantItems = null;
-
-    public static List<String> blackItems = null;
-
-    public static boolean canEnchant(ItemStack item, String itemID) {
-        if (itemID == null) {
-            itemID = "-null";
-        }
-        if (enchantItems == null) {
-            enchantItems = ConfigReader.getItemCanBeEnchantedWhiteList();
-            if (enchantItems.isEmpty()) {
-                enchantItems = new ArrayList<>();
-            }
-        }
-        if (blackItems == null) {
-            blackItems = ConfigReader.getItemCanBeEnchantedBlackList();
-            if (blackItems.isEmpty()) {
-                blackItems = new ArrayList<>();
-            }
-        }
-        if (!enchantItems.isEmpty()) {
-            for (String tempVal1 : enchantItems) {
-                if (tempVal1.equalsIgnoreCase(item.getType().name()) || tempVal1.equalsIgnoreCase(itemID)) {
-                    for (String tempVal2 : blackItems) {
-                        if (tempVal2.equalsIgnoreCase(itemID)) {
-                            return false;
-                        }
-                    }
-                    return true;
-                }
-            }
-            return false;
-        } else if (!blackItems.isEmpty()) {
-            for (String tempVal2 : blackItems) {
-                if (tempVal2.equalsIgnoreCase(item.getType().name()) || tempVal2.equalsIgnoreCase(itemID)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
     }
 }

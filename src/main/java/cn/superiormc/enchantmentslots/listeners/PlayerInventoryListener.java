@@ -1,11 +1,10 @@
 package cn.superiormc.enchantmentslots.listeners;
 
-import cn.superiormc.enchantmentslots.configs.ConfigReader;
-import cn.superiormc.enchantmentslots.configs.Messages;
+import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.managers.LanguageManager;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
-import cn.superiormc.enchantmentslots.methods.ExtraSlotsItem;
+import cn.superiormc.enchantmentslots.objects.ObjectExtraSlotsItem;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,40 +27,39 @@ public class PlayerInventoryListener implements Listener {
         if (event.isCancelled()) {
             return;
         }
-        if (!(event.getWhoClicked() instanceof Player)) {
+        if (!(event.getWhoClicked() instanceof Player player)) {
             return;
         }
-        Player player = (Player)event.getWhoClicked();
         ItemStack targetItem = event.getCurrentItem();
         if (targetItem == null || targetItem.getType().isAir()) {
             return;
         }
         ItemStack extraItem = event.getCursor();
-        if (extraItem == null || extraItem.getType().isAir()) {
+        if (extraItem.getType().isAir()) {
             return;
         }
-        ExtraSlotsItem item = ExtraSlotsItem.getExtraSlotItemValue(extraItem);
+        ObjectExtraSlotsItem item = ConfigManager.configManager.getExtraSlotItemValue(extraItem);
         String itemID = CheckValidHook.checkValid(targetItem);
         if (item == null || !item.canApply(player, itemID)) {
             return;
         }
         int value = item.getAddSlot();
-        int baseValue = ItemLimits.getMaxEnchantments(targetItem, ConfigReader.getDefaultLimits(player, itemID), itemID);
+        int baseValue = ItemLimits.getMaxEnchantments(targetItem, ConfigManager.configManager.getDefaultLimits(player, itemID), itemID);
         if (baseValue == 0) {
             return;
         }
         if (player.getGameMode() == GameMode.CREATIVE) {
-            player.sendMessage(Messages.getMessages("error-creative-mode"));
+            LanguageManager.languageManager.sendStringText(player, "error-creative-mode");
             return;
         }
-        int maxValue = ConfigReader.getMaxLimits(player, targetItem);
+        int maxValue = ConfigManager.configManager.getMaxLimits(player, targetItem);
         if (baseValue >= maxValue) {
-            player.sendMessage(Messages.getMessages("max-slots-reached"));
+            LanguageManager.languageManager.sendStringText(player, "max-slots-reached");
             return;
         }
         if (maxValue != -1 && baseValue + value > maxValue) {
-            if (ConfigReader.getCancelMaxLimits()) {
-                player.sendMessage(Messages.getMessages("max-slots-reached"));
+            if (ConfigManager.configManager.getBoolean("settings.cancel-add-slot-if-reached-max-slot", true)) {
+                LanguageManager.languageManager.sendStringText(player, "max-slots-reached");
             } else {
                 extraItem.setAmount(extraItem.getAmount() - 1);
                 if (value == 0) {
