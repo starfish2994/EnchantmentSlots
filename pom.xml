@@ -101,6 +101,7 @@
     </repositories>
 
     <dependencies>
+        <!-- To other developers: ManyouItems already built-in this project, so you can simply remove this dependency. -->
         <dependency>
             <groupId>cn.superiormc</groupId>
             <artifactId>ManyouItems</artifactId>
