@@ -7,14 +7,16 @@ import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SubSetSlots extends AbstractCommand {
 
     public SubSetSlots() {
         this.id = "setslots";
         this.requiredPermission =  "enchantmentslots." + id;
         this.onlyInGame = true;
-        this.requiredArgLength = new Integer[]{1, 2, 3, 4};
-        this.requiredConsoleArgLength = new Integer[]{3, 4};
+        this.requiredArgLength = new Integer[]{1, 2};
         this.premiumOnly = true;
     }
 
@@ -34,5 +36,18 @@ public class SubSetSlots extends AbstractCommand {
         }
         ItemLimits.setMaxEnchantments(target, Integer.parseInt(args[1]));
         LanguageManager.languageManager.sendStringText(player, "success-set", "amount", args[1]);
+    }
+
+    @Override
+    public List<String> getTabResult(String[] args) {
+        List<String> tempVal1 = new ArrayList<>();
+        switch (args.length) {
+            case 2:
+                tempVal1.add("1");
+                tempVal1.add("5");
+                tempVal1.add("10");
+                break;
+        }
+        return tempVal1;
     }
 }

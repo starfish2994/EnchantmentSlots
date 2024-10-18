@@ -9,6 +9,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SubGiveSlots extends AbstractCommand {
 
     public SubGiveSlots() {
@@ -46,7 +49,6 @@ public class SubGiveSlots extends AbstractCommand {
         }
         Player target = Bukkit.getPlayer(args[2]);
         if (target == null) {
-
             LanguageManager.languageManager.sendStringText(player, "error-player-not-found", "player", args[2]);
             return;
         }
@@ -84,5 +86,29 @@ public class SubGiveSlots extends AbstractCommand {
                 "player", target.getName(),
                 "item", args[1],
                 "amount", String.valueOf(amount));
+    }
+
+    @Override
+    public List<String> getTabResult(String[] args) {
+        List<String> tempVal1 = new ArrayList<>();
+        switch (args.length) {
+            case 2:
+                tempVal1.add("1");
+                tempVal1.add("5");
+                tempVal1.add("10");
+                tempVal1.addAll(ConfigManager.configManager.getSlotsItemMap().keySet());
+                break;
+            case 3:
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    tempVal1.add(player.getName());
+                }
+                break;
+            case 4:
+                tempVal1.add("1");
+                tempVal1.add("5");
+                tempVal1.add("10");
+                break;
+        }
+        return tempVal1;
     }
 }

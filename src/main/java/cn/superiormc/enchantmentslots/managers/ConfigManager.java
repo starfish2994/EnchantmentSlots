@@ -60,6 +60,10 @@ public class ConfigManager {
         return item.getItem();
     }
 
+    public Map<String, ObjectExtraSlotsItem> getSlotsItemMap() {
+        return slotsItemMap;
+    }
+
     public ObjectExtraSlotsItem getExtraSlotItemValue(ItemStack item) {
         if (!item.hasItemMeta()) {
             return null;
@@ -191,6 +195,10 @@ public class ConfigManager {
 
     public List<String> getStringList(String path) {
         return config.getStringList(path);
+    }
+
+    public ConfigurationSection getSection(String path) {
+        return config.getConfigurationSection(path);
     }
 
     public boolean canEnchant(ItemStack item, String itemID) {

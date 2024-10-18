@@ -21,7 +21,6 @@ import java.util.Map;
 
 import static cn.superiormc.enchantmentslots.methods.ItemLimits.ENCHANTMENT_SLOTS_KEY;
 
-
 public class ItemModify {
 
     public static String lorePrefix = "";
@@ -44,8 +43,8 @@ public class ItemModify {
                     for (Enchantment enchantment : enchantments.keySet()) {
                         String value = TextUtil.parse(ConfigManager.configManager.getString("settings.add-lore.placeholder.enchants.format",
                                         "&6  {enchant_name}"
-                                ,"enchant_name", LanguageManager.getEnchantName(item, enchantment, player, true)
-                                ,"enchant_raw_name", LanguageManager.getEnchantName(item, enchantment, player, false)
+                                ,"enchant_name", LanguageManager.languageManager.getEnchantName(item, enchantment, player, true)
+                                ,"enchant_raw_name", LanguageManager.languageManager.getEnchantName(item, enchantment, player, false)
                                 ,"enchant_level", getEnchantmentLevel(enchantment, enchantments.get(enchantment))
                                 ,"enchant_level_roman", getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment))));
                         value = lorePrefix + value;
@@ -82,8 +81,8 @@ public class ItemModify {
                     for (Enchantment enchantment : enchantments.keySet()) {
                         String value = TextUtil.parse(ConfigManager.configManager.getString("settings.add-lore.placeholder.enchants.format",
                                 "&6  {enchant_name}"
-                                        ,"enchant_name", LanguageManager.getEnchantName(item, enchantment, player, true)
-                                        ,"enchant_raw_name", LanguageManager.getEnchantName(item, enchantment, player, false)
+                                        ,"enchant_name", LanguageManager.languageManager.getEnchantName(item, enchantment, player, true)
+                                        ,"enchant_raw_name", LanguageManager.languageManager.getEnchantName(item, enchantment, player, false)
                                         ,"enchant_level", getEnchantmentLevel(enchantment, enchantments.get(enchantment))
                                         ,"enchant_level_roman", getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment))));
                         value = lorePrefix + value;
@@ -208,8 +207,8 @@ public class ItemModify {
                     tempLore.add(TextUtil.parse(
                             ConfigManager.configManager.getString("settings.add-lore.placeholder.enchants.format",
                                     "&6  {enchant_name}",
-                            "enchant_name", LanguageManager.getEnchantName(itemStack, enchantment, player, true),
-                            "enchant_raw_name", LanguageManager.getEnchantName(itemStack, enchantment, player, false),
+                            "enchant_name", LanguageManager.languageManager.getEnchantName(itemStack, enchantment, player, true),
+                            "enchant_raw_name", LanguageManager.languageManager.getEnchantName(itemStack, enchantment, player, false),
                             "enchant_level", ItemModify.getEnchantmentLevel(enchantment, enchantments.get(enchantment)),
                             "enchant_level_roman", ItemModify.getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment)))));
                 }
@@ -234,7 +233,7 @@ public class ItemModify {
         if (ConfigManager.configManager.getBoolean("settings.add-lore.placeholder.enchants.level-hide-one", false) && level == enchantment.getMaxLevel() && enchantment.getMaxLevel() == 1) {
             return "";
         }
-        return ConfigManager.configManager.getString("enchant-level." + level, String.valueOf(level), String.valueOf(level));
+        return LanguageManager.languageManager.getEnchantLevel(level);
     }
 
     public static String getEnchantmentLevelRoman(Enchantment enchantment, int level) {

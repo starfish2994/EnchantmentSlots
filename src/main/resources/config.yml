@@ -7,6 +7,9 @@ language: en_US
 
 debug: false
 
+paper-api:
+  skull: false
+
 # Settings
 settings:
   item-can-be-enchanted:

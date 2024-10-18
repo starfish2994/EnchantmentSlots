@@ -10,6 +10,7 @@ import com.loohp.interactivechat.api.InteractiveChatAPI;
 import com.loohp.interactivechat.objectholders.ICPlayer;
 import com.loohp.interactivechat.objectholders.ICPlayerFactory;
 import me.arasple.mc.trchat.module.internal.hook.HookPlugin;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,6 +21,8 @@ public final class EnchantmentSlots extends JavaPlugin {
     public static int majorVersion;
 
     public static int miniorVersion;
+
+    public static boolean isPaper;
 
     public static boolean newSkullMethod;
 
@@ -33,11 +36,15 @@ public final class EnchantmentSlots extends JavaPlugin {
             majorVersion = versionParts.length > 1 ? Integer.parseInt(versionParts[1]) : 0;
             miniorVersion = versionParts.length > 2 ? Integer.parseInt(versionParts[2]) : 0;
         } catch (Throwable throwable) {
-            ErrorManager.errorManager.sendErrorMessage("§x§9§8§F§B§9§8[MythicChanger] §cError: Can not get your Minecraft version! Default set to 1.0.0.");
+            ErrorManager.errorManager.sendErrorMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §cError: Can not get your Minecraft version! Default set to 1.0.0.");
         }
         new ErrorManager();
         new LicenseManager();
         new ConfigManager();
+        if (CommonUtil.getClass("com.destroystokyo.paper.PaperConfig")) {
+            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fPaper is found, enabled Paper only feature!");
+            isPaper = true;
+        }
         new ListenerManager();
         new CommandManager();
         if (LicenseManager.licenseManager.checkJarFiles()) {
@@ -71,6 +78,7 @@ public final class EnchantmentSlots extends JavaPlugin {
             newSkullMethod = true;
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fNew AuthLib found, enabled new skull get method!");
         }
+        new Metrics(this, 23653);
         Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fYour Minecraft version is: 1." + majorVersion + "." + miniorVersion + "!");
         Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fPlugin is loaded. Author: PQguanfang.");
     }

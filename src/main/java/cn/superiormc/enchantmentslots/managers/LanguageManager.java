@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LanguageManager {
 
@@ -34,6 +36,10 @@ public class LanguageManager {
     private File file;
 
     private File tempFile;
+
+    private Map<Enchantment, String> enchantmentNameCache = new HashMap<>();
+
+    private Map<Integer, String> enchantmentLevelCache = new HashMap<>();
 
     public LanguageManager() {
         languageManager = this;
@@ -178,41 +184,57 @@ public class LanguageManager {
         return TextUtil.parse(text);
     }
 
-    public static String getEnchantName(ItemStack item, Enchantment enchantment, Player player, boolean showTierColor) {
+    public String getEnchantName(ItemStack item, Enchantment enchantment, Player player, boolean showTierColor) {
         try {
+            if (enchantmentNameCache.containsKey(enchantment)) {
+                return enchantmentNameCache.get(enchantment);
+            }
             String enchantmentName = ConfigManager.configManager.getString("enchant-name." + enchantment.getKey().getKey(), enchantment.getKey().getKey());
-            if (enchantmentName == null) {
+            if (enchantmentName.equals(enchantment.getKey().getKey())) {
                 if (CommonUtil.checkPluginLoad("EcoEnchants")) {
                     EcoEnchantLike ecoEnchant = EcoEnchants.INSTANCE.getByID(enchantment.getKey().getKey());
                     if (ecoEnchant != null) {
                         if (showTierColor) {
-                            return EcoEnchantsHook.getEcoEnchantName(ecoEnchant, item, player);
+                            enchantmentName = EcoEnchantsHook.getEcoEnchantName(ecoEnchant, item, player);
+                        } else {
+                            enchantmentName = StringUtils.format(ecoEnchant.getRawDisplayName());
                         }
-                        return StringUtils.format(ecoEnchant.getRawDisplayName());
                     }
                 } else if (CommonUtil.checkPluginLoad("ExcellentEnchants")) {
                     if (!EnchantmentSlots.eeLegacy) {
                         CustomEnchantment excellentEnchant = su.nightexpress.excellentenchants.registry.EnchantRegistry.getByKey(enchantment.getKey());
                         if (excellentEnchant != null) {
                             if (showTierColor) {
-                                return NightMessage.asLegacy(excellentEnchant.getFormattedName());
+                                enchantmentName = NightMessage.asLegacy(excellentEnchant.getFormattedName());
+                            } else {
+                                enchantmentName = NightMessage.asLegacy(excellentEnchant.getDisplayName());
                             }
-                            return NightMessage.asLegacy(excellentEnchant.getDisplayName());
                         }
                     } else {
                         EnchantmentData excellentEnchant = EnchantRegistry.getByKey(enchantment.getKey());
                         if (excellentEnchant != null) {
                             if (showTierColor) {
-                                return NightMessage.asLegacy(excellentEnchant.getNameFormatted(-1, excellentEnchant.getCharges(item)).replace(" -1", ""));
+                                enchantmentName = NightMessage.asLegacy(excellentEnchant.getNameFormatted(-1, excellentEnchant.getCharges(item)).replace(" -1", ""));
+                            } else {
+                                enchantmentName = NightMessage.asLegacy(excellentEnchant.getName());
                             }
-                            return NightMessage.asLegacy(excellentEnchant.getName());
                         }
                     }
                 }
             }
-            return TextUtil.parse(enchantmentName);
+            enchantmentNameCache.put(enchantment, TextUtil.parse(enchantmentName));
+            return enchantmentName;
         } catch (Throwable throwable) {
             return "ERROR";
         }
+    }
+
+    public String getEnchantLevel(int level) {
+        if (enchantmentLevelCache.containsKey(level)) {
+            return enchantmentLevelCache.get(level);
+        }
+        String levelName = ConfigManager.configManager.getString("enchant-level." + level, String.valueOf(level));
+        enchantmentLevelCache.put(level, levelName);
+        return levelName;
     }
 }

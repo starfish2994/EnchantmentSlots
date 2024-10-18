@@ -3,11 +3,14 @@ package cn.superiormc.enchantmentslots.utils;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.managers.ErrorManager;
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import com.google.common.base.Enums;
 import com.google.common.collect.MultimapBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.willfp.ecoenchants.display.EnchantSorter;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
@@ -81,41 +84,53 @@ public class ItemUtil {
                 }
             }
         }
+        // Skull
         if (meta instanceof SkullMeta) {
             SkullMeta skullMeta = (SkullMeta) meta;
             String skullTextureNameKey = section.getString("skull-meta", section.getString("skull"));
             if (skullTextureNameKey != null) {
-                if (EnchantmentSlots.newSkullMethod) {
-                    try {
-                        Class<?> profileClass = Class.forName("net.minecraft.world.item.component.ResolvableProfile");
-                        Constructor<?> constroctor = profileClass.getConstructor(GameProfile.class);
-                        GameProfile profile = new GameProfile(UUID.randomUUID(), "");
-                        profile.getProperties().put("textures", new Property("textures", skullTextureNameKey));
-                        try {
-                            Method mtd = skullMeta.getClass().getDeclaredMethod("setProfile", profileClass);
-                            mtd.setAccessible(true);
-                            mtd.invoke(skullMeta, constroctor.newInstance(profile));
-                        } catch (Exception exception) {
-                            exception.printStackTrace();
-                            ErrorManager.errorManager.sendErrorMessage("§x§9§8§F§B§9§8[ManyouItems] §cError: Can not parse skull texture in a item!");
+                if (skullTextureNameKey.length() > 16) {
+                    if (EnchantmentSlots.isPaper && ConfigManager.configManager.getBoolean("paper-api.skull", false)) {
+                        PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID(), "");
+                        profile.setProperty(new ProfileProperty("textures", skullTextureNameKey));
+                        skullMeta.setPlayerProfile(profile);
+                    } else {
+                        if (EnchantmentSlots.newSkullMethod) {
+                            try {
+                                Class<?> profileClass = Class.forName("net.minecraft.world.item.component.ResolvableProfile");
+                                Constructor<?> constroctor = profileClass.getConstructor(GameProfile.class);
+                                GameProfile profile = new GameProfile(UUID.randomUUID(), "");
+                                profile.getProperties().put("textures", new Property("textures", skullTextureNameKey));
+                                try {
+                                    Method mtd = skullMeta.getClass().getDeclaredMethod("setProfile", profileClass);
+                                    mtd.setAccessible(true);
+                                    mtd.invoke(skullMeta, constroctor.newInstance(profile));
+                                } catch (Exception exception) {
+                                    exception.printStackTrace();
+                                    ErrorManager.errorManager.sendErrorMessage("§x§9§8§F§B§9§8[ManyouItems] §cError: Can not parse skull texture in a item!");
+                                }
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else {
+                            GameProfile profile = new GameProfile(UUID.randomUUID(), "");
+                            profile.getProperties().put("textures", new Property("textures", skullTextureNameKey));
+                            try {
+                                Method mtd = skullMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
+                                mtd.setAccessible(true);
+                                mtd.invoke(skullMeta, profile);
+                            } catch (Exception exception) {
+                                exception.printStackTrace();
+                                ErrorManager.errorManager.sendErrorMessage("§x§9§8§F§B§9§8[ManyouItems] §cError: Can not parse skull texture in a item!");
+                            }
                         }
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
                     }
                 } else {
-                    GameProfile profile = new GameProfile(UUID.randomUUID(), "");
-                    profile.getProperties().put("textures", new Property("textures", skullTextureNameKey));
-                    try {
-                        Method mtd = skullMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
-                        mtd.setAccessible(true);
-                        mtd.invoke(skullMeta, profile);
-                    } catch (Exception exception) {
-                        exception.printStackTrace();
-                        ErrorManager.errorManager.sendErrorMessage("§x§9§8§F§B§9§8[ManyouItems] §cError: Can not parse skull texture in a item!");
-                    }
+                    skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(skullTextureNameKey));
                 }
             }
         }
+
         item.setItemMeta(meta);
         return item;
     }
