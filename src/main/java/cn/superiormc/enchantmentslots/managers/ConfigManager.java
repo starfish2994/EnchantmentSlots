@@ -4,9 +4,12 @@ import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.objects.ObjectCondition;
 import cn.superiormc.enchantmentslots.objects.ObjectExtraSlotsItem;
+import cn.superiormc.enchantmentslots.utils.CommonUtil;
+import cn.superiormc.mythicchanger.manager.MatchItemManager;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.willfp.eco.core.display.DisplayPriority;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -29,8 +32,6 @@ public class ConfigManager {
     public Map<String, ObjectExtraSlotsItem> slotsItemMap = new HashMap<>();
 
     public List<String> enchantItems = null;
-
-    public List<String> blackItems = null;
 
     public ConfigManager() {
         configManager = this;
@@ -78,10 +79,6 @@ public class ConfigManager {
 
     public boolean getBoolean(String path, boolean defaultValue) {
         return config.getBoolean(path, defaultValue);
-    }
-
-    public long getLong(String path, long defaultValue) {
-        return config.getLong(path, defaultValue);
     }
 
     public String getString(String path, String... args) {
@@ -197,6 +194,13 @@ public class ConfigManager {
         return config.getStringList(path);
     }
 
+    public List<String> getStringListOrDefault(String originalPath, String newPath) {
+        if (config.getStringList(originalPath).isEmpty()) {
+            return config.getStringList(newPath);
+        }
+        return config.getStringList(originalPath);
+    }
+
     public ConfigurationSection getSection(String path) {
         return config.getConfigurationSection(path);
     }
@@ -205,77 +209,36 @@ public class ConfigManager {
         if (itemID == null) {
             itemID = "-null";
         }
+        ConfigurationSection matchItemSection = getSection("settings.item-can-be-enchanted.match-item");
+        if (matchItemSection != null && CommonUtil.checkPluginLoad("MythicChanger")) {
+            return MatchItemManager.matchItemManager.getMatch(matchItemSection, item);
+        }
         if (enchantItems == null) {
-            enchantItems = ConfigManager.configManager.getStringList("settings.item-can-be-enchanted.whitelist-items");
+            enchantItems = getStringListOrDefault("settings.item-can-be-enchanted.whitelist-items",
+                    "settings.item-can-be-enchanted.match-item.material");
             if (enchantItems.isEmpty()) {
                 enchantItems = new ArrayList<>();
-            }
-        }
-        if (blackItems == null) {
-            blackItems = ConfigManager.configManager.getStringList("settings.item-can-be-enchanted.blacklist-items");
-            if (blackItems.isEmpty()) {
-                blackItems = new ArrayList<>();
             }
         }
         if (!enchantItems.isEmpty()) {
             for (String tempVal1 : enchantItems) {
                 if (tempVal1.equalsIgnoreCase(item.getType().name()) || tempVal1.equalsIgnoreCase(itemID)) {
-                    for (String tempVal2 : blackItems) {
-                        if (tempVal2.equalsIgnoreCase(itemID)) {
-                            return false;
-                        }
-                    }
                     return true;
                 }
             }
             return false;
-        } else if (!blackItems.isEmpty()) {
-            for (String tempVal2 : blackItems) {
-                if (tempVal2.equalsIgnoreCase(item.getType().name()) || tempVal2.equalsIgnoreCase(itemID)) {
-                    return false;
-                }
-            }
-            return true;
         }
         return false;
     }
 
-    public boolean canDisplay(ItemStack itemStack) {
-        List<String> tempVal1 = new ArrayList<>();
-        for (String tempVal2 : ConfigManager.configManager.getStringList("settings.add-lore.black-items")) {
-            tempVal1.add(tempVal2.toLowerCase());
+    public boolean canDisplay(ItemStack item) {
+        boolean isBook = ConfigManager.configManager.getBoolean("settings.add-lore.black-book",
+                true) && (item.getType().equals(Material.BOOK) || item.getType().equals(Material.ENCHANTED_BOOK));
+        ConfigurationSection matchItemSection = getSection("settings.add-lore.match-item");
+        if (matchItemSection != null && CommonUtil.checkPluginLoad("MythicChanger")) {
+            return !isBook && MatchItemManager.matchItemManager.getMatch(matchItemSection, item);
         }
-        if (tempVal1.contains(itemStack.getType().getKey().getKey())) {
-            return true;
-        }
-        if (!itemStack.hasItemMeta()) {
-            return false;
-        }
-        if (ConfigManager.configManager.getBoolean("settings.add-lore.black-item-has-lore", false) &&
-                itemStack.getItemMeta().hasLore()) {
-            return true;
-        }
-        if (!ConfigManager.configManager.getStringList("settings.add-lore.black-item-contains-lore").isEmpty()
-                && itemStack.getItemMeta().hasLore()) {
-            for (String hasLore : itemStack.getItemMeta().getLore()) {
-                for (String requiredLore : EnchantmentSlots.instance.getConfig().getStringList("settings.add-lore.black-item-contains-lore")) {
-                    if (hasLore.contains(requiredLore)) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-        if (!ConfigManager.configManager.getStringList("settings.add-lore.black-item-contains-name").isEmpty()
-                && itemStack.getItemMeta().hasDisplayName()) {
-            for (String requiredName : ConfigManager.configManager.getStringList("settings.add-lore.black-item-contains-name")) {
-                if (itemStack.getItemMeta().getDisplayName().contains(requiredName)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        return false;
+        return !isBook;
     }
 
 }

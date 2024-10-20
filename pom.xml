@@ -6,7 +6,7 @@
 
     <groupId>cn.superiormc</groupId>
     <artifactId>EnchantmentSlots</artifactId>
-    <version>4.0.3</version>
+    <version>4.1.0</version>
     <packaging>jar</packaging>
 
     <name>EnchantmentSlots</name>
@@ -297,6 +297,13 @@
             <version>6.2.0.6</version>
             <scope>provided</scope>
             <classifier>shaded</classifier>
+        </dependency>
+        <dependency>
+            <groupId>cn.superiormc</groupId>
+            <artifactId>MythicChanger</artifactId>
+            <version>1.10.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/MythicChanger-1.10.0.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

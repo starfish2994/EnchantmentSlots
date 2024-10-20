@@ -37,7 +37,7 @@ public class ItemModify {
         List<String> lore = new ArrayList<>();
         Map<Enchantment, Integer> enchantments = ItemUtil.getEnchantments(item, true);
         if (ConfigManager.configManager.getBoolean("settings.add-lore.at-first-or-last", false) &&
-                !ConfigManager.configManager.canDisplay(item)) {
+                ConfigManager.configManager.canDisplay(item)) {
             for (String line : ConfigManager.configManager.getStringList("settings.add-lore.display-value")) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : enchantments.keySet()) {
@@ -75,7 +75,8 @@ public class ItemModify {
             List<String> tempLore = itemMeta.getLore();
             lore.addAll(ItemModify.getDisplayLore(tempLore, item, player, slot));
         }
-        if (!ConfigManager.configManager.getBoolean("settings.add-lore.at-first-or-last", false) && !ConfigManager.configManager.canDisplay(item)) {
+        if (!ConfigManager.configManager.getBoolean("settings.add-lore.at-first-or-last", false) &&
+                ConfigManager.configManager.canDisplay(item)) {
             for (String line : ConfigManager.configManager.getStringList("settings.add-lore.display-value")) {
                 if (line.equals("{enchants}")) {
                     for (Enchantment enchantment : enchantments.keySet()) {

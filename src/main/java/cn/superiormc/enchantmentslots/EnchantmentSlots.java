@@ -1,10 +1,14 @@
 package cn.superiormc.enchantmentslots;
 
+import cn.superiormc.enchantmentslots.hooks.mythicchanger.AddESLore;
+import cn.superiormc.enchantmentslots.hooks.mythicchanger.ResetSlot;
+import cn.superiormc.enchantmentslots.hooks.mythicchanger.SetSlot;
 import cn.superiormc.enchantmentslots.managers.*;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import cn.superiormc.enchantmentslots.papi.PlaceholderAPIExpansion;
 import cn.superiormc.enchantmentslots.protolcol.GeneralProtolcol;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
+import cn.superiormc.mythicchanger.manager.ChangesManager;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.loohp.interactivechat.api.InteractiveChatAPI;
 import com.loohp.interactivechat.objectholders.ICPlayer;
@@ -73,6 +77,12 @@ public final class EnchantmentSlots extends JavaPlugin {
             eeLegacy = true;
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §7Seems that you are using ExcellentEnchants old version, enabled compatibility mode, " +
                     "this mode will be removed in future updates, please consider update it to latest.");
+        }
+        if (CommonUtil.checkPluginLoad("MythicChanger")) {
+            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into MythicChanger...");
+            ChangesManager.changesManager.registerNewRule(new SetSlot());
+            ChangesManager.changesManager.registerNewRule(new ResetSlot());
+            ChangesManager.changesManager.registerNewRule(new AddESLore());
         }
         if (!CommonUtil.checkClass("com.mojang.authlib.properties.Property", "getValue") && CommonUtil.getMinorVersion(21, 1)) {
             newSkullMethod = true;
