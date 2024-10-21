@@ -2,8 +2,8 @@ package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.managers.HookManager;
 import cn.superiormc.enchantmentslots.managers.LanguageManager;
-import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
@@ -21,7 +21,7 @@ public class EnchantGUIEnchantListener implements Listener {
     public void onEnchantItem(PlayerEnchantItemEvent event) {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
-        String itemID = CheckValidHook.checkValid(item);
+        String itemID = HookManager.hookManager.parseItemID(item);
         int defaultSlot = ConfigManager.configManager.getDefaultLimits(player, itemID);
         ItemModify.setSlot(item, defaultSlot, itemID);
         int maxEnchantments = ItemLimits.getMaxEnchantments(item, defaultSlot, itemID);

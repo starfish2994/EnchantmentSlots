@@ -1,7 +1,7 @@
 package cn.superiormc.enchantmentslots.listeners;
 
-import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.managers.HookManager;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -40,7 +40,7 @@ public class PlayerClickListener implements Listener {
             boolean isBook = ConfigManager.configManager.getBoolean("settings.set-slot-trigger.black-book",
                     true) && (tempItemStack.getType().equals(Material.BOOK) || tempItemStack.getType().equals(Material.ENCHANTED_BOOK));
             if (!isBook) {
-                String itemID = CheckValidHook.checkValid(tempItemStack);
+                String itemID = HookManager.hookManager.parseItemID(tempItemStack);
                 int defaultSlot = ConfigManager.configManager.getDefaultLimits(player, itemID);
                 ItemModify.setSlot(tempItemStack, defaultSlot, itemID);
             }

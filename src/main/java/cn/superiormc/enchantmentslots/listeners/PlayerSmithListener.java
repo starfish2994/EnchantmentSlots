@@ -1,8 +1,8 @@
 package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.managers.HookManager;
 import cn.superiormc.enchantmentslots.managers.LanguageManager;
-import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
@@ -22,7 +22,7 @@ public class PlayerSmithListener implements Listener {
         if (item == null || item.getType().isAir()) {
             return;
         }
-        String itemID = CheckValidHook.checkValid(item);
+        String itemID = HookManager.hookManager.parseItemID(item);
         int defaultSlot = ConfigManager.configManager.getDefaultLimits(player, itemID);
         int maxEnchantments = ItemLimits.getMaxEnchantments(item, defaultSlot, itemID);
         if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.SmithItemEvent.enabled", true)) {

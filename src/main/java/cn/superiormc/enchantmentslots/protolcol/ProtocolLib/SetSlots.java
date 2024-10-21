@@ -1,8 +1,8 @@
 package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.managers.HookManager;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
@@ -67,7 +67,7 @@ public class SetSlots extends GeneralPackets {
                             boolean isBook = ConfigManager.configManager.getBoolean("settings.set-slot-trigger.black-book",
                                     true) && (targetItem.getType().equals(Material.BOOK) || targetItem.getType().equals(Material.ENCHANTED_BOOK));
                             if (!isBook) {
-                                String itemID = CheckValidHook.checkValid(targetItem);
+                                String itemID = HookManager.hookManager.parseItemID(targetItem);
                                 int defaultSlot = ConfigManager.configManager.getDefaultLimits(event.getPlayer(), itemID);
                                 ItemModify.setSlot(targetItem, defaultSlot, itemID);
                                 dontAddLore = true;
@@ -98,7 +98,7 @@ public class SetSlots extends GeneralPackets {
                 if (!dontAddLore && ConfigManager.configManager.getBoolean("settings.item-can-be-enchanted.auto-add-lore", false) &&
                         ConfigManager.configManager.getOnlyInPlayerInventory(event.getPlayer(),
                         CommonUtil.inPlayerInventory(event.getPlayer(), slot))) {
-                    String itemID = CheckValidHook.checkValid(serverItemStack);
+                    String itemID = HookManager.hookManager.parseItemID(serverItemStack);
                     int defaultSlot = ConfigManager.configManager.getDefaultLimits(event.getPlayer(), itemID);
                     ItemModify.setSlot(serverItemStack, defaultSlot, itemID);
                 }

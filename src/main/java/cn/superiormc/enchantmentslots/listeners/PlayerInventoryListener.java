@@ -1,8 +1,8 @@
 package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.managers.HookManager;
 import cn.superiormc.enchantmentslots.managers.LanguageManager;
-import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.objects.ObjectExtraSlotsItem;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import org.bukkit.GameMode;
@@ -39,7 +39,7 @@ public class PlayerInventoryListener implements Listener {
             return;
         }
         ObjectExtraSlotsItem item = ConfigManager.configManager.getExtraSlotItemValue(extraItem);
-        String itemID = CheckValidHook.checkValid(targetItem);
+        String itemID = HookManager.hookManager.parseItemID(targetItem);
         if (item == null || !item.canApply(player, itemID)) {
             return;
         }

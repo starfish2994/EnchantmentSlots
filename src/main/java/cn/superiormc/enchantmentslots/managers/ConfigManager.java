@@ -1,7 +1,6 @@
 package cn.superiormc.enchantmentslots.managers;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.objects.ObjectCondition;
 import cn.superiormc.enchantmentslots.objects.ObjectExtraSlotsItem;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
@@ -153,7 +152,7 @@ public class ConfigManager {
 
     public int getMaxLimits(Player player, ItemStack itemStack) {
         ConfigurationSection section = config.getConfigurationSection("settings.max-slots-by-item." +
-                        CheckValidHook.checkValid(itemStack));
+                HookManager.hookManager.parseItemID(itemStack));
         if (section == null) {
             section = config.getConfigurationSection("settings.max-slots");
         }
@@ -179,15 +178,15 @@ public class ConfigManager {
     }
 
     public boolean getOnlyInPlayerInventory(Player player, boolean playerInInventory) {
-        if (EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.only-in-player-inventory",
-                EnchantmentSlots.instance.getConfig().getBoolean("settings.only-in-player-inventory", true))) {
+        if (!config.getBoolean("settings.add-lore.only-in-player-inventory",
+                config.getBoolean("settings.only-in-player-inventory", true))) {
             return true;
         }
         InventoryView view = player.getOpenInventory();
         if (view.getType().equals(InventoryType.CHEST)) {
             return playerInInventory || view.getTitle().equals("Chest");
         }
-        return playerInInventory || EnchantmentSlots.instance.getConfig().getBoolean("settings.add-lore.check-chests-only");
+        return playerInInventory || config.getBoolean("settings.add-lore.check-chests-only");
     }
 
     public List<String> getStringList(String path) {

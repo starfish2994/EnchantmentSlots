@@ -1,8 +1,8 @@
 package cn.superiormc.enchantmentslots.commands;
 
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.managers.HookManager;
 import cn.superiormc.enchantmentslots.managers.LanguageManager;
-import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import org.bukkit.Bukkit;
@@ -31,7 +31,7 @@ public class SubGiveSlots extends AbstractCommand {
                 LanguageManager.languageManager.sendStringText(player, "error-no-item");
                 return;
             }
-            String itemID = CheckValidHook.checkValid(targetItem);
+            String itemID = HookManager.hookManager.parseItemID(targetItem);
             int slot = ItemLimits.getMaxEnchantments(targetItem, ConfigManager.configManager.getDefaultLimits(player, itemID), itemID);
             if (args.length == 1) {
                 ItemLimits.setMaxEnchantments(targetItem, slot + 1);

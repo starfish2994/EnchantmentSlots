@@ -1,8 +1,8 @@
 package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.managers.HookManager;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -35,13 +35,13 @@ public class WindowMerchant extends GeneralPackets {
                 packet.getMerchantRecipeLists().read(0).forEach(recipe -> {
                     ItemStack serverItemStack1 = recipe.getResult();
                     List<ItemStack> serverItemStack2List = recipe.getIngredients();
-                    String itemID = CheckValidHook.checkValid(serverItemStack1);
+                    String itemID = HookManager.hookManager.parseItemID(serverItemStack1);
                     int defaultSlot = ConfigManager.configManager.getDefaultLimits(event.getPlayer(), itemID);
                     ItemModify.setSlot(serverItemStack1, defaultSlot, itemID);
                     ItemStack clientItemStack = ItemModify.serverToClient(serverItemStack1, event.getPlayer());
                     MerchantRecipe merchantRecipe = new MerchantRecipe(clientItemStack, recipe.getUses(), recipe.getMaxUses(), recipe.hasExperienceReward(), recipe.getVillagerExperience(), recipe.getPriceMultiplier(), recipe.getDemand(), recipe.getSpecialPrice());
                     for (ItemStack serverItemStack2 : serverItemStack2List) {
-                        String itemID2 = CheckValidHook.checkValid(serverItemStack2);
+                        String itemID2 = HookManager.hookManager.parseItemID(serverItemStack2);
                         int defaultSlot2 = ConfigManager.configManager.getDefaultLimits(event.getPlayer(), itemID2);
                         ItemModify.setSlot(serverItemStack2, defaultSlot2, itemID2);
                         merchantRecipe.addIngredient(ItemModify.serverToClient(serverItemStack2, event.getPlayer()));

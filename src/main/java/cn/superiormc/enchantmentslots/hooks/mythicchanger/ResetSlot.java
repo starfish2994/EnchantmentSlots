@@ -1,7 +1,7 @@
 package cn.superiormc.enchantmentslots.hooks.mythicchanger;
 
-import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.managers.HookManager;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import cn.superiormc.mythicchanger.objects.changes.AbstractChangesRule;
 import org.bukkit.configuration.ConfigurationSection;
@@ -21,7 +21,7 @@ public class ResetSlot extends AbstractChangesRule {
                                Player player,
                                boolean fakeOrReal,
                                boolean isPlayerInventory) {
-        String itemID = CheckValidHook.checkValid(item);
+        String itemID = HookManager.hookManager.parseItemID(item);
         int defaultSlot = ConfigManager.configManager.getDefaultLimits(player, itemID);
         return ItemModify.resetSlot(item, defaultSlot, itemID);
     }

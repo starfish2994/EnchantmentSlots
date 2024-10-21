@@ -1,8 +1,8 @@
 package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.hooks.CheckValidHook;
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.managers.HookManager;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -39,7 +39,7 @@ public class WindowItem extends GeneralPackets {
                 if (singleItemStackStructureModifier.size() != 0) {
                     ItemStack serverItemStack = singleItemStackStructureModifier.read(0);
                     if (ConfigManager.configManager.getBoolean("settings.item-can-be-enchanted.auto-add-lore", false)) {
-                        String itemID = CheckValidHook.checkValid(serverItemStack);
+                        String itemID = HookManager.hookManager.parseItemID(serverItemStack);
                         int defaultSlot = ConfigManager.configManager.getDefaultLimits(event.getPlayer(), itemID);
                         ItemModify.setSlot(serverItemStack, defaultSlot, itemID);
                     }
@@ -58,8 +58,9 @@ public class WindowItem extends GeneralPackets {
                         continue;
                     }
                     boolean isPlayerInventory = event.getPacket().getIntegers().read(0) == 0 || index > serverItemStack.size() - 36;
-                    if (ConfigManager.configManager.getBoolean("settings.item-can-be-enchanted.auto-add-lore", false) && ConfigManager.configManager.getOnlyInPlayerInventory(event.getPlayer(), isPlayerInventory)) {
-                        String itemID = CheckValidHook.checkValid(itemStack);
+                    if (ConfigManager.configManager.getBoolean("settings.item-can-be-enchanted.auto-add-lore", false) &&
+                            ConfigManager.configManager.getOnlyInPlayerInventory(event.getPlayer(), isPlayerInventory)) {
+                        String itemID = HookManager.hookManager.parseItemID(itemStack);
                         int defaultSlot = ConfigManager.configManager.getDefaultLimits(event.getPlayer(), itemID);
                         ItemModify.setSlot(itemStack, defaultSlot, itemID);
                     }

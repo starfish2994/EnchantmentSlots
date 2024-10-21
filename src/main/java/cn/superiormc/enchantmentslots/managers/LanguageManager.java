@@ -1,12 +1,14 @@
 package cn.superiormc.enchantmentslots.managers;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.hooks.EcoEnchantsHook;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import cn.superiormc.enchantmentslots.utils.TextUtil;
 import com.willfp.eco.util.StringUtils;
+import com.willfp.ecoenchants.display.EnchantmentFormattingKt;
 import com.willfp.ecoenchants.enchant.EcoEnchantLike;
 import com.willfp.ecoenchants.enchant.EcoEnchants;
+import com.willfp.libreforge.Holder;
+import com.willfp.libreforge.ItemProvidedHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -37,9 +39,9 @@ public class LanguageManager {
 
     private File tempFile;
 
-    private Map<Enchantment, String> enchantmentNameCache = new HashMap<>();
+    private final Map<Enchantment, String> enchantmentNameCache = new HashMap<>();
 
-    private Map<Integer, String> enchantmentLevelCache = new HashMap<>();
+    private final Map<Integer, String> enchantmentLevelCache = new HashMap<>();
 
     public LanguageManager() {
         languageManager = this;
@@ -49,7 +51,7 @@ public class LanguageManager {
     private void initLanguage() {
         file = new File(EnchantmentSlots.instance.getDataFolder() + "/languages/" +
                 ConfigManager.configManager.getString("language", "en_US") + ".yml");
-        if (!file.exists()){
+        if (!file.exists()) {
             File tempVal1 = new File("languages/en_US.yml");
             EnchantmentSlots.instance.saveResource(tempVal1.getPath(), false);
             File tempVal2 = new File("languages/zh_CN.yml");
@@ -73,8 +75,7 @@ public class LanguageManager {
     public void sendStringText(CommandSender sender, String... args) {
         if (sender instanceof Player) {
             sendStringText((Player) sender, args);
-        }
-        else {
+        } else {
             sendStringText(args);
         }
     }
@@ -85,8 +86,7 @@ public class LanguageManager {
             if (this.tempMessageFile.getString(args[0]) == null) {
                 Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §cCan not found language key: " + args[0] + "!");
                 return;
-            }
-            else {
+            } else {
                 Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §cUpdated your language file, added " +
                         "new language key and it's default value: " + args[0] + "!");
                 text = this.tempMessageFile.getString(args[0]);
@@ -101,12 +101,11 @@ public class LanguageManager {
         if (text == null) {
             return;
         }
-        for (int i = 1 ; i < args.length ; i += 2) {
+        for (int i = 1; i < args.length; i += 2) {
             String var = "%" + args[i] + "%";
             if (args[i + 1] == null) {
                 text = text.replace(var, "");
-            }
-            else {
+            } else {
                 text = text.replace(var, args[i + 1]);
             }
         }
@@ -121,8 +120,7 @@ public class LanguageManager {
             if (this.tempMessageFile.getString(args[0]) == null) {
                 player.sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §cCan not found language key: " + args[0] + "!");
                 return;
-            }
-            else {
+            } else {
                 Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §cUpdated your language file, added " +
                         "new language key and it's default value: " + args[0] + "!");
                 text = this.tempMessageFile.getString(args[0]);
@@ -137,12 +135,11 @@ public class LanguageManager {
         if (text == null) {
             return;
         }
-        for (int i = 1 ; i < args.length ; i += 2) {
+        for (int i = 1; i < args.length; i += 2) {
             String var = "%" + args[i] + "%";
             if (args[i + 1] == null) {
                 text = text.replace(var, "");
-            }
-            else {
+            } else {
                 text = text.replace(var, args[i + 1]);
             }
         }
@@ -156,8 +153,7 @@ public class LanguageManager {
         if (text == null) {
             if (this.tempMessageFile.getString(args[0]) == null) {
                 return "§cCan not found language key: " + args[0] + "!";
-            }
-            else {
+            } else {
                 Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §cUpdated your language file, added " +
                         "new language key and it's default value: " + args[0] + "!");
                 text = this.tempMessageFile.getString(args[0]);
@@ -172,12 +168,11 @@ public class LanguageManager {
         if (text == null) {
             return "";
         }
-        for (int i = 1 ; i < args.length ; i += 2) {
+        for (int i = 1; i < args.length; i += 2) {
             String var = "%" + args[i] + "%";
             if (args[i + 1] == null) {
                 text = text.replace(var, "");
-            }
-            else {
+            } else {
                 text = text.replace(var, args[i + 1]);
             }
         }
@@ -236,5 +231,15 @@ public class LanguageManager {
         String levelName = ConfigManager.configManager.getString("enchant-level." + level, String.valueOf(level));
         enchantmentLevelCache.put(level, levelName);
         return levelName;
+    }
+
+}
+
+class EcoEnchantsHook {
+
+    public static String getEcoEnchantName(EcoEnchantLike ecoEnchant, ItemStack item, Player player) {
+        Holder holder = EcoEnchants.INSTANCE.getByID(ecoEnchant.getEnchantment().getKey().getKey()).getLevel(item.getEnchantmentLevel(ecoEnchant.getEnchantment()));
+        ItemProvidedHolder itemProvidedHolder = new ItemProvidedHolder(holder, item);
+        return EnchantmentFormattingKt.getFormattedName(ecoEnchant, 0, itemProvidedHolder.isShowingAnyNotMet(player));
     }
 }
