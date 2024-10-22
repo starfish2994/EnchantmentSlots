@@ -1,131 +1,64 @@
 package cn.superiormc.enchantmentslots.objects;
 
-import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import me.clip.placeholderapi.PlaceholderAPI;
+import cn.superiormc.enchantmentslots.objects.conditions.ObjectSingleCondition;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ObjectCondition {
 
-    private final List<String> conditions;
+    private ConfigurationSection section;
 
-    public ObjectCondition(List<String> conditions) {
-        this.conditions = conditions;
+    private final List<ObjectSingleCondition> conditions = new ArrayList<>();
+
+    public ObjectCondition() {
+        this.section = new MemoryConfiguration();
     }
 
-    public boolean getBoolean(Player player) {
-        boolean conditionTrueOrFasle = true;
-        for (String singleCondition : conditions){
-            if (singleCondition.startsWith("none")){
-                return true;
-            } else if (singleCondition.startsWith("world: "))
-            {
-                int i = 0;
-                for (String str : singleCondition.substring(7).split(";;")){
-                    if (str.equals(player.getWorld().getName())){
-                        break;
-                    }
-                    i ++;
-                }
-                if (i == singleCondition.substring(7).split(";;").length){
-                    conditionTrueOrFasle = false;
-                    break;
-                }
-            } else if (singleCondition.startsWith("permission: ") && player != null)
-            {
-                for (String str : singleCondition.substring(12).split(";;")){
-                    if(!player.hasPermission(str)){
-                        conditionTrueOrFasle = false;
-                        break;
-                    }
-                }
-            } else if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI") && singleCondition.startsWith("placeholder: ") &&
-            player != null) {
-                try {
-                    if (singleCondition.split(";;").length == 3) {
-                        String[] conditionString = singleCondition.substring(13).split(";;");
-                        String placeholder = conditionString[0];
-                        String conditionValue = conditionString[1];
-                        String value = conditionString[2];
-                        if (conditionValue.equals("!=")) {
-                            placeholder = PlaceholderAPI.setPlaceholders(player, placeholder);
-                            if (placeholder.equals(value)) {
-                                conditionTrueOrFasle = false;
-                                break;
-                            }
-                        }
-                        if (conditionValue.equals("==")){
-                            placeholder = PlaceholderAPI.setPlaceholders(player, placeholder);
-                            if(!placeholder.equals(value)){
-                                conditionTrueOrFasle = false;
-                                break;
-                            }
-                        }
-                        if (conditionValue.equals("!*=")) {
-                            placeholder = PlaceholderAPI.setPlaceholders(player, placeholder);
-                            if (placeholder.contains(value)) {
-                                conditionTrueOrFasle = false;
-                                break;
-                            }
-                        }
-                        if (conditionValue.equals("*=")){
-                            placeholder = PlaceholderAPI.setPlaceholders(player, placeholder);
-                            if(!placeholder.contains(value)){
-                                conditionTrueOrFasle = false;
-                                break;
-                            }
-                        }
-                        if (conditionValue.equals(">=")){
-                            placeholder = PlaceholderAPI.setPlaceholders(player, placeholder);
-                            if(!(Double.parseDouble(placeholder) >= Double.parseDouble(value))){
-                                conditionTrueOrFasle = false;
-                                break;
-                            }
-                        }
-                        if (conditionValue.equals(">")){
-                            placeholder = PlaceholderAPI.setPlaceholders(player, placeholder);
-                            if (!(Double.parseDouble(placeholder) > Double.parseDouble(value))){
-                                conditionTrueOrFasle = false;
-                                break;
-                            }
-                        }
-                        if (conditionValue.equals("<=")){
-                            placeholder = PlaceholderAPI.setPlaceholders(player, placeholder);
-                            if (!(Double.parseDouble(placeholder) <= Double.parseDouble(value))){
-                                conditionTrueOrFasle = false;
-                                break;
-                            }
-                        }
-                        if(conditionValue.equals("<")){
-                            placeholder = PlaceholderAPI.setPlaceholders(player, placeholder);
-                            if (!(Double.parseDouble(placeholder) < Double.parseDouble(value))){
-                                conditionTrueOrFasle = false;
-                                break;
-                            }
-                        }
-                        if (conditionValue.equals("=")) {
-                            placeholder = PlaceholderAPI.setPlaceholders(player, placeholder);
-                            if (!(Double.parseDouble(placeholder) == Double.parseDouble(value))) {
-                                conditionTrueOrFasle = false;
-                                break;
-                            }
-                        }
-                    }
-                    else {
-                        return false;
-                    }
-                }
-                catch (ArrayIndexOutOfBoundsException e) {
-                    return false;
-                }
+    public ObjectCondition(ConfigurationSection section) {
+        this.section = section;
+        initCondition();
+    }
+
+    private void initCondition() {
+        if (section == null) {
+            this.section = new MemoryConfiguration();
+            return;
+        }
+        for (String key : section.getKeys(false)) {
+            ConfigurationSection singleActionSection = section.getConfigurationSection(key);
+            if (singleActionSection == null) {
+                continue;
+            }
+            ObjectSingleCondition singleAction = new ObjectSingleCondition(this, singleActionSection);
+            conditions.add(singleAction);
+        }
+    }
+
+    public boolean getAllBoolean(Player player, int amount) {
+        if (player == null) {
+            return false;
+        }
+        for (ObjectSingleCondition singleCondition : conditions){
+            if (!singleCondition.checkBoolean(player, amount)) {
+                return false;
             }
         }
-        return conditionTrueOrFasle;
+        return true;
     }
 
-    public static boolean getBoolean(Player player, List<String> conditions) {
-        ObjectCondition condition = new ObjectCondition(conditions);
-        return condition.getBoolean(player);
+    public boolean getAnyBoolean(Player player, int amount) {
+        if (player == null) {
+            return false;
+        }
+        for (ObjectSingleCondition singleCondition : conditions){
+            if (singleCondition.checkBoolean(player, amount)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

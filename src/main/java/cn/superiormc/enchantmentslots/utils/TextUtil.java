@@ -22,6 +22,15 @@ public class TextUtil {
         }
     }
 
+    public static String withPAPI(String text, Player player) {
+        if (text.contains("%") && CommonUtil.checkPluginLoad("PlaceholderAPI")) {
+            return PlaceholderAPI.setPlaceholders(player, text);
+        }
+        else {
+            return text;
+        }
+    }
+
     public static List<String> getListWithColor(List<String> inList) {
         List<String> resultList = new ArrayList<>();
         for (String s : inList) {

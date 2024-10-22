@@ -2,10 +2,9 @@ package cn.superiormc.enchantmentslots.utils;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Method;
@@ -105,5 +104,13 @@ public class CommonUtil {
         } catch (ClassNotFoundException e) {
             return false;
         }
+    }
+
+    public static NamespacedKey parseNamespacedKey(String key) {
+        String[] keySplit = key.split(":");
+        if (keySplit.length == 1) {
+            return NamespacedKey.minecraft(key.toLowerCase());
+        }
+        return NamespacedKey.fromString(key);
     }
 }

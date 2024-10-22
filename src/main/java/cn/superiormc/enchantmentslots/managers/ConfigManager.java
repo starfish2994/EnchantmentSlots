@@ -135,8 +135,9 @@ public class ConfigManager {
         Set<String> groupNameSet = conditionSection.getKeys(false);
         List<Integer> result = new ArrayList<>();
         for (String groupName : groupNameSet) {
+            ObjectCondition condition = new ObjectCondition(conditionSection.getConfigurationSection(groupName));
             if (groupName.equals("default") || (section.getInt(groupName, -1) != -1 &&
-                    ObjectCondition.getBoolean(player, conditionSection.getStringList(groupName)))) {
+                    condition.getAllBoolean(player, 0))) {
                 result.add(section.getInt(groupName));
             }
         }
@@ -166,8 +167,9 @@ public class ConfigManager {
         Set<String> groupNameSet = conditionSection.getKeys(false);
         List<Integer> result = new ArrayList<>();
         for (String groupName : groupNameSet) {
+            ObjectCondition condition = new ObjectCondition(conditionSection.getConfigurationSection(groupName));
             if (groupName.equals("default") || (section.getInt(groupName, -1) != -1 &&
-                    ObjectCondition.getBoolean(player, conditionSection.getStringList(groupName)))) {
+                    condition.getAllBoolean(player, 0))) {
                 result.add(section.getInt(groupName));
             }
         }
@@ -214,7 +216,7 @@ public class ConfigManager {
         }
         if (enchantItems == null) {
             enchantItems = getStringListOrDefault("settings.item-can-be-enchanted.whitelist-items",
-                    "settings.item-can-be-enchanted.match-item.material");
+                    "settings.item-can-be-enchanted.apply-items");
             if (enchantItems.isEmpty()) {
                 enchantItems = new ArrayList<>();
             }

@@ -35,6 +35,9 @@ public final class EnchantmentSlots extends JavaPlugin {
         }
         new ErrorManager();
         new LicenseManager();
+        new ActionManager();
+        new ConditionManager();
+        new ConfigManager();
         new ConfigManager();
         new HookManager();
         if (CommonUtil.getClass("com.destroystokyo.paper.PaperConfig")) {

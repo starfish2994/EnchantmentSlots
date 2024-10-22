@@ -45,9 +45,9 @@ public class ObjectExtraSlotsItem {
         this.applyItems = section.getStringList("apply-items");
         this.blackItems = section.getStringList("black-items");
         this.addSlot = section.getInt("add-slots", 1);
-        this.successAction = new ObjectAction(section.getStringList("success-actions"));
-        this.failAction = new ObjectAction(section.getStringList("fail-actions"));
-        this.condition = new ObjectCondition(section.getStringList("conditions"));
+        this.successAction = new ObjectAction(section.getConfigurationSection("success-actions"));
+        this.failAction = new ObjectAction(section.getConfigurationSection("fail-actions"));
+        this.condition = new ObjectCondition(section.getConfigurationSection("conditions"));
         this.section = section;
     }
 
@@ -62,7 +62,7 @@ public class ObjectExtraSlotsItem {
     }
 
     public boolean canApply(Player player, String itemID) {
-        if (!condition.getBoolean(player)) {
+        if (!condition.getAllBoolean(player, 1)) {
             return false;
         }
         if (!blackItems.isEmpty() && blackItems.contains(itemID)) {
@@ -81,10 +81,10 @@ public class ObjectExtraSlotsItem {
     }
 
     public void doSuccessAction(Player player) {
-        successAction.doAction(player, addSlot);
+        successAction.runAllActions(player, addSlot);
     }
 
     public void doFailAction(Player player) {
-        failAction.doAction(player, 0);
+        failAction.runAllActions(player, 0);
     }
 }
