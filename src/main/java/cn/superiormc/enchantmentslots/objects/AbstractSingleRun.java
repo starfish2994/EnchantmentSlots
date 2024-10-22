@@ -16,7 +16,7 @@ public abstract class AbstractSingleRun {
         this.section = section;
     }
 
-    protected String replacePlaceholder(String content, Player player, double amount) {
+    protected String replacePlaceholder(String content, Player player, int amount) {
         content = CommonUtil.modifyString(content
                 ,"world", player.getWorld().getName()
                 ,"amount", String.valueOf(amount)
