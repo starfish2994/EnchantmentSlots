@@ -1,6 +1,6 @@
 package cn.superiormc.enchantmentslots.objects.conditions;
 
-import cn.superiormc.mythicchanger.manager.ErrorManager;
+import cn.superiormc.enchantmentslots.managers.ErrorManager;
 import org.bukkit.entity.Player;
 
 public class ConditionPlaceholder extends AbstractCheckCondition {
