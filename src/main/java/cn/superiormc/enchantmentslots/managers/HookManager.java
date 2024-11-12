@@ -56,7 +56,7 @@ public class HookManager {
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §7Seems that you are using ExcellentEnchants old version, enabled compatibility mode, " +
                     "this mode will be removed in future updates, please consider update it to latest.");
         }
-        if (CommonUtil.checkPluginLoad("MythicChanger")) {
+        if (CommonUtil.checkPluginLoad("MythicChanger") && ConfigManager.configManager.getBoolean("mythicchanger-hook", false)) {
             MythicChangerHook.initMythicChanger();
         }
     }

@@ -10,6 +10,8 @@ debug: false
 paper-api:
   skull: false
 
+mythicchanger-hook: false
+
 # Settings
 settings:
   item-can-be-enchanted:
