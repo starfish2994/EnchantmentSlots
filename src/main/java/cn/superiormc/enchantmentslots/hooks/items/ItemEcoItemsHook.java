@@ -1,8 +1,13 @@
 package cn.superiormc.enchantmentslots.hooks.items;
 
+import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import com.willfp.ecoarmor.sets.ArmorSet;
+import com.willfp.ecoarmor.sets.ArmorUtils;
+import com.willfp.ecoarmor.upgrades.Tier;
 import com.willfp.ecoitems.items.EcoItem;
 import com.willfp.ecoitems.items.EcoItems;
 import com.willfp.ecoitems.items.ItemUtilsKt;
+import com.willfp.ecoitems.rarity.Rarity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -27,8 +32,22 @@ public class ItemEcoItemsHook extends AbstractItemHook {
         if (tempVal1 == null) {
             return null;
         }
-        else {
-            return tempVal1.getID();
+        return tempVal1.getID();
+    }
+
+    @Override
+    public String getSimplyIDByItemStack(ItemStack hookItem) {
+        EcoItem tempVal1 = ItemUtilsKt.getEcoItem(hookItem);
+        if (tempVal1 == null) {
+            return null;
         }
+        if (ConfigManager.configManager.getBoolean("settings.use-tier-identify-slots", false)) {
+            Rarity rarity = tempVal1.getRarity();
+            if (rarity == null) {
+                return getIDByItemStack(hookItem);
+            }
+            return rarity.getID();
+        }
+        return tempVal1.getID();
     }
 }

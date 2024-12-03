@@ -15,7 +15,7 @@ public final class EnchantmentSlots extends JavaPlugin {
 
     public static int majorVersion;
 
-    public static int miniorVersion;
+    public static int minorVersion;
 
     public static boolean isPaper;
 
@@ -29,7 +29,7 @@ public final class EnchantmentSlots extends JavaPlugin {
         try {
             String[] versionParts = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
             majorVersion = versionParts.length > 1 ? Integer.parseInt(versionParts[1]) : 0;
-            miniorVersion = versionParts.length > 2 ? Integer.parseInt(versionParts[2]) : 0;
+            minorVersion = versionParts.length > 2 ? Integer.parseInt(versionParts[2]) : 0;
         } catch (Throwable throwable) {
             ErrorManager.errorManager.sendErrorMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §cError: Can not get your Minecraft version! Default set to 1.0.0.");
         }
@@ -55,7 +55,7 @@ public final class EnchantmentSlots extends JavaPlugin {
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fNew AuthLib found, enabled new skull get method!");
         }
         new Metrics(this, 23653);
-        Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fYour Minecraft version is: 1." + majorVersion + "." + miniorVersion + "!");
+        Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fYour Minecraft version is: 1." + majorVersion + "." + minorVersion + "!");
         Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fPlugin is loaded. Author: PQguanfang.");
     }
 

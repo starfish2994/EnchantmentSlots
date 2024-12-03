@@ -186,7 +186,7 @@ settings:
     # Enable this maybe improve plugin performance.
     # Maybe has incompatible issue with other plugins.
     InventoryClickEvent:
-      enabled: false
+      enabled: true
   # Only item that can be enchanted will be added lore.
   # If item don't have enchantment slot NBT, plugin will auto calculate it default slot as max slot.
   add-lore:
@@ -268,6 +268,7 @@ settings:
         permission: 'group.vip'
   # Whether you use item tier instead of item ID to identify item slots.
   # If this item plugin don't have tier, will still use Item ID as identify.
+  # Supported plugins: EcoItems, EcoArmor, MMOItems
   use-tier-identify-slots: false
   close-inventory-if-reached-limit: true
   # Whether cancel add slot or just set item slot to max slot value and still consume add slot item

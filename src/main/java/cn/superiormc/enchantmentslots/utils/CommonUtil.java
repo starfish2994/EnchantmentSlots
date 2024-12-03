@@ -35,7 +35,7 @@ public class CommonUtil {
 
     public static boolean getMinorVersion(int majorVersion, int minorVersion) {
         return EnchantmentSlots.majorVersion > majorVersion || (EnchantmentSlots.majorVersion == majorVersion &&
-                EnchantmentSlots.miniorVersion >= minorVersion);
+                EnchantmentSlots.minorVersion >= minorVersion);
     }
 
     public static boolean inPlayerInventory(Player player, int slot) {

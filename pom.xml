@@ -6,7 +6,7 @@
 
     <groupId>cn.superiormc</groupId>
     <artifactId>EnchantmentSlots</artifactId>
-    <version>4.1.4</version>
+    <version>4.1.5</version>
     <packaging>jar</packaging>
 
     <name>EnchantmentSlots</name>
@@ -206,7 +206,7 @@
         <dependency>
             <groupId>com.willfp</groupId>
             <artifactId>EcoItems</artifactId>
-            <version>5.10.4</version>
+            <version>5.59.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
