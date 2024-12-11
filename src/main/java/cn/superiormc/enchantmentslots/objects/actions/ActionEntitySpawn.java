@@ -1,5 +1,6 @@
 package cn.superiormc.enchantmentslots.objects.actions;
 
+import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -27,6 +28,10 @@ public class ActionEntitySpawn extends AbstractRunAction {
                     singleAction.getDouble("y"),
                     singleAction.getDouble("z"));
 
+        }
+        if (EnchantmentSlots.isFolia) {
+            Bukkit.getRegionScheduler().run(EnchantmentSlots.instance, location, task -> location.getWorld().spawnEntity(location, entity));
+            return;
         }
         location.getWorld().spawnEntity(player.getLocation(), entity);
     }

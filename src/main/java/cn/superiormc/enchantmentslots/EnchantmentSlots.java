@@ -19,6 +19,8 @@ public final class EnchantmentSlots extends JavaPlugin {
 
     public static boolean isPaper;
 
+    public static boolean isFolia = false;
+
     public static boolean newSkullMethod;
 
     public static boolean eeLegacy = false;
@@ -33,6 +35,16 @@ public final class EnchantmentSlots extends JavaPlugin {
         } catch (Throwable throwable) {
             ErrorManager.errorManager.sendErrorMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §cError: Can not get your Minecraft version! Default set to 1.0.0.");
         }
+        if (CommonUtil.getClass("com.destroystokyo.paper.PaperConfig")) {
+            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fPaper is found, enabled Paper only feature!");
+            isPaper = true;
+        }
+        if (CommonUtil.getClass("io.papermc.paper.threadedregions.RegionizedServerInitEvent")) {
+            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fFolia is found, enabled Folia compatibility feature!");
+            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §6Warning: Folia support is not fully test, major bugs maybe found! " +
+                    "Please do not use in production environment!");
+            isFolia = true;
+        }
         new ErrorManager();
         new LicenseManager();
         new ActionManager();
@@ -40,10 +52,6 @@ public final class EnchantmentSlots extends JavaPlugin {
         new ConfigManager();
         new ConfigManager();
         new HookManager();
-        if (CommonUtil.getClass("com.destroystokyo.paper.PaperConfig")) {
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fPaper is found, enabled Paper only feature!");
-            isPaper = true;
-        }
         new ListenerManager();
         new CommandManager();
         if (LicenseManager.licenseManager.checkJarFiles()) {

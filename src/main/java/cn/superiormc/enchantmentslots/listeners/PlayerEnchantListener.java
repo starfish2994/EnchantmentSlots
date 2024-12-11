@@ -7,6 +7,7 @@ import cn.superiormc.enchantmentslots.managers.LanguageManager;
 import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.methods.ItemModify;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
+import cn.superiormc.enchantmentslots.utils.SchedulerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -31,7 +32,7 @@ public class PlayerEnchantListener implements Listener {
         if (event.getEnchantsToAdd().size() + ItemUtil.getEnchantments(item, false).size() > maxEnchantments) {
             int removeAmount = item.getEnchantments().size() - maxEnchantments;
                 if (!ConfigManager.configManager.getBoolean("settings.set-slot-trigger.EnchantItemEvent.cancel-if-reached-slot", true) && item.getType() != Material.BOOK && removeAmount < event.getEnchantsToAdd().size()) {
-                    Bukkit.getScheduler().runTask(EnchantmentSlots.instance, () -> {
+                    SchedulerUtil.runSync(() -> {
                         int realRemoveAmount = removeAmount;
                         for (Enchantment enchant : item.getEnchantments().keySet()) {
                             if (realRemoveAmount <= 0) {

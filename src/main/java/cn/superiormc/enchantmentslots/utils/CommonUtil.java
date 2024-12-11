@@ -47,15 +47,37 @@ public class CommonUtil {
         return slot >= topSize;
     }
 
-    public static void dispatchCommand(String command){
+    public static void dispatchCommand(String command) {
+        if (EnchantmentSlots.isFolia) {
+            Bukkit.getGlobalRegionScheduler().run(EnchantmentSlots.instance, task -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command));
+            return;
+        }
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
     }
 
-    public static void dispatchCommand(Player player, String command){
+    public static void dispatchCommand(Player player, String command) {
+        if (EnchantmentSlots.isFolia) {
+            player.getScheduler().run(EnchantmentSlots.instance, task -> Bukkit.dispatchCommand(player, command), () -> {
+            });
+            return;
+        }
         Bukkit.dispatchCommand(player, command);
     }
 
-    public static void dispatchOpCommand(Player player, String command){
+    public static void dispatchOpCommand(Player player, String command) {
+        if (EnchantmentSlots.isFolia) {
+            player.getScheduler().run(EnchantmentSlots.instance, task -> {
+                boolean playerIsOp = player.isOp();
+                try {
+                    player.setOp(true);
+                    Bukkit.dispatchCommand(player, command);
+                } finally {
+                    player.setOp(playerIsOp);
+                }
+            }, () -> {
+            });
+            return;
+        }
         boolean playerIsOp = player.isOp();
         try {
             player.setOp(true);

@@ -44,7 +44,7 @@ public class ItemEcoItemsHook extends AbstractItemHook {
         if (ConfigManager.configManager.getBoolean("settings.use-tier-identify-slots", false)) {
             Rarity rarity = tempVal1.getRarity();
             if (rarity == null) {
-                return getIDByItemStack(hookItem);
+                return tempVal1.getID();
             }
             return rarity.getID();
         }

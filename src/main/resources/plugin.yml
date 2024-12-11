@@ -2,6 +2,7 @@ name: EnchantmentSlots
 version: '${project.version}'
 main: cn.superiormc.enchantmentslots.EnchantmentSlots
 api-version: 1.14
+folia-supported: true
 softdepend:
   - EcoEnchants
   - ExcellentEnchants
