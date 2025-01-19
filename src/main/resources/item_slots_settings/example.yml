@@ -1,0 +1,83 @@
+match-item:
+  material:
+    - wooden_pickaxe
+    - stone_pickaxe
+    - iron_pickaxe
+    - golden_pickaxe
+    - diamond_pickaxe
+    - netherite_pickaxe
+    - wooden_hoe
+    - stone_hoe
+    - iron_hoe
+    - golden_hoe
+    - diamond_hoe
+    - netherite_hoe
+    - wooden_axe
+    - stone_axe
+    - iron_axe
+    - golden_axe
+    - diamond_axe
+    - netherite_axe
+    - wooden_shovel
+    - stone_shovel
+    - iron_shovel
+    - golden_shovel
+    - diamond_shovel
+    - netherite_shovel
+    - wooden_sword
+    - stone_sword
+    - iron_sword
+    - golden_sword
+    - diamond_sword
+    - netherite_sword
+    - fishing_rod
+    - trident
+    - elytra
+    - bow
+    - crossbow
+    - carrot_on_a_stick
+    - shield
+    - turtle_helmet
+    - leather_helmet
+    - chainmail_helmet
+    - iron_helmet
+    - golden_helmet
+    - diamond_helmet
+    - netherite_helmet
+    - leather_chestplate
+    - chainmail_chestplate
+    - iron_chestplate
+    - golden_chestplate
+    - diamond_chestplate
+    - netherite_chestplate
+    - leather_leggings
+    - chainmail_leggings
+    - iron_leggings
+    - golden_leggings
+    - diamond_leggings
+    - netherite_leggings
+    - leather_boots
+    - chainmail_boots
+    - iron_boots
+    - golden_boots
+    - diamond_boots
+    - netherite_boots
+    #- enchanted_book
+    #- book
+    - mace
+
+auto-add-lore: false
+
+default-slots:
+  default: 3
+  vip: 5
+
+max-slots:
+  default: 10
+  vip: 15
+
+slots-conditions:
+  vip:
+    1:
+      type: permission
+      permission: 'group.vip'

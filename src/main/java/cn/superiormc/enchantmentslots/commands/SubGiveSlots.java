@@ -1,10 +1,9 @@
 package cn.superiormc.enchantmentslots.commands;
 
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
-import cn.superiormc.enchantmentslots.managers.HookManager;
 import cn.superiormc.enchantmentslots.managers.LanguageManager;
-import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
+import cn.superiormc.enchantmentslots.methods.SlotUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -31,15 +30,13 @@ public class SubGiveSlots extends AbstractCommand {
                 LanguageManager.languageManager.sendStringText(player, "error-no-item");
                 return;
             }
-            String itemID = HookManager.hookManager.parseItemID(targetItem);
-            int slot = ItemLimits.getMaxEnchantments(targetItem, ConfigManager.configManager.getDefaultLimits(player, itemID), itemID);
             if (args.length == 1) {
-                ItemLimits.setMaxEnchantments(targetItem, slot + 1);
-                LanguageManager.languageManager.sendStringText(player, "success-set", "amount", String.valueOf(slot+ 1));
+                SlotUtil.setSlot(targetItem, SlotUtil.getSlot(targetItem) + 1, true);
+                LanguageManager.languageManager.sendStringText(player, "success-set", "amount", String.valueOf(SlotUtil.getSlot(targetItem) + 1));
                 return;
             }
-            ItemLimits.setMaxEnchantments(targetItem, ItemLimits.getMaxEnchantments(targetItem, slot + Integer.parseInt(args[1]), itemID));
-            LanguageManager.languageManager.sendStringText("success-set", "amount", args[1]);
+            SlotUtil.setSlot(targetItem, SlotUtil.getSlot(targetItem) + Integer.parseInt(args[1]), true);
+            LanguageManager.languageManager.sendStringText("success-set", "amount", String.valueOf(SlotUtil.getSlot(targetItem) + Integer.parseInt(args[1])));
             return;
         }
         ItemStack item = ConfigManager.configManager.getExtraSlotItem(args[1]);
@@ -96,7 +93,7 @@ public class SubGiveSlots extends AbstractCommand {
                 tempVal1.add("1");
                 tempVal1.add("5");
                 tempVal1.add("10");
-                tempVal1.addAll(ConfigManager.configManager.getSlotsItemMap().keySet());
+                tempVal1.addAll(ConfigManager.configManager.getExtraSlotsItemMap().keySet());
                 break;
             case 3:
                 for (Player player : Bukkit.getOnlinePlayers()) {

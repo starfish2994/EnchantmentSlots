@@ -1,8 +1,8 @@
 package cn.superiormc.enchantmentslots.protolcol.eco;
 
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
-import cn.superiormc.enchantmentslots.managers.HookManager;
-import cn.superiormc.enchantmentslots.methods.ItemModify;
+import cn.superiormc.enchantmentslots.methods.AddLore;
+import cn.superiormc.enchantmentslots.methods.SlotUtil;
 import com.willfp.eco.core.EcoPlugin;
 import com.willfp.eco.core.display.Display;
 import com.willfp.eco.core.display.DisplayModule;
@@ -30,11 +30,7 @@ public class EcoDisplayModule extends DisplayModule {
         if (itemStack.getType().isAir()) {
             return;
         }
-        String itemID = HookManager.hookManager.parseItemID(itemStack);
-        int defaultSlot = ConfigManager.configManager.getDefaultLimits(player, itemID);
-        if (ConfigManager.configManager.getBoolean("settings.item-can-be-enchanted.auto-add-lore", false)) {
-            ItemModify.setSlot(itemStack, defaultSlot, itemID);
-        }
-        ItemModify.serverToClient(itemStack, player);
+        SlotUtil.setSlot(itemStack, player, false);
+        AddLore.addLore(itemStack, player);
     }
 }

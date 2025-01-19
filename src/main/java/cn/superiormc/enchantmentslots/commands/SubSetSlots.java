@@ -1,9 +1,7 @@
 package cn.superiormc.enchantmentslots.commands;
 
-import cn.superiormc.enchantmentslots.managers.ConfigManager;
-import cn.superiormc.enchantmentslots.managers.HookManager;
 import cn.superiormc.enchantmentslots.managers.LanguageManager;
-import cn.superiormc.enchantmentslots.methods.ItemLimits;
+import cn.superiormc.enchantmentslots.methods.SlotUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -28,13 +26,11 @@ public class SubSetSlots extends AbstractCommand {
             return;
         }
         if (args.length == 1) {
-            String itemID = HookManager.hookManager.parseItemID(target);
-            int slot = ItemLimits.getMaxEnchantments(target, ConfigManager.configManager.getDefaultLimits(player, itemID), itemID);
-            ItemLimits.setMaxEnchantments(target, slot + 1);
-            LanguageManager.languageManager.sendStringText(player, "success-set", "amount", String.valueOf(slot + 1));
+            SlotUtil.setSlot(target, SlotUtil.getSlot(target) + 1, true);
+            LanguageManager.languageManager.sendStringText(player, "success-set", "amount", String.valueOf(SlotUtil.getSlot(target) + 1));
             return;
         }
-        ItemLimits.setMaxEnchantments(target, Integer.parseInt(args[1]));
+        SlotUtil.setSlot(target, Integer.parseInt(args[1]), true);
         LanguageManager.languageManager.sendStringText(player, "success-set", "amount", args[1]);
     }
 

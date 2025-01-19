@@ -2,11 +2,9 @@ package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
-import cn.superiormc.enchantmentslots.managers.HookManager;
 import cn.superiormc.enchantmentslots.managers.LanguageManager;
-import cn.superiormc.enchantmentslots.methods.ItemLimits;
-import cn.superiormc.enchantmentslots.methods.ItemModify;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
+import cn.superiormc.enchantmentslots.methods.SlotUtil;
 import com.gmail.legamemc.enchantgui.api.event.PlayerEnchantItemEvent;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
@@ -21,10 +19,8 @@ public class EnchantGUIEnchantListener implements Listener {
     public void onEnchantItem(PlayerEnchantItemEvent event) {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
-        String itemID = HookManager.hookManager.parseItemID(item);
-        int defaultSlot = ConfigManager.configManager.getDefaultLimits(player, itemID);
-        ItemModify.setSlot(item, defaultSlot, itemID);
-        int maxEnchantments = ItemLimits.getMaxEnchantments(item, defaultSlot, itemID);
+        SlotUtil.setSlot(item, player, false);
+        int maxEnchantments = SlotUtil.getSlot(item);
         if (item.getEnchantments().size() >= maxEnchantments) {
             int buyLevel = event.getLevel();
             int nowLevel = event.getItem().getEnchantmentLevel(event.getEnchantment());

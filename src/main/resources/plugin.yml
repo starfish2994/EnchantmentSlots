@@ -15,6 +15,7 @@ softdepend:
   - Oraxen
   - ProtocolLib
   - eco
+  - NBTAPI
   - EnchantGui
   - ExecutableItems
   - InteractiveChat

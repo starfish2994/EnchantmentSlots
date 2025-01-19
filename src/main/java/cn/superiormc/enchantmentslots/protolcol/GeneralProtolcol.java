@@ -1,9 +1,10 @@
 package cn.superiormc.enchantmentslots.protolcol;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
+import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.methods.AddLore;
 import cn.superiormc.enchantmentslots.protolcol.ProtocolLib.*;
 import cn.superiormc.enchantmentslots.protolcol.eco.EcoDisplayModule;
-import cn.superiormc.enchantmentslots.methods.ItemModify;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import org.bukkit.Bukkit;
 
@@ -19,12 +20,12 @@ public abstract class GeneralProtolcol {
             new SetSlots();
             new WindowItem();
             new WindowMerchant();
-            ItemModify.lorePrefix = "§y";
+            AddLore.lorePrefix = ConfigManager.configManager.getString("settings.add-lore.lore-prefix", "§y");
         } else if (plugin.equals("eco") &&
                 CommonUtil.checkPluginLoad("eco")) {
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into eco....");
             EcoDisplayModule.init();
-            ItemModify.lorePrefix = "§z";
+            AddLore.lorePrefix = "§z";
         } else {
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §cCan not found any packet " +
                     "listener plugin, enchantment slot won't displayed in your server!");

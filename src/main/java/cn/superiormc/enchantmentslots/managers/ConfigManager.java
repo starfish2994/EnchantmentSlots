@@ -1,16 +1,14 @@
 package cn.superiormc.enchantmentslots.managers;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.objects.ObjectCondition;
 import cn.superiormc.enchantmentslots.objects.ObjectExtraSlotsItem;
-import cn.superiormc.enchantmentslots.utils.CommonUtil;
-import cn.superiormc.mythicchanger.manager.MatchItemManager;
+import cn.superiormc.enchantmentslots.objects.ObjectItemSlot;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.willfp.eco.core.display.DisplayPriority;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.InventoryView;
@@ -18,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.io.File;
 import java.util.*;
 
 import static cn.superiormc.enchantmentslots.objects.ObjectExtraSlotsItem.ENCHANTMENT_SLOTS_EXTRA;
@@ -28,40 +27,91 @@ public class ConfigManager {
 
     public FileConfiguration config;
 
-    public Map<String, ObjectExtraSlotsItem> slotsItemMap = new HashMap<>();
+    public Map<String, ObjectExtraSlotsItem> extraSlotsItemMap = new HashMap<>();
 
-    public List<String> enchantItems = null;
+    public Map<String, ObjectItemSlot> itemSlotMap = new HashMap<>();
 
     public ConfigManager() {
         configManager = this;
-        EnchantmentSlots.instance.saveDefaultConfig();
         this.config = EnchantmentSlots.instance.getConfig();
         initExtraSlotItemConfigs();
+        initItemSlotSettingsConfigs();
     }
 
     private void initExtraSlotItemConfigs() {
-        ConfigurationSection tempVal1 = EnchantmentSlots.instance.getConfig().getConfigurationSection(
-                "add-slot-items");
-        if (tempVal1 == null) {
+        File dir = new File(EnchantmentSlots.instance.getDataFolder(), "extra_slot_items");
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        loadExtraSlotItem(dir);
+    }
+
+    private void loadExtraSlotItem(File folder) {
+        File[] files = folder.listFiles();
+        if (files == null) {
             return;
         }
-        slotsItemMap = new HashMap<>();
-        for (String key : tempVal1.getKeys(false)) {
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fLoaded extra slot item: " + key + "!");
-            slotsItemMap.put(key, new ObjectExtraSlotsItem(key, tempVal1.getConfigurationSection(key)));
+        for (File file : files) {
+            if (file.isDirectory()) {
+                loadExtraSlotItem(file); // 递归调用以加载子文件夹内的文件
+            } else {
+                String fileName = file.getName();
+                if (fileName.endsWith(".yml")) {
+                    String substring = fileName.substring(0, fileName.length() - 4);
+                    if (extraSlotsItemMap.containsKey(substring)) {
+                        ErrorManager.errorManager.sendErrorMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §cError: Already loaded a extra slot item config called: " +
+                                fileName + "!");
+                        continue;
+                    }
+                    extraSlotsItemMap.put(substring, new ObjectExtraSlotsItem(substring, YamlConfiguration.loadConfiguration(file)));
+                    Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fLoaded extra slot item: " + substring + "!");
+                }
+            }
+        }
+    }
+
+    private void initItemSlotSettingsConfigs() {
+        File dir = new File(EnchantmentSlots.instance.getDataFolder(), "item_slots_settings");
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        loadItemSlotSettings(dir);
+    }
+
+    private void loadItemSlotSettings(File folder) {
+        File[] files = folder.listFiles();
+        if (files == null) {
+            return;
+        }
+        for (File file : files) {
+            if (file.isDirectory()) {
+                loadItemSlotSettings(file); // 递归调用以加载子文件夹内的文件
+            } else {
+                String fileName = file.getName();
+                if (fileName.endsWith(".yml")) {
+                    String substring = fileName.substring(0, fileName.length() - 4);
+                    if (itemSlotMap.containsKey(substring)) {
+                        ErrorManager.errorManager.sendErrorMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §cError: Already loaded a item slot config called: " +
+                                fileName + "!");
+                        continue;
+                    }
+                    itemSlotMap.put(substring, new ObjectItemSlot(substring, YamlConfiguration.loadConfiguration(file)));
+                    Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fLoaded item slot config: " + substring + "!");
+                }
+            }
         }
     }
 
     public ItemStack getExtraSlotItem(String itemID) {
-        ObjectExtraSlotsItem item = slotsItemMap.get(itemID);
+        ObjectExtraSlotsItem item = extraSlotsItemMap.get(itemID);
         if (item == null) {
             return null;
         }
         return item.getItem();
     }
 
-    public Map<String, ObjectExtraSlotsItem> getSlotsItemMap() {
-        return slotsItemMap;
+    public Map<String, ObjectExtraSlotsItem> getExtraSlotsItemMap() {
+        return extraSlotsItemMap;
     }
 
     public ObjectExtraSlotsItem getExtraSlotItemValue(ItemStack item) {
@@ -73,7 +123,7 @@ public class ConfigManager {
             return null;
         }
         String id = meta.getPersistentDataContainer().get(ENCHANTMENT_SLOTS_EXTRA, PersistentDataType.STRING);
-        return slotsItemMap.get(id);
+        return extraSlotsItemMap.get(id);
     }
 
     public boolean getBoolean(String path, boolean defaultValue) {
@@ -112,74 +162,41 @@ public class ConfigManager {
                         "settings.packet-listener-priority", "HIGHEST")).toUpperCase());
     }
 
-    public int getDefaultLimits(Player player, String itemID) {
-        ConfigurationSection section = EnchantmentSlots.instance.getConfig().
-                getConfigurationSection("settings.default-slots-by-item." + itemID);
-        if (ConfigManager.configManager.getBoolean("debug", false)) {
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fItem ID: " + itemID);
-        }
-        if (section == null) {
-            section = EnchantmentSlots.instance.getConfig().
-                    getConfigurationSection("settings.default-slots");
-        }
-        ConfigurationSection conditionSection = EnchantmentSlots.instance.getConfig().
-                getConfigurationSection("settings.slots-conditions");
-        if (section == null) {
-            ErrorManager.errorManager.sendErrorMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §cError: " +
-                    "Can not found default-slots section, default set to 5!");
-            return 5;
-        }
-        if (conditionSection == null) {
-            return section.getInt("default", 5);
-        }
-        Set<String> groupNameSet = conditionSection.getKeys(false);
-        List<Integer> result = new ArrayList<>();
-        for (String groupName : groupNameSet) {
-            ObjectCondition condition = new ObjectCondition(conditionSection.getConfigurationSection(groupName));
-            if (groupName.equals("default") || (section.getInt(groupName, -1) != -1 &&
-                    condition.getAllBoolean(player, 0))) {
-                result.add(section.getInt(groupName));
+    public int getDefaultLimits(ItemStack item, Player player) {
+        int result = 0;
+        for (ObjectItemSlot itemSlot : itemSlotMap.values()) {
+            int tempVal1 = itemSlot.getDefaultSlot(item, player);
+            if (tempVal1 > 0 && tempVal1 > result) {
+                result = tempVal1;
             }
         }
-        if (result.isEmpty()) {
-            if (section.getInt("default", -1) == -1) {
-                result.add(5);
-            } else {
-                result.add(section.getInt("default"));
-            }
-        }
-        return Collections.max(result);
+        return result;
     }
 
-    public int getMaxLimits(Player player, ItemStack itemStack) {
-        ConfigurationSection section = config.getConfigurationSection("settings.max-slots-by-item." +
-                HookManager.hookManager.parseItemID(itemStack));
-        if (section == null) {
-            section = config.getConfigurationSection("settings.max-slots");
-        }
-        ConfigurationSection conditionSection = config.getConfigurationSection("settings.slots-conditions");
-        if (section == null) {
-            return -1;
-        }
-        if (conditionSection == null) {
-            return section.getInt("default", -1);
-        }
-        Set<String> groupNameSet = conditionSection.getKeys(false);
-        List<Integer> result = new ArrayList<>();
-        for (String groupName : groupNameSet) {
-            ObjectCondition condition = new ObjectCondition(conditionSection.getConfigurationSection(groupName));
-            if (groupName.equals("default") || (section.getInt(groupName, -1) != -1 &&
-                    condition.getAllBoolean(player, 0))) {
-                result.add(section.getInt(groupName));
+    public int getMaxLimits( ItemStack item, Player player) {
+        int result = 0;
+        for (ObjectItemSlot itemSlot : itemSlotMap.values()) {
+            int tempVal1 = itemSlot.getMaxSlot(item, player);
+            if (tempVal1 > 0 && tempVal1 > result) {
+                result = tempVal1;
             }
         }
-        if (result.isEmpty()) {
-            result.add(section.getInt("default", -1));
-        }
-        return Collections.max(result);
+        return result;
     }
 
-    public boolean getOnlyInPlayerInventory(Player player, boolean playerInInventory) {
+    public boolean isAutoAddLore(ItemStack item, Player player, boolean playerInInventory) {
+        if (!modifyOnlyInPlayerInventory(player, playerInInventory)) {
+            return false;
+        }
+        for (ObjectItemSlot itemSlot : itemSlotMap.values()) {
+            if (itemSlot.isAutoAddLore(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean modifyOnlyInPlayerInventory(Player player, boolean playerInInventory) {
         if (!config.getBoolean("settings.add-lore.only-in-player-inventory",
                 config.getBoolean("settings.only-in-player-inventory", true))) {
             return true;
@@ -189,6 +206,14 @@ public class ConfigManager {
             return playerInInventory || view.getTitle().equals("Chest");
         }
         return playerInInventory || config.getBoolean("settings.add-lore.check-chests-only");
+    }
+
+    public boolean isIgnore(ItemStack item) {
+        ConfigurationSection matchItemSection = getSection("settings.ignore-slot-item");
+        if (matchItemSection != null) {
+            return MatchItemManager.matchItemManager.getMatch(matchItemSection, item);
+        }
+        return false;
     }
 
     public List<String> getStringList(String path) {
@@ -206,40 +231,12 @@ public class ConfigManager {
         return config.getConfigurationSection(path);
     }
 
-    public boolean canEnchant(ItemStack item, String itemID) {
-        if (itemID == null) {
-            itemID = "-null";
-        }
-        ConfigurationSection matchItemSection = getSection("settings.item-can-be-enchanted.match-item");
-        if (matchItemSection != null && CommonUtil.checkPluginLoad("MythicChanger")) {
-            return MatchItemManager.matchItemManager.getMatch(matchItemSection, item);
-        }
-        if (enchantItems == null) {
-            enchantItems = getStringListOrDefault("settings.item-can-be-enchanted.whitelist-items",
-                    "settings.item-can-be-enchanted.apply-items");
-            if (enchantItems.isEmpty()) {
-                enchantItems = new ArrayList<>();
-            }
-        }
-        if (!enchantItems.isEmpty()) {
-            for (String tempVal1 : enchantItems) {
-                if (tempVal1.equalsIgnoreCase(item.getType().name()) || tempVal1.equalsIgnoreCase(itemID)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        return false;
-    }
-
     public boolean canDisplay(ItemStack item) {
-        boolean isBook = ConfigManager.configManager.getBoolean("settings.add-lore.black-book",
-                true) && (item.getType().equals(Material.BOOK) || item.getType().equals(Material.ENCHANTED_BOOK));
-        ConfigurationSection matchItemSection = getSection("settings.add-lore.match-item");
-        if (matchItemSection != null && CommonUtil.checkPluginLoad("MythicChanger")) {
-            return !isBook && MatchItemManager.matchItemManager.getMatch(matchItemSection, item);
+        ConfigurationSection matchItemSection = getSection("settings.add-lore.black-item");
+        if (matchItemSection != null) {
+            return !MatchItemManager.matchItemManager.getMatch(matchItemSection, item);
         }
-        return !isBook;
+        return true;
     }
 
 }

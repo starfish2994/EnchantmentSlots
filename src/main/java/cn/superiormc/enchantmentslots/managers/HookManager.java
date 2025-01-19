@@ -3,13 +3,9 @@ package cn.superiormc.enchantmentslots.managers;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.hooks.items.*;
 import cn.superiormc.enchantmentslots.hooks.items.AbstractItemHook;
-import cn.superiormc.enchantmentslots.hooks.mythicchanger.AddESLore;
-import cn.superiormc.enchantmentslots.hooks.mythicchanger.ResetSlot;
-import cn.superiormc.enchantmentslots.hooks.mythicchanger.SetSlot;
-import cn.superiormc.enchantmentslots.methods.ItemModify;
+import cn.superiormc.enchantmentslots.methods.AddLore;
 import cn.superiormc.enchantmentslots.papi.PlaceholderAPIExpansion;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
-import cn.superiormc.mythicchanger.manager.ChangesManager;
 import com.loohp.interactivechat.api.InteractiveChatAPI;
 import com.loohp.interactivechat.objectholders.ICPlayer;
 import com.loohp.interactivechat.objectholders.ICPlayerFactory;
@@ -44,20 +40,17 @@ public class HookManager {
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into InteractiveChat...");
             InteractiveChatAPI.registerItemStackTransformProvider(EnchantmentSlots.instance, 10, (itemStack, uuid) -> {
                 ICPlayer icPlayer = ICPlayerFactory.getICPlayer(uuid);
-                return ItemModify.serverToClient(itemStack, icPlayer.getLocalPlayer());
+                return AddLore.addLore(itemStack, icPlayer.getLocalPlayer());
             });
         }
         if (CommonUtil.checkPluginLoad("TrChat")) {
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into TrChat...");
-            HookPlugin.INSTANCE.registerDisplayItemHook("EnchantmentSlots", ItemModify::serverToClient);
+            HookPlugin.INSTANCE.registerDisplayItemHook("EnchantmentSlots", AddLore::addLore);
         }
         if (CommonUtil.checkPluginLoad("ExcellentEnchants") && CommonUtil.getClass("su.nightexpress.excellentenchants.api.enchantment.EnchantmentData")) {
             EnchantmentSlots.eeLegacy = true;
             Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §7Seems that you are using ExcellentEnchants old version, enabled compatibility mode, " +
                     "this mode will be removed in future updates, please consider update it to latest.");
-        }
-        if (CommonUtil.checkPluginLoad("MythicChanger") && ConfigManager.configManager.getBoolean("mythicchanger-hook", false)) {
-            MythicChangerHook.initMythicChanger();
         }
     }
 
@@ -110,14 +103,5 @@ public class HookManager {
             }
         }
         return hookItem.getType().name().toLowerCase();
-    }
-}
-
-class MythicChangerHook {
-    public static void initMythicChanger() {
-        Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into MythicChanger...");
-        ChangesManager.changesManager.registerNewRule(new SetSlot());
-        ChangesManager.changesManager.registerNewRule(new ResetSlot());
-        ChangesManager.changesManager.registerNewRule(new AddESLore());
     }
 }

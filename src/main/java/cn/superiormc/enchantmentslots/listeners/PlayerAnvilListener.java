@@ -1,11 +1,9 @@
 package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
-import cn.superiormc.enchantmentslots.managers.HookManager;
 import cn.superiormc.enchantmentslots.managers.LanguageManager;
-import cn.superiormc.enchantmentslots.methods.ItemLimits;
-import cn.superiormc.enchantmentslots.methods.ItemModify;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
+import cn.superiormc.enchantmentslots.methods.SlotUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,15 +26,13 @@ public class PlayerAnvilListener implements Listener {
             if (item == null) {
                 return;
             }
-            String itemID = HookManager.hookManager.parseItemID(item);
-            int defaultSlot = ConfigManager.configManager.getDefaultLimits(player, itemID);
             ItemStack result = inventory.getItem(2);
             if (result != null) {
                 if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.AnvilItemEvent.enabled", true)) {
-                    ItemModify.setSlot(result, defaultSlot, itemID);
+                    SlotUtil.setSlot(result, player, false);
                 }
-                int maxEnchantments = ItemLimits.getMaxEnchantments(result, defaultSlot, itemID);
-                if (ItemUtil.getEnchantments(result, false).size() > maxEnchantments) {
+                int maxEnchantments = SlotUtil.getSlot(item);
+                if (!ConfigManager.configManager.isIgnore(item) && ItemUtil.getEnchantments(result, false).size() > maxEnchantments) {
                     inventory.setRepairCost(0);
                     event.setCancelled(true);
                     if (ConfigManager.configManager.getBoolean("settings.close-inventory-if-reached-limit", true)) {

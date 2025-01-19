@@ -52,10 +52,11 @@ public class LanguageManager {
         file = new File(EnchantmentSlots.instance.getDataFolder() + "/languages/" +
                 ConfigManager.configManager.getString("language", "en_US") + ".yml");
         if (!file.exists()) {
-            File tempVal1 = new File("languages/en_US.yml");
-            EnchantmentSlots.instance.saveResource(tempVal1.getPath(), false);
-            File tempVal2 = new File("languages/zh_CN.yml");
-            EnchantmentSlots.instance.saveResource(tempVal2.getPath(), false);
+            this.file = new File(EnchantmentSlots.instance.getDataFolder(), "message.yml");
+            if (!file.exists()) {
+                Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §cWe can not found your message file, " +
+                        "please try restart your server!");
+            }
         }
         messageFile = YamlConfiguration.loadConfiguration(file);
         InputStream is = EnchantmentSlots.instance.getResource("languages/en_US.yml");

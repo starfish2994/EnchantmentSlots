@@ -1,10 +1,8 @@
 package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
-import cn.superiormc.enchantmentslots.managers.HookManager;
-import cn.superiormc.enchantmentslots.methods.ItemModify;
+import cn.superiormc.enchantmentslots.methods.SlotUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,13 +35,7 @@ public class PlayerClickListener implements Listener {
                     return;
                 }
             }
-            boolean isBook = ConfigManager.configManager.getBoolean("settings.set-slot-trigger.black-book",
-                    true) && (tempItemStack.getType().equals(Material.BOOK) || tempItemStack.getType().equals(Material.ENCHANTED_BOOK));
-            if (!isBook) {
-                String itemID = HookManager.hookManager.parseItemID(tempItemStack);
-                int defaultSlot = ConfigManager.configManager.getDefaultLimits(player, itemID);
-                ItemModify.setSlot(tempItemStack, defaultSlot, itemID);
-            }
+            SlotUtil.setSlot(tempItemStack, player, false);
         }
     }
 }

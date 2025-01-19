@@ -3,8 +3,6 @@ package cn.superiormc.enchantmentslots.commands;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.managers.LanguageManager;
-import cn.superiormc.enchantmentslots.objects.ObjectExtraSlotsItem;
-import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import org.bukkit.entity.Player;
 
 public class SubReload extends AbstractCommand {

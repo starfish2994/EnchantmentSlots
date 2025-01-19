@@ -1,10 +1,8 @@
 package cn.superiormc.enchantmentslots.papi;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.managers.ConfigManager;
-import cn.superiormc.enchantmentslots.managers.HookManager;
-import cn.superiormc.enchantmentslots.methods.ItemLimits;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
+import cn.superiormc.enchantmentslots.methods.SlotUtil;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -58,17 +56,14 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
             if (mainHandItem.getType().isAir()) {
                 return "0";
             }
-            String itemID = HookManager.hookManager.parseItemID(mainHandItem);
-            return String.valueOf(ItemLimits.getMaxEnchantments(mainHandItem, ConfigManager.configManager.getDefaultLimits(player, itemID), itemID));
+            return String.valueOf(SlotUtil.getSlot(mainHandItem));
         }
         else if (params.equals("has_empty_slot")) {
             ItemStack mainHandItem = player.getInventory().getItemInMainHand();
             if (mainHandItem.getType().isAir()) {
                 return "false";
             }
-            String itemID = HookManager.hookManager.parseItemID(mainHandItem);
-            if (ItemUtil.getEnchantments(mainHandItem, false).size() >= ItemLimits.getMaxEnchantments(mainHandItem,
-                    ConfigManager.configManager.getDefaultLimits(player, itemID), itemID)) {
+            if (ItemUtil.getEnchantments(mainHandItem, false).size() >= SlotUtil.getSlot(mainHandItem)) {
                 return "false";
             }
             return "true";

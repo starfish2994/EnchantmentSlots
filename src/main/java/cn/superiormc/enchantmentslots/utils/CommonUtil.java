@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
@@ -134,5 +135,17 @@ public class CommonUtil {
             return NamespacedKey.minecraft(key.toLowerCase());
         }
         return NamespacedKey.fromString(key);
+    }
+
+    public static void mkDir(File dir) {
+        if (!dir.exists()) {
+            File parentFile = dir.getParentFile();
+            if (parentFile == null) {
+                return;
+            }
+            String parentPath = parentFile.getPath();
+            mkDir(new File(parentPath));
+            dir.mkdir();
+        }
     }
 }

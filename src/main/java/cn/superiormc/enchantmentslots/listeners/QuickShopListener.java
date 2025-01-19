@@ -1,6 +1,6 @@
 package cn.superiormc.enchantmentslots.listeners;
 
-import cn.superiormc.enchantmentslots.methods.ItemModify;
+import cn.superiormc.enchantmentslots.methods.AddLore;
 import com.ghostchu.quickshop.api.event.ItemPreviewComponentPrePopulateEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,6 +15,6 @@ public class QuickShopListener implements Listener {
             return;
         }
         final ItemStack item = event.getItemStack().clone();
-        event.setItemStack(ItemModify.serverToClient(item, event.getPlayer()));
+        event.setItemStack(AddLore.addLore(item, event.getPlayer()));
     }
 }

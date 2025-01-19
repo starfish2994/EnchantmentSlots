@@ -2,8 +2,8 @@ package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
-import cn.superiormc.enchantmentslots.managers.HookManager;
-import cn.superiormc.enchantmentslots.methods.ItemModify;
+import cn.superiormc.enchantmentslots.methods.AddLore;
+import cn.superiormc.enchantmentslots.methods.SlotUtil;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
@@ -38,12 +38,10 @@ public class WindowItem extends GeneralPackets {
                 StructureModifier<ItemStack> singleItemStackStructureModifier = packet.getItemModifier();
                 if (singleItemStackStructureModifier.size() != 0) {
                     ItemStack serverItemStack = singleItemStackStructureModifier.read(0);
-                    if (ConfigManager.configManager.getBoolean("settings.item-can-be-enchanted.auto-add-lore", false)) {
-                        String itemID = HookManager.hookManager.parseItemID(serverItemStack);
-                        int defaultSlot = ConfigManager.configManager.getDefaultLimits(event.getPlayer(), itemID);
-                        ItemModify.setSlot(serverItemStack, defaultSlot, itemID);
+                    if (ConfigManager.configManager.isAutoAddLore(serverItemStack, event.getPlayer(), true)) {
+                        SlotUtil.setSlot(serverItemStack, event.getPlayer(), false);
                     }
-                    ItemStack clientItemStack = ItemModify.serverToClient(serverItemStack, event.getPlayer());
+                    ItemStack clientItemStack = AddLore.addLore(serverItemStack, event.getPlayer());
                     // client 是加过 Lore 的，server 是没加过的！
                     singleItemStackStructureModifier.write(0, clientItemStack);
                 }
@@ -54,17 +52,13 @@ public class WindowItem extends GeneralPackets {
                 for (ItemStack itemStack : serverItemStack) {
                     if (itemStack.getType().isAir()) {
                         clientItemStack.add(itemStack);
-                        index ++;
                         continue;
                     }
                     boolean isPlayerInventory = event.getPacket().getIntegers().read(0) == 0 || index > serverItemStack.size() - 36;
-                    if (ConfigManager.configManager.getBoolean("settings.item-can-be-enchanted.auto-add-lore", false) &&
-                            ConfigManager.configManager.getOnlyInPlayerInventory(event.getPlayer(), isPlayerInventory)) {
-                        String itemID = HookManager.hookManager.parseItemID(itemStack);
-                        int defaultSlot = ConfigManager.configManager.getDefaultLimits(event.getPlayer(), itemID);
-                        ItemModify.setSlot(itemStack, defaultSlot, itemID);
+                    if (ConfigManager.configManager.isAutoAddLore(itemStack, event.getPlayer(), isPlayerInventory)) {
+                        SlotUtil.setSlot(itemStack, event.getPlayer(), isPlayerInventory);
                     }
-                    clientItemStack.add(ItemModify.serverToClient(itemStack, event.getPlayer()));
+                    clientItemStack.add(AddLore.addLore(itemStack, event.getPlayer()));
                     index ++;
                 }
                 // client 是加过 Lore 的，server 是没加过的！

@@ -1,10 +1,9 @@
 package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
-import cn.superiormc.enchantmentslots.managers.HookManager;
 import cn.superiormc.enchantmentslots.managers.LanguageManager;
 import cn.superiormc.enchantmentslots.objects.ObjectExtraSlotsItem;
-import cn.superiormc.enchantmentslots.methods.ItemLimits;
+import cn.superiormc.enchantmentslots.methods.SlotUtil;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,12 +38,11 @@ public class PlayerInventoryListener implements Listener {
             return;
         }
         ObjectExtraSlotsItem item = ConfigManager.configManager.getExtraSlotItemValue(extraItem);
-        String itemID = HookManager.hookManager.parseItemID(targetItem);
-        if (item == null || !item.canApply(player, itemID)) {
+        if (item == null || !item.canApply(player, targetItem)) {
             return;
         }
         int value = item.getAddSlot();
-        int baseValue = ItemLimits.getMaxEnchantments(targetItem, ConfigManager.configManager.getDefaultLimits(player, itemID), itemID);
+        int baseValue = SlotUtil.getSlot(targetItem);
         if (baseValue == 0) {
             return;
         }
@@ -52,7 +50,7 @@ public class PlayerInventoryListener implements Listener {
             LanguageManager.languageManager.sendStringText(player, "error-creative-mode");
             return;
         }
-        int maxValue = ConfigManager.configManager.getMaxLimits(player, targetItem);
+        int maxValue = ConfigManager.configManager.getMaxLimits(targetItem, player);
         if (baseValue >= maxValue) {
             LanguageManager.languageManager.sendStringText(player, "max-slots-reached");
             return;
@@ -65,7 +63,7 @@ public class PlayerInventoryListener implements Listener {
                 if (value == 0) {
                     item.doFailAction(player);
                 } else {
-                    ItemLimits.setMaxEnchantments(targetItem, maxValue);
+                    SlotUtil.setSlot(targetItem, maxValue, true);
                     item.doSuccessAction(player);
                 }
             }
@@ -75,7 +73,7 @@ public class PlayerInventoryListener implements Listener {
         if (value == 0) {
             item.doFailAction(player);
         } else {
-            ItemLimits.setMaxEnchantments(targetItem, baseValue + value);
+            SlotUtil.setSlot(targetItem, baseValue + value, true);
             item.doSuccessAction(player);
         }
     }

@@ -3,7 +3,7 @@ package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
-import cn.superiormc.enchantmentslots.methods.ItemModify;
+import cn.superiormc.enchantmentslots.methods.AddLore;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
@@ -34,7 +34,7 @@ public class SetCreativeSlots extends GeneralPackets {
                 if (clientItemStack.getType().isAir()) {
                     return;
                 }
-                ItemStack serverItemStack = ItemModify.clientToServer(clientItemStack);
+                ItemStack serverItemStack = AddLore.removeLore(clientItemStack);
                 itemStackStructureModifier.write(0, serverItemStack);
             }
         };

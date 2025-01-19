@@ -1,7 +1,6 @@
 package cn.superiormc.enchantmentslots;
 
 import cn.superiormc.enchantmentslots.managers.*;
-import cn.superiormc.enchantmentslots.methods.ItemModify;
 import cn.superiormc.enchantmentslots.protolcol.GeneralProtolcol;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -46,14 +45,15 @@ public final class EnchantmentSlots extends JavaPlugin {
             isFolia = true;
         }
         new ErrorManager();
+        new InitManager();
         new LicenseManager();
         new ActionManager();
         new ConditionManager();
         new ConfigManager();
-        new ConfigManager();
         new HookManager();
         new ListenerManager();
         new CommandManager();
+        new MatchItemManager();
         if (LicenseManager.licenseManager.checkJarFiles()) {
             GeneralProtolcol.init();
         }
@@ -69,7 +69,7 @@ public final class EnchantmentSlots extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if (ItemModify.lorePrefix.equals("§y")){
+        if (CommonUtil.checkPluginLoad("ProtocolLib")){
             ProtocolLibrary.getProtocolManager().removePacketListeners(this);
         }
         Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fPlugin is disabled. Author: PQguanfang.");

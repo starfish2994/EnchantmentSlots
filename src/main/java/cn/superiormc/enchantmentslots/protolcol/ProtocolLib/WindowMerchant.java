@@ -2,8 +2,8 @@ package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
-import cn.superiormc.enchantmentslots.managers.HookManager;
-import cn.superiormc.enchantmentslots.methods.ItemModify;
+import cn.superiormc.enchantmentslots.methods.AddLore;
+import cn.superiormc.enchantmentslots.methods.SlotUtil;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
@@ -35,16 +35,12 @@ public class WindowMerchant extends GeneralPackets {
                 packet.getMerchantRecipeLists().read(0).forEach(recipe -> {
                     ItemStack serverItemStack1 = recipe.getResult();
                     List<ItemStack> serverItemStack2List = recipe.getIngredients();
-                    String itemID = HookManager.hookManager.parseItemID(serverItemStack1);
-                    int defaultSlot = ConfigManager.configManager.getDefaultLimits(event.getPlayer(), itemID);
-                    ItemModify.setSlot(serverItemStack1, defaultSlot, itemID);
-                    ItemStack clientItemStack = ItemModify.serverToClient(serverItemStack1, event.getPlayer());
+                    SlotUtil.setSlot(serverItemStack1, event.getPlayer(), false);
+                    ItemStack clientItemStack = AddLore.addLore(serverItemStack1, event.getPlayer());
                     MerchantRecipe merchantRecipe = new MerchantRecipe(clientItemStack, recipe.getUses(), recipe.getMaxUses(), recipe.hasExperienceReward(), recipe.getVillagerExperience(), recipe.getPriceMultiplier(), recipe.getDemand(), recipe.getSpecialPrice());
                     for (ItemStack serverItemStack2 : serverItemStack2List) {
-                        String itemID2 = HookManager.hookManager.parseItemID(serverItemStack2);
-                        int defaultSlot2 = ConfigManager.configManager.getDefaultLimits(event.getPlayer(), itemID2);
-                        ItemModify.setSlot(serverItemStack2, defaultSlot2, itemID2);
-                        merchantRecipe.addIngredient(ItemModify.serverToClient(serverItemStack2, event.getPlayer()));
+                        SlotUtil.setSlot(serverItemStack2, event.getPlayer(), false);
+                        merchantRecipe.addIngredient(AddLore.addLore(serverItemStack2, event.getPlayer()));
                     }
                     list.add(merchantRecipe);
                 });

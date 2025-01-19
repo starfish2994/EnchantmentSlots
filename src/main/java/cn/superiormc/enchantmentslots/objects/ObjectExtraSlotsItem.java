@@ -1,6 +1,7 @@
 package cn.superiormc.enchantmentslots.objects;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
+import cn.superiormc.enchantmentslots.managers.MatchItemManager;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
@@ -9,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.List;
 import java.util.Random;
 
 public class ObjectExtraSlotsItem {
@@ -22,9 +22,7 @@ public class ObjectExtraSlotsItem {
 
     private final int addSlot;
 
-    private final List<String> applyItems;
-
-    private final List<String> blackItems;
+    private final ConfigurationSection matchItem;
 
     private final ConfigurationSection section;
 
@@ -42,8 +40,7 @@ public class ObjectExtraSlotsItem {
         } else if (chance < 0) {
             chance = 0;
         }
-        this.applyItems = section.getStringList("apply-items");
-        this.blackItems = section.getStringList("black-items");
+        this.matchItem = section.getConfigurationSection("match-item");
         this.addSlot = section.getInt("add-slots", 1);
         this.successAction = new ObjectAction(section.getConfigurationSection("success-actions"));
         this.failAction = new ObjectAction(section.getConfigurationSection("fail-actions"));
@@ -52,7 +49,11 @@ public class ObjectExtraSlotsItem {
     }
 
     public ItemStack getItem() {
-        ItemStack resultItem = ItemUtil.buildItemStack(section);
+        ConfigurationSection itemSection = section.getConfigurationSection("display-item");
+        if (itemSection == null) {
+            itemSection = section;
+        }
+        ItemStack resultItem = ItemUtil.buildItemStack(itemSection);
         ItemMeta meta = resultItem.getItemMeta();
         meta.getPersistentDataContainer().set(ENCHANTMENT_SLOTS_EXTRA,
                 PersistentDataType.STRING,
@@ -61,14 +62,11 @@ public class ObjectExtraSlotsItem {
         return resultItem;
     }
 
-    public boolean canApply(Player player, String itemID) {
+    public boolean canApply(Player player, ItemStack item) {
         if (!condition.getAllBoolean(player, 1)) {
             return false;
         }
-        if (!blackItems.isEmpty() && blackItems.contains(itemID)) {
-            return false;
-        }
-        return applyItems.isEmpty() || applyItems.contains("*") || applyItems.contains(itemID);
+        return MatchItemManager.matchItemManager.getMatch(matchItem, item);
     }
 
     public int getAddSlot() {

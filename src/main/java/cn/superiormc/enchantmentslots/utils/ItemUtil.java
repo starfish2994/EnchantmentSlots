@@ -3,6 +3,7 @@ package cn.superiormc.enchantmentslots.utils;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.managers.ErrorManager;
+import cn.superiormc.enchantmentslots.managers.LanguageManager;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import com.google.common.base.Enums;
@@ -190,5 +191,19 @@ public class ItemUtil {
             }
             return enchantments;
         }
+    }
+
+    public static String getEnchantmentLevel(Enchantment enchantment, int level) {
+        if (ConfigManager.configManager.getBoolean("settings.add-lore.placeholder.enchants.level-hide-one", false) && level == enchantment.getMaxLevel() && enchantment.getMaxLevel() == 1) {
+            return "";
+        }
+        return LanguageManager.languageManager.getEnchantLevel(level);
+    }
+
+    public static String getEnchantmentLevelRoman(Enchantment enchantment, int level) {
+        if (ConfigManager.configManager.getBoolean("settings.add-lore.placeholder.enchants.level-hide-one", false) && level == enchantment.getMaxLevel() && enchantment.getMaxLevel() == 1) {
+            return "";
+        }
+        return NumberUtil.convertToRoman(level);
     }
 }
