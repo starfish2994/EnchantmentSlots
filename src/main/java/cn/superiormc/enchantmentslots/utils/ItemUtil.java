@@ -142,6 +142,11 @@ public class ItemUtil {
         if (itemMeta == null) {
             return new HashMap<>();
         }
+        return getEnchantments(itemMeta, sort);
+    }
+
+    @NotNull
+    public static Map<Enchantment, Integer> getEnchantments(@NotNull ItemMeta itemMeta, boolean sort) {
         if (!ConfigManager.configManager.getBoolean("settings.add-lore.placeholder.enchants.sort", true)) {
             sort = false;
         }
@@ -167,10 +172,10 @@ public class ItemUtil {
                 EnchantmentStorageMeta storageMeta = (EnchantmentStorageMeta) itemMeta;
                 enchantments = storageMeta.getStoredEnchants();
                 if (enchantments.isEmpty()) {
-                    enchantments = itemStack.getEnchantments();
+                    enchantments = itemMeta.getEnchants();
                 }
             } else {
-                enchantments = itemStack.getEnchantments();
+                enchantments = itemMeta.getEnchants();
             }
             for (Enchantment singleEnch : enchantments.keySet()) {
                 if (!enchants.containsKey(singleEnch)) {
@@ -184,10 +189,10 @@ public class ItemUtil {
                 EnchantmentStorageMeta storageMeta = (EnchantmentStorageMeta) itemMeta;
                 enchantments = storageMeta.getStoredEnchants();
                 if (enchantments.isEmpty()) {
-                    enchantments = itemStack.getEnchantments();
+                    enchantments = itemMeta.getEnchants();
                 }
             } else {
-                enchantments = itemStack.getEnchantments();
+                enchantments = itemMeta.getEnchants();
             }
             return enchantments;
         }

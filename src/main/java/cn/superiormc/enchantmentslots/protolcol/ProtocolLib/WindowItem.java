@@ -3,7 +3,6 @@ package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.methods.AddLore;
-import cn.superiormc.enchantmentslots.methods.SlotUtil;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
@@ -38,12 +37,8 @@ public class WindowItem extends GeneralPackets {
                 StructureModifier<ItemStack> singleItemStackStructureModifier = packet.getItemModifier();
                 if (singleItemStackStructureModifier.size() != 0) {
                     ItemStack serverItemStack = singleItemStackStructureModifier.read(0);
-                    if (ConfigManager.configManager.isAutoAddLore(serverItemStack, event.getPlayer(), true)) {
-                        SlotUtil.setSlot(serverItemStack, event.getPlayer(), false);
-                    }
-                    ItemStack clientItemStack = AddLore.addLore(serverItemStack, event.getPlayer());
                     // client 是加过 Lore 的，server 是没加过的！
-                    singleItemStackStructureModifier.write(0, clientItemStack);
+                    singleItemStackStructureModifier.write(0, AddLore.autoAddLore(serverItemStack, event.getPlayer(), true));
                 }
                 StructureModifier<List<ItemStack>> itemStackStructureModifier = packet.getItemListModifier();
                 List<ItemStack> serverItemStack = itemStackStructureModifier.read(0);
@@ -55,10 +50,7 @@ public class WindowItem extends GeneralPackets {
                         continue;
                     }
                     boolean isPlayerInventory = event.getPacket().getIntegers().read(0) == 0 || index > serverItemStack.size() - 36;
-                    if (ConfigManager.configManager.isAutoAddLore(itemStack, event.getPlayer(), isPlayerInventory)) {
-                        SlotUtil.setSlot(itemStack, event.getPlayer(), isPlayerInventory);
-                    }
-                    clientItemStack.add(AddLore.addLore(itemStack, event.getPlayer()));
+                    clientItemStack.add(AddLore.autoAddLore(itemStack, event.getPlayer(), isPlayerInventory));
                     index ++;
                 }
                 // client 是加过 Lore 的，server 是没加过的！

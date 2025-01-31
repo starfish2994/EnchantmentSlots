@@ -5,7 +5,6 @@ import cn.superiormc.enchantmentslots.managers.LanguageManager;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import cn.superiormc.enchantmentslots.utils.TextUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -20,23 +19,33 @@ public class AddLore {
 
     public static String lorePrefix;
 
+    public static ItemStack autoAddLore(ItemStack item, Player player, boolean inPlayerInventory) {
+        if (ConfigManager.configManager.isAutoAddLore(item, player, inPlayerInventory)) {
+            SlotUtil.setSlot(item, player, false);
+        }
+        return addLore(item, player);
+    }
+
     public static ItemStack addLore(ItemStack item, Player player) {
         List<String> itemLore;
-        if (ConfigManager.configManager.getBoolean("settings.add-lore.placeholder.auto-parse", true)) {
-            item = AddLore.parseLore(item, player);
-        }
         ItemMeta meta = item.getItemMeta();
-        if (meta != null && meta.hasLore()) {
-            itemLore = meta.getLore();
-        } else {
-            itemLore = new ArrayList<>();
+        if (meta == null) {
+            return item;
         }
-        int slot = SlotUtil.getSlot(item);
+        int slot = SlotUtil.getSlot(meta);
         if (slot == 0) {
             return item;
         }
+        if (ConfigManager.configManager.getBoolean("settings.add-lore.placeholder.auto-parse", true)) {
+            item.setItemMeta(AddLore.parseLore(item, meta, player));
+        }
         if (!ConfigManager.configManager.canDisplay(item)) {
             return item;
+        }
+        if (meta.hasLore()) {
+            itemLore = meta.getLore();
+        } else {
+            itemLore = new ArrayList<>();
         }
         if (ConfigManager.configManager.getBoolean("settings.add-lore.remove-lore-first", true)) {
             itemLore.removeIf(tempVal1 -> tempVal1.startsWith(lorePrefix));
@@ -80,7 +89,9 @@ public class AddLore {
             index++;
 
         }
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        if (ConfigManager.configManager.getBoolean("settings.add-lore.auto-hide-enchants", false)) {
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
         meta.setLore(itemLore);
         item.setItemMeta(meta);
         return item;
@@ -101,17 +112,22 @@ public class AddLore {
     }
 
     public static ItemStack parseLore(ItemStack item, Player player) {
-        List<String> itemLore = new ArrayList<>();
-        List<String> newLore = new ArrayList<>();
         ItemMeta meta = item.getItemMeta();
         if (meta == null) {
             return item;
         }
+        item.setItemMeta(parseLore(item, meta, player));
+        return item;
+    }
+
+    public static ItemMeta parseLore(ItemStack item, ItemMeta meta, Player player) {
+        List<String> itemLore = new ArrayList<>();
+        List<String> newLore = new ArrayList<>();
         if (meta.hasLore()) {
             itemLore = meta.getLore();
         }
-        int slot = SlotUtil.getSlot(item);
-        Map<Enchantment, Integer> enchantments = ItemUtil.getEnchantments(item, true);
+        int slot = SlotUtil.getSlot(meta);
+        Map<Enchantment, Integer> enchantments = ItemUtil.getEnchantments(meta, true);
         if (itemLore != null) {
             for (String str : itemLore) {
                 if (str.contains("{enchants}")) {
@@ -140,7 +156,6 @@ public class AddLore {
             }
         }
         meta.setLore(newLore);
-        item.setItemMeta(meta);
-        return item;
+        return meta;
     }
 }

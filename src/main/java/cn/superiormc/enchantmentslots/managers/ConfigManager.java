@@ -150,6 +150,10 @@ public class ConfigManager {
         return s.replace("{plugin_folder}", String.valueOf(EnchantmentSlots.instance.getDataFolder()));
     }
 
+    public long getLong(String path, long defaultValue) {
+        return config.getLong(path, defaultValue);
+    }
+
     public ListenerPriority getPriority() {
         return ListenerPriority.valueOf(EnchantmentSlots.instance.getConfig().getString(
                 "settings.add-lore.packet-listener-priority", EnchantmentSlots.instance.getConfig().getString(
@@ -173,7 +177,7 @@ public class ConfigManager {
         return result;
     }
 
-    public int getMaxLimits( ItemStack item, Player player) {
+    public int getMaxLimits(ItemStack item, Player player) {
         int result = 0;
         for (ObjectItemSlot itemSlot : itemSlotMap.values()) {
             int tempVal1 = itemSlot.getMaxSlot(item, player);

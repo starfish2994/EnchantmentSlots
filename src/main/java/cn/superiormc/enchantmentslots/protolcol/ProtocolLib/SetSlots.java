@@ -1,11 +1,13 @@
 package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
+import cn.superiormc.enchantmentslots.listeners.PlayerCacheListener;
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.managers.LanguageManager;
 import cn.superiormc.enchantmentslots.methods.AddLore;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import cn.superiormc.enchantmentslots.methods.SlotUtil;
+import cn.superiormc.enchantmentslots.utils.SchedulerUtil;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
@@ -17,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class SetSlots extends GeneralPackets {
+
     public SetSlots() {
         super();
     }
@@ -53,45 +56,35 @@ public class SetSlots extends GeneralPackets {
                             "Packet Slot ID: " + slot + ", Window ID: " + windowID + ", Top Size: " +
                             event.getPlayer().getOpenInventory().getTopInventory().getSize() + ".");
                 }
-                if (CommonUtil.inPlayerInventory(event.getPlayer(), slot) && (ConfigManager.configManager.getBoolean(
+                boolean inPlayerInventory = CommonUtil.inPlayerInventory(event.getPlayer(), slot);
+                if (inPlayerInventory && (ConfigManager.configManager.getBoolean(
                         "settings.set-slot-trigger.SetSlotPacket.enabled", true)) ||
                         ConfigManager.configManager.getBoolean(
-                                "settings.set-slot-trigger.SetSlotPacket.remove-illegal-excess-enchant",
+                                "settings.set-slot-trigger.SetSlotPacket.remove-illegal-excess-enchant.enabled",
                                 true)) {
                     ItemStack targetItem = event.getPlayer().getInventory().getItem(spigotSlot);
-                    if (ConfigManager.configManager.getBoolean(
-                            "settings.set-slot-trigger.SetSlotPacket.enabled", true)) {
-                        if (targetItem != null && !targetItem.getType().isAir()) {
-                            SlotUtil.setSlot(targetItem, event.getPlayer(), false);
-                        }
+                    if (targetItem == null || targetItem.getType().isAir()) {
+                        return;
                     }
-                    if (!ConfigManager.configManager.isIgnore(targetItem) && ConfigManager.configManager.getBoolean("settings.set-slot-trigger.SetSlotPacket.remove-illegal-excess-enchant", true)) {
-                        if (targetItem != null && !targetItem.getType().isAir()) {
-                            int maxEnchantments = SlotUtil.getSlot(serverItemStack);
-                            if (maxEnchantments > 0 && targetItem.getEnchantments().size() > maxEnchantments) {
-                                int removeAmount = targetItem.getEnchantments().size() - maxEnchantments;
-                                for (Enchantment enchant : targetItem.getEnchantments().keySet()) {
-                                    if (removeAmount <= 0) {
-                                        break;
-                                    }
-                                    ItemMeta meta = targetItem.getItemMeta();
-                                    if (meta == null) {
-                                        break;
-                                    }
-                                    meta.removeEnchant(enchant);
-                                    targetItem.setItemMeta(meta);
-                                    removeAmount--;
-                                }
-                                if (!ConfigManager.configManager.getBoolean("settings.set-slot-trigger.SetSlotPacket.hide-remove-message", false)) {
-                                    LanguageManager.languageManager.sendStringText(event.getPlayer(), "remove-excess-enchants");
-                                }
-                            }
+                    ItemMeta meta = targetItem.getItemMeta();
+                    if (meta == null) {
+                        return;
+                    }
+                    if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.SetSlotPacket.enabled", true)) {
+                        targetItem.setItemMeta(SlotUtil.setSlot(targetItem, meta, event.getPlayer(), false));
+                    }
+                    if (PlayerCacheListener.loadedPlayers.contains(event.getPlayer()) && !ConfigManager.configManager.isIgnore(targetItem) && ConfigManager.configManager.getBoolean("settings.set-slot-trigger.SetSlotPacket.remove-illegal-excess-enchant.enabled", true)) {
+                        if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.SetSlotPacket.run-sync", true)) {
+                            SchedulerUtil.runSync(() -> {
+                                targetItem.setItemMeta(SlotUtil.removeExcessEnchantments(meta, event.getPlayer()));
+                            });
+                        } else {
+                            targetItem.setItemMeta(SlotUtil.removeExcessEnchantments(meta, event.getPlayer()));
                         }
                     }
                 }
-                ItemStack clientItemStack = AddLore.addLore(serverItemStack, event.getPlayer());
                 // client 是加过 Lore 的，server 是没加过的！
-                itemStackStructureModifier.write(0, clientItemStack);
+                itemStackStructureModifier.write(0, AddLore.autoAddLore(serverItemStack, event.getPlayer(), inPlayerInventory));
             }
         };
     }

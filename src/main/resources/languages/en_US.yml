@@ -15,7 +15,8 @@ help-main-console: |
   &f/es reload &7- Reload the plugin.
   &f/es giveslots <itemID> <player> &7- Give extra slot item to specified player.
 give-extra-slot-item: "&#98FB98[EnchantmentSlots] &aGave %player% extra slot item %item% x%amount%"
-remove-excess-enchants: "&#98FB98[EnchantmentSlots] &fOne of your item exceeded its enchantment slot limit, therefore the excess enchantment has been removed."
+remove-excess-enchants: "&#98FB98[EnchantmentSlots] &fOne of your item exceeded its enchantment slot limit, therefore the excess enchantment has been removed. (%remove%/%max%)"
+remove-excess-enchants-console: "&#98FB98[EnchantmentSlots] &fRemoved player %player%'s one item which exceeded its enchantment slot limit, therefore the excess enchantment has been removed. (%remove%/%max%)"
 success-add: "&#98FB98[EnchantmentSlots] &aAdd %amount% extra main hand item enchantment slot!"
 success-set: "&#98FB98[EnchantmentSlots] &aSet main hand item enchantment slot to %amount%!"
 slots-limit-reached: "&#98FB98[EnchantmentSlots] &cYour item has reached its enchantment limits!"

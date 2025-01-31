@@ -21,8 +21,11 @@ settings:
     SetSlotPacket:
       enabled: true
       # Only plugin has enchantment slot NBT will be checked.
-      remove-illegal-excess-enchant: true
-      hide-remove-message: false
+      remove-illegal-excess-enchant:
+        enabled: true
+        hide-remove-message: false
+        ignore-join-time: -1
+        run-sync: true
     EnchantItemEvent:
       enabled: true
       # Whether cancel the enchantment event or remove extra enchantment if
@@ -52,6 +55,7 @@ settings:
     # ProtolcolLib only.
     remove-lore-first: true
     lore-prefix: "§y"
+    auto-hide-enchants: true
     # This option support ProtocolLib only.
     # Enable this maybe improve plugin performance.
     only-in-player-inventory: true

@@ -19,28 +19,29 @@ public class PlayerEnchantListener implements Listener {
     public void onEnchantItem(EnchantItemEvent event) {
         Player player = event.getEnchanter();
         ItemStack item = event.getItem();
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) {
+            return;
+        }
         if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.EnchantItemEvent.enabled", true)) {
-            SlotUtil.setSlot(item, player, false);
+            item.setItemMeta(SlotUtil.setSlot(item, meta, player, false));
         }
         int maxEnchantments = SlotUtil.getSlot(item);
         if (!ConfigManager.configManager.isIgnore(item) && event.getEnchantsToAdd().size() + ItemUtil.getEnchantments(item, false).size() > maxEnchantments) {
+
             int removeAmount = item.getEnchantments().size() - maxEnchantments;
             if (!ConfigManager.configManager.getBoolean("settings.set-slot-trigger.EnchantItemEvent.cancel-if-reached-slot", true) && item.getType() != Material.BOOK && removeAmount < event.getEnchantsToAdd().size()) {
                 SchedulerUtil.runSync(() -> {
                     int realRemoveAmount = removeAmount;
-                    for (Enchantment enchant : item.getEnchantments().keySet()) {
+                    for (Enchantment enchant : meta.getEnchants().keySet()) {
                         if (realRemoveAmount <= 0) {
                             break;
                         }
-                        ItemMeta meta = item.getItemMeta();
-                        if (meta == null) {
-                            break;
-                        }
                         meta.removeEnchant(enchant);
-                        item.setItemMeta(meta);
                         realRemoveAmount--;
                     }
-                    LanguageManager.languageManager.sendStringText(player, "slots-limit-reached-enchant");
+                    item.setItemMeta(meta);
+                    LanguageManager.languageManager.sendStringText(player, "slots-limit-reached-enchant", "max", String.valueOf(maxEnchantments), "remove", String.valueOf(removeAmount));
                 });
             } else {
                 event.setCancelled(true);

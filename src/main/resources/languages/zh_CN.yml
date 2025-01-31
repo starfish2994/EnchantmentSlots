@@ -15,7 +15,8 @@ help-main-console: |
   &f/es reload &7- 重启插件.
   &f/es giveslots <物品ID> <玩家> &7- 给予指定玩家扩槽器.
 give-extra-slot-item: "&#98FB98[EnchantmentSlots] &a给予玩家 %player% 扩槽器 %item% x%amount%"
-remove-excess-enchants: "&#98FB98[EnchantmentSlots] &f你的某件物品超出了附魔槽位限制，因此多余的附魔已被移除."
+remove-excess-enchants: "&#98FB98[EnchantmentSlots] &f你的某件物品超出了附魔槽位限制，因此多余的附魔已被移除. (%remove%/%max%)"
+remove-excess-enchants-console: "&#98FB98[EnchantmentSlots] &f玩家 %player% 的某件物品超出了附魔槽位限制，因此多余的附魔已被移除. (%remove%/%max%)"
 success-add: "&#98FB98[EnchantmentSlots] &a给手上物品添加了 %amount% 额外的附魔槽位!"
 success-set: "&#98FB98[EnchantmentSlots] &a将手上物品的附魔槽位设置为 %amount%!"
 slots-limit-reached: "&#98FB98[EnchantmentSlots] &c你的物品已经达到了附魔上限!"
