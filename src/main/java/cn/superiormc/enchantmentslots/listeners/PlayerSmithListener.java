@@ -17,7 +17,7 @@ public class PlayerSmithListener implements Listener {
             return;
         }
         ItemStack item = event.getInventory().getResult();
-        if (item == null || item.getType().isAir()) {
+        if (!ItemUtil.isValid(item)) {
             return;
         }
         int defaultSlot = ConfigManager.configManager.getDefaultLimits(item, player);

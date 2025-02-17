@@ -15,6 +15,9 @@ public class HasEnchants extends AbstractMatchItemRule {
     @Override
     public boolean getMatch(ConfigurationSection section, ItemStack item, ItemMeta meta) {
         for (String ench : section.getStringList("has-enchants")) {
+            if (ench.equals("*")) {
+                return !meta.getEnchants().isEmpty();
+            }
             Enchantment vanillaEnchant = Registry.ENCHANTMENT.get(CommonUtil.parseNamespacedKey(ench.toLowerCase()));
             if (vanillaEnchant != null && meta.getEnchants().containsKey(vanillaEnchant)) {
                 return true;

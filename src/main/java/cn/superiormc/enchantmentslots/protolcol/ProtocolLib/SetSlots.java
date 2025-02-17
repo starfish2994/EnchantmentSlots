@@ -3,10 +3,10 @@ package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.listeners.PlayerCacheListener;
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
-import cn.superiormc.enchantmentslots.managers.LanguageManager;
 import cn.superiormc.enchantmentslots.methods.AddLore;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import cn.superiormc.enchantmentslots.methods.SlotUtil;
+import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import cn.superiormc.enchantmentslots.utils.SchedulerUtil;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -14,7 +14,6 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.reflect.StructureModifier;
 import org.bukkit.Bukkit;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -39,7 +38,7 @@ public class SetSlots extends GeneralPackets {
                 int windowID = packet.getIntegers().read(0);
                 StructureModifier<ItemStack> itemStackStructureModifier = packet.getItemModifier();
                 ItemStack serverItemStack = itemStackStructureModifier.read(0);
-                if (serverItemStack == null || serverItemStack.getType().isAir()) {
+                if (!ItemUtil.isValid(serverItemStack)) {
                     return;
                 }
                 int slot = packet.getIntegers().read(packet.getIntegers().size() - 1);
@@ -56,12 +55,12 @@ public class SetSlots extends GeneralPackets {
                             "Packet Slot ID: " + slot + ", Window ID: " + windowID + ", Top Size: " +
                             event.getPlayer().getOpenInventory().getTopInventory().getSize() + ".");
                 }
-                boolean inPlayerInventory = CommonUtil.inPlayerInventory(event.getPlayer(), slot);
+                boolean inPlayerInventory = CommonUtil.inPlayerInventory(event.getPlayer(), slot, windowID);
                 if (inPlayerInventory && (ConfigManager.configManager.getBoolean(
-                        "settings.set-slot-trigger.SetSlotPacket.enabled", true)) ||
+                        "settings.set-slot-trigger.SetSlotPacket.enabled", true) ||
                         ConfigManager.configManager.getBoolean(
                                 "settings.set-slot-trigger.SetSlotPacket.remove-illegal-excess-enchant.enabled",
-                                true)) {
+                                true))) {
                     ItemStack targetItem = event.getPlayer().getInventory().getItem(spigotSlot);
                     if (targetItem == null || targetItem.getType().isAir()) {
                         return;
@@ -75,9 +74,7 @@ public class SetSlots extends GeneralPackets {
                     }
                     if (PlayerCacheListener.loadedPlayers.contains(event.getPlayer()) && !ConfigManager.configManager.isIgnore(targetItem) && ConfigManager.configManager.getBoolean("settings.set-slot-trigger.SetSlotPacket.remove-illegal-excess-enchant.enabled", true)) {
                         if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.SetSlotPacket.run-sync", true)) {
-                            SchedulerUtil.runSync(() -> {
-                                targetItem.setItemMeta(SlotUtil.removeExcessEnchantments(meta, event.getPlayer()));
-                            });
+                            SchedulerUtil.runSync(() -> targetItem.setItemMeta(SlotUtil.removeExcessEnchantments(meta, event.getPlayer())));
                         } else {
                             targetItem.setItemMeta(SlotUtil.removeExcessEnchantments(meta, event.getPlayer()));
                         }

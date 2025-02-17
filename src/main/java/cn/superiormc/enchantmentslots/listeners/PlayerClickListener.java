@@ -2,6 +2,7 @@ package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.methods.SlotUtil;
+import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,7 +30,7 @@ public class PlayerClickListener implements Listener {
         }
         if (event.getClickedInventory().equals(player.getOpenInventory().getBottomInventory())) {
             ItemStack tempItemStack = event.getCurrentItem();
-            if (tempItemStack == null || tempItemStack.getType().isAir()) {
+            if (!ItemUtil.isValid(tempItemStack)) {
                 tempItemStack = player.getItemOnCursor();
                 if (tempItemStack.getType().isAir()) {
                     return;

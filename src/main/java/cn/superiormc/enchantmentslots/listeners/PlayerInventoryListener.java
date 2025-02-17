@@ -4,6 +4,7 @@ import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.managers.LanguageManager;
 import cn.superiormc.enchantmentslots.objects.ObjectExtraSlotsItem;
 import cn.superiormc.enchantmentslots.methods.SlotUtil;
+import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,7 +31,7 @@ public class PlayerInventoryListener implements Listener {
             return;
         }
         ItemStack targetItem = event.getCurrentItem();
-        if (targetItem == null || targetItem.getType().isAir()) {
+        if (!ItemUtil.isValid(targetItem)) {
             return;
         }
         ItemStack extraItem = event.getCursor();

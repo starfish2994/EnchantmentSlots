@@ -211,4 +211,8 @@ public class ItemUtil {
         }
         return NumberUtil.convertToRoman(level);
     }
+
+    public static boolean isValid(ItemStack item) {
+        return item != null && !item.getType().isAir();
+    }
 }
