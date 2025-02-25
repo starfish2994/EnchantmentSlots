@@ -22,8 +22,6 @@ public final class EnchantmentSlots extends JavaPlugin {
 
     public static boolean newSkullMethod;
 
-    public static boolean eeLegacy = false;
-
     @Override
     public void onEnable() {
         instance = this;

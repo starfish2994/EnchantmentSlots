@@ -99,7 +99,7 @@ public class SlotUtil {
 
     public static ItemMeta removeExcessEnchantments(ItemMeta meta, Player player) {
         int maxEnchantments = SlotUtil.getSlot(meta);
-        int enchantmentAmount = meta.getEnchants().size();
+        int enchantmentAmount = EnchantsUtil.getUsedSlot(meta);
         int loggedRemoveAmount;
         if (maxEnchantments > 0 && enchantmentAmount > maxEnchantments) {
             int removeAmount = enchantmentAmount - maxEnchantments;

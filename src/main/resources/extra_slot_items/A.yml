@@ -4,9 +4,11 @@ display-item:
   lore:
     - '&fDrag this item into your item to use!'
     - '&fApply for all items but have only 50% success rate!'
+
+add-slots: 1
 chance: 50
+
 conditions: []
-add-lore: 1
 success-actions:
   1:
     type: sound
@@ -21,4 +23,5 @@ fail-actions:
   2:
     type: message
     message: '&#98FB98[EnchantmentSlots] &cYou are not very lucky, slot item has broken!'
+
 match-item: []

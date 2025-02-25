@@ -1,31 +1,16 @@
 package cn.superiormc.enchantmentslots.managers;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import cn.superiormc.enchantmentslots.utils.TextUtil;
-import com.willfp.eco.util.StringUtils;
-import com.willfp.ecoenchants.display.EnchantmentFormattingKt;
-import com.willfp.ecoenchants.enchant.EcoEnchantLike;
-import com.willfp.ecoenchants.enchant.EcoEnchants;
-import com.willfp.libreforge.Holder;
-import com.willfp.libreforge.ItemProvidedHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import su.nightexpress.excellentenchants.api.enchantment.CustomEnchantment;
-import su.nightexpress.excellentenchants.api.enchantment.EnchantmentData;
-import su.nightexpress.excellentenchants.enchantment.registry.EnchantRegistry;
-import su.nightexpress.nightcore.util.text.NightMessage;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Map;
 
 public class LanguageManager {
 
@@ -38,10 +23,6 @@ public class LanguageManager {
     private File file;
 
     private File tempFile;
-
-    private final Map<Enchantment, String> enchantmentNameCache = new HashMap<>();
-
-    private final Map<Integer, String> enchantmentLevelCache = new HashMap<>();
 
     public LanguageManager() {
         languageManager = this;
@@ -178,69 +159,5 @@ public class LanguageManager {
             }
         }
         return TextUtil.parse(text);
-    }
-
-    public String getEnchantName(ItemStack item, Enchantment enchantment, Player player, boolean showTierColor) {
-        try {
-            if (enchantmentNameCache.containsKey(enchantment)) {
-                return enchantmentNameCache.get(enchantment);
-            }
-            String enchantmentName = ConfigManager.configManager.getString("enchant-name." + enchantment.getKey().getKey(), enchantment.getKey().getKey());
-            if (enchantmentName.equals(enchantment.getKey().getKey())) {
-                if (CommonUtil.checkPluginLoad("EcoEnchants")) {
-                    EcoEnchantLike ecoEnchant = EcoEnchants.INSTANCE.getByID(enchantment.getKey().getKey());
-                    if (ecoEnchant != null) {
-                        if (showTierColor) {
-                            enchantmentName = EcoEnchantsHook.getEcoEnchantName(ecoEnchant, item, player);
-                        } else {
-                            enchantmentName = StringUtils.format(ecoEnchant.getRawDisplayName());
-                        }
-                    }
-                } else if (CommonUtil.checkPluginLoad("ExcellentEnchants")) {
-                    if (!EnchantmentSlots.eeLegacy) {
-                        CustomEnchantment excellentEnchant = su.nightexpress.excellentenchants.registry.EnchantRegistry.getByKey(enchantment.getKey());
-                        if (excellentEnchant != null) {
-                            if (showTierColor) {
-                                enchantmentName = NightMessage.asLegacy(excellentEnchant.getFormattedName());
-                            } else {
-                                enchantmentName = NightMessage.asLegacy(excellentEnchant.getDisplayName());
-                            }
-                        }
-                    } else {
-                        EnchantmentData excellentEnchant = EnchantRegistry.getByKey(enchantment.getKey());
-                        if (excellentEnchant != null) {
-                            if (showTierColor) {
-                                enchantmentName = NightMessage.asLegacy(excellentEnchant.getNameFormatted(-1, excellentEnchant.getCharges(item)).replace(" -1", ""));
-                            } else {
-                                enchantmentName = NightMessage.asLegacy(excellentEnchant.getName());
-                            }
-                        }
-                    }
-                }
-            }
-            enchantmentNameCache.put(enchantment, TextUtil.parse(enchantmentName));
-            return enchantmentName;
-        } catch (Throwable throwable) {
-            return "ERROR";
-        }
-    }
-
-    public String getEnchantLevel(int level) {
-        if (enchantmentLevelCache.containsKey(level)) {
-            return enchantmentLevelCache.get(level);
-        }
-        String levelName = ConfigManager.configManager.getString("enchant-level." + level, String.valueOf(level));
-        enchantmentLevelCache.put(level, levelName);
-        return levelName;
-    }
-
-}
-
-class EcoEnchantsHook {
-
-    public static String getEcoEnchantName(EcoEnchantLike ecoEnchant, ItemStack item, Player player) {
-        Holder holder = EcoEnchants.INSTANCE.getByID(ecoEnchant.getEnchantment().getKey().getKey()).getLevel(item.getEnchantmentLevel(ecoEnchant.getEnchantment()));
-        ItemProvidedHolder itemProvidedHolder = new ItemProvidedHolder(holder, item);
-        return EnchantmentFormattingKt.getFormattedName(ecoEnchant, 0, itemProvidedHolder.isShowingAnyNotMet(player));
     }
 }

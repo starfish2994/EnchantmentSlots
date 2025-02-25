@@ -1,6 +1,7 @@
 package cn.superiormc.enchantmentslots.papi;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
+import cn.superiormc.enchantmentslots.methods.EnchantsUtil;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import cn.superiormc.enchantmentslots.methods.SlotUtil;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -63,7 +64,7 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
             if (mainHandItem.getType().isAir()) {
                 return "false";
             }
-            if (ItemUtil.getEnchantments(mainHandItem, false).size() >= SlotUtil.getSlot(mainHandItem)) {
+            if (EnchantsUtil.getEnchantments(mainHandItem, false).size() >= SlotUtil.getSlot(mainHandItem)) {
                 return "false";
             }
             return "true";

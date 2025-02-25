@@ -5,9 +5,10 @@ display-item:
   lore:
     - '&fDrag this item into your item to use!'
     - '&f100% success but only work for diamond sword.'
+
 add-slots: 5
-conditions:
-  - 'none'
+
+conditions: []
 success-actions:
   1:
     type: sound
@@ -22,6 +23,7 @@ fail-actions:
   2:
     type: message
     message: '&#98FB98[EnchantmentSlots] &cYou are not very lucky, slot item has broken!'
+
 match-item:
   material:
     - 'diamond_sword'

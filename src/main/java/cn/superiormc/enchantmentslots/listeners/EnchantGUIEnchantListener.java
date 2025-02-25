@@ -3,6 +3,7 @@ package cn.superiormc.enchantmentslots.listeners;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.managers.LanguageManager;
+import cn.superiormc.enchantmentslots.methods.EnchantsUtil;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import cn.superiormc.enchantmentslots.methods.SlotUtil;
 import com.gmail.legamemc.enchantgui.api.event.PlayerEnchantItemEvent;
@@ -21,7 +22,7 @@ public class EnchantGUIEnchantListener implements Listener {
         ItemStack item = event.getItem();
         SlotUtil.setSlot(item, player, false);
         int maxEnchantments = SlotUtil.getSlot(item);
-        if (item.getEnchantments().size() >= maxEnchantments) {
+        if (EnchantsUtil.getUsedSlot(item) >= maxEnchantments) {
             int buyLevel = event.getLevel();
             int nowLevel = event.getItem().getEnchantmentLevel(event.getEnchantment());
             int originalLevel = nowLevel - buyLevel;

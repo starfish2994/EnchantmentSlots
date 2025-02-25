@@ -236,6 +236,9 @@ public class ConfigManager {
     }
 
     public boolean canDisplay(ItemStack item) {
+        if (!getBoolean("settings.add-lore.enabled", true)) {
+            return false;
+        }
         ConfigurationSection matchItemSection = getSection("settings.add-lore.black-item");
         if (matchItemSection != null) {
             return !MatchItemManager.matchItemManager.getMatch(matchItemSection, item);

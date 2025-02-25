@@ -2,6 +2,7 @@ package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.managers.LanguageManager;
+import cn.superiormc.enchantmentslots.methods.EnchantsUtil;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import cn.superiormc.enchantmentslots.methods.SlotUtil;
 import org.bukkit.entity.Player;
@@ -35,7 +36,7 @@ public class PlayerSmithListener implements Listener {
                 maxEnchantments = defaultSlot;
             }
         }
-        if (!ConfigManager.configManager.isIgnore(item) && ItemUtil.getEnchantments(item, false).size() > maxEnchantments) {
+        if (!ConfigManager.configManager.isIgnore(item) && EnchantsUtil.getUsedSlot(item) > maxEnchantments) {
             event.setCancelled(true);
             if (ConfigManager.configManager.getBoolean("settings.close-inventory-if-reached-limit", true)) {
                 player.closeInventory();

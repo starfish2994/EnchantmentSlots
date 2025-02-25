@@ -6,6 +6,7 @@ folia-supported: true
 softdepend:
   - EcoEnchants
   - ExcellentEnchants
+  - Aiyatsbus
   - EcoItems
   - EcoArmor
   - MythicMobs

@@ -5,6 +5,7 @@ import org.bukkit.Registry;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class ContainsEnchants extends AbstractMatchItemRule {
@@ -17,13 +18,20 @@ public class ContainsEnchants extends AbstractMatchItemRule {
         ConfigurationSection containsEnchantsSection = section.getConfigurationSection("contains-enchants");
         for (String ench : containsEnchantsSection.getKeys(false)) {
             Enchantment vanillaEnchant = Registry.ENCHANTMENT.get(CommonUtil.parseNamespacedKey(ench.toLowerCase()));
-            if (vanillaEnchant == null || meta.getEnchants().get(vanillaEnchant) == null) {
+            if (vanillaEnchant == null) {
                 continue;
             }
-            if (containsEnchantsSection.getString(ench).startsWith("[")) {
-                return containsEnchantsSection.getIntegerList(ench).contains(meta.getEnchants().get(vanillaEnchant));
+            int level;
+            if (meta instanceof EnchantmentStorageMeta) {
+                EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) meta;
+                level = enchantmentStorageMeta.getStoredEnchantLevel(vanillaEnchant);
             } else {
-                return meta.getEnchants().get(vanillaEnchant) > containsEnchantsSection.getInt(ench);
+                level = meta.getEnchantLevel(vanillaEnchant);
+            }
+            if (containsEnchantsSection.getString(ench).startsWith("[")) {
+                return containsEnchantsSection.getIntegerList(ench).contains(level);
+            } else {
+                return level > containsEnchantsSection.getInt(ench);
             }
         }
         return false;

@@ -1,9 +1,8 @@
 package cn.superiormc.enchantmentslots.methods;
 
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
-import cn.superiormc.enchantmentslots.managers.LanguageManager;
+import cn.superiormc.enchantmentslots.managers.HookManager;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
-import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import cn.superiormc.enchantmentslots.utils.TextUtil;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -54,16 +53,17 @@ public class AddLore {
         if (!ConfigManager.configManager.getBoolean("settings.add-lore.at-first-or-last", false)) {
             index = itemLore.size();
         }
-        Map<Enchantment, Integer> enchantments = ItemUtil.getEnchantments(item, true);
+        Map<Enchantment, Integer> enchantments = EnchantsUtil.getEnchantments(item, true);
         for (String line : ConfigManager.configManager.getStringList("settings.add-lore.display-value")) {
             if (line.equals("{enchants}")) {
                 for (Enchantment enchantment : enchantments.keySet()) {
                     String value = TextUtil.parse(ConfigManager.configManager.getString("settings.add-lore.placeholder.enchants.format",
                             "&6  {enchant_name}"
-                            ,"enchant_name", LanguageManager.languageManager.getEnchantName(item, enchantment, player, true)
-                            ,"enchant_raw_name", LanguageManager.languageManager.getEnchantName(item, enchantment, player, false)
-                            ,"enchant_level", ItemUtil.getEnchantmentLevel(enchantment, enchantments.get(enchantment))
-                            ,"enchant_level_roman", ItemUtil.getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment))));
+                            ,"enchant_name", HookManager.hookManager.getEnchantName(item, enchantment, player, true)
+                            ,"enchant_raw_name", HookManager.hookManager.getEnchantName(item, enchantment, player, false)
+                            ,"enchant_level", EnchantsUtil.getEnchantmentLevel(enchantment, enchantments.get(enchantment))
+                            ,"enchant_level_roman", EnchantsUtil.getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment))
+                            ,"enchant_used_slot", EnchantsUtil.getUsedSlotPlaceholder(enchantment)));
                     value = lorePrefix + value;
                     itemLore.add(index, value);
                     index++;
@@ -71,7 +71,7 @@ public class AddLore {
                 continue;
             }
             if (line.equals("{empty_slots}")) {
-                int i = slot - enchantments.size();
+                int i = slot - EnchantsUtil.getUsedSlot(enchantments.keySet());
                 while (i > 0) {
                     String value = TextUtil.parse(ConfigManager.configManager.getString("settings.add-lore.placeholder.empty-slots.format",
                             "&7  --- Empty Slot ---"));
@@ -85,7 +85,8 @@ public class AddLore {
             line = lorePrefix + line;
             itemLore.add(index, TextUtil.parse(CommonUtil.modifyString(line,
                     "slot_amount", String.valueOf(slot),
-                    "enchant_amount", String.valueOf(enchantments.size()))));
+                    "enchant_amount", String.valueOf(enchantments.size()),
+                    "used_slot_amount", String.valueOf(EnchantsUtil.getUsedSlot(enchantments.keySet())))));
             index++;
 
         }
@@ -127,7 +128,7 @@ public class AddLore {
             itemLore = meta.getLore();
         }
         int slot = SlotUtil.getSlot(meta);
-        Map<Enchantment, Integer> enchantments = ItemUtil.getEnchantments(meta, true);
+        Map<Enchantment, Integer> enchantments = EnchantsUtil.getEnchantments(meta, true);
         if (itemLore != null) {
             for (String str : itemLore) {
                 if (str.contains("{enchants}")) {
@@ -135,15 +136,16 @@ public class AddLore {
                         newLore.add(TextUtil.parse(
                                 ConfigManager.configManager.getString("settings.add-lore.placeholder.enchants.format",
                                         "&6  {enchant_name}",
-                                        "enchant_name", LanguageManager.languageManager.getEnchantName(item, enchantment, player, true),
-                                        "enchant_raw_name", LanguageManager.languageManager.getEnchantName(item, enchantment, player, false),
-                                        "enchant_level", ItemUtil.getEnchantmentLevel(enchantment, enchantments.get(enchantment)),
-                                        "enchant_level_roman", ItemUtil.getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment)))));
+                                        "enchant_name", HookManager.hookManager.getEnchantName(item, enchantment, player, true),
+                                        "enchant_raw_name", HookManager.hookManager.getEnchantName(item, enchantment, player, false),
+                                        "enchant_level", EnchantsUtil.getEnchantmentLevel(enchantment, enchantments.get(enchantment)),
+                                        "enchant_level_roman", EnchantsUtil.getEnchantmentLevelRoman(enchantment, enchantments.get(enchantment)),
+                                        "enchant_used_slot", EnchantsUtil.getUsedSlotPlaceholder(enchantment))));
                     }
                     continue;
                 }
                 if (str.contains("{empty_slots}")) {
-                    int i = slot - enchantments.size();
+                    int i = slot - EnchantsUtil.getUsedSlot(enchantments.keySet());
                     while (i > 0) {
                         newLore.add(TextUtil.parse(ConfigManager.configManager.getString("settings.add-lore.placeholder.empty-slots.format",
                                 "&7  --- Empty Slot ---")));
@@ -151,8 +153,10 @@ public class AddLore {
                     }
                     continue;
                 }
-                newLore.add(CommonUtil.modifyString(str, "slot_amount", String.valueOf(slot),
-                        "enchant_amount", String.valueOf(enchantments.size())));
+                newLore.add(TextUtil.parse(CommonUtil.modifyString(str,
+                        "slot_amount", String.valueOf(slot),
+                        "enchant_amount", String.valueOf(enchantments.size()),
+                        "used_slot_amount", String.valueOf(EnchantsUtil.getUsedSlot(enchantments.keySet())))));
             }
         }
         meta.setLore(newLore);

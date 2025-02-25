@@ -2,6 +2,7 @@ package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.managers.LanguageManager;
+import cn.superiormc.enchantmentslots.methods.EnchantsUtil;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import cn.superiormc.enchantmentslots.methods.SlotUtil;
 import org.bukkit.entity.Player;
@@ -32,7 +33,7 @@ public class PlayerAnvilListener implements Listener {
                     SlotUtil.setSlot(result, player, false);
                 }
                 int maxEnchantments = SlotUtil.getSlot(item);
-                if (!ConfigManager.configManager.isIgnore(item) && ItemUtil.getEnchantments(result, false).size() > maxEnchantments) {
+                if (!ConfigManager.configManager.isIgnore(item) && EnchantsUtil.getUsedSlot(result) > maxEnchantments) {
                     inventory.setRepairCost(0);
                     event.setCancelled(true);
                     if (ConfigManager.configManager.getBoolean("settings.close-inventory-if-reached-limit", true)) {

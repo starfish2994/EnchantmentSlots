@@ -52,8 +52,9 @@ settings:
       - book
       - enchanted_book
   add-lore:
-    # ProtolcolLib only.
+    enabled: true
     remove-lore-first: true
+    # ProtolcolLib only.
     lore-prefix: "§y"
     auto-hide-enchants: true
     # This option support ProtocolLib only.
@@ -63,9 +64,10 @@ settings:
     check-chests-only: true
     # Which item will not display lore.
     black-item:
-      material:
-        - book
-        - enchanted_book
+      any:
+        material:
+          - book
+          - enchanted_book
     # Support plugin:
     #   - eco (Do not change unless you are know what you are doing)
     #   - ProtocolLib (Classic and stable choice)
@@ -92,15 +94,16 @@ settings:
     # Do not change this option when server started!
     # Only change this if your server has stopped!
     display-value:
-      - "&#ff3300Enchantment Slots: {enchant_amount}/{slot_amount}"
+      - "&#ff3300Enchantment Slots: {used_slot_amount}/{slot_amount}"
       - "{enchants}"
       - "{empty_slots}"
     placeholder:
       auto-parse: true
       enchants:
-        # Other placeholder: {enchant_level_roman}, {raw_enchant_name}
-        format: '&6  {enchant_name} {enchant_level}'
+        # Other placeholder: {enchant_level_roman}, {raw_enchant_name}, {enchant_used_slot}
+        format: '&6  {enchant_name}{enchant_level}{enchant_used_slot}'
         sort: true
+        auto-add-space: true
         level-hide-one: true
       empty-slots:
         format: '&7  --- Empty Slot ---'
@@ -115,12 +118,7 @@ settings:
 
 # Enchant Level
 enchant-level:
-  1: ①
-  2: ②
-  3: ③
-  4: ④
-  5: ⑤
-  6: ⑥
+  1: ''
 
 # Enchant Name
 enchant-name:
@@ -173,3 +171,15 @@ enchant-name:
   wind_burst: 'Wind Burst'
   breach: 'Breach'
   density: 'Density'
+
+# Enchant Used Slot
+enchant-used-slot:
+  values:
+    # mending: 2
+  placeholder:
+    0: '&c☆'
+    1: ''
+    2: '&7☆'
+    3: '&f☆'
+    4: '&e☆'
+    5: '&6☆'
