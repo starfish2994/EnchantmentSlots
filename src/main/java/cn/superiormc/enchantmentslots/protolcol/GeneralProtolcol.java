@@ -6,20 +6,21 @@ import cn.superiormc.enchantmentslots.methods.AddLore;
 import cn.superiormc.enchantmentslots.protolcol.ProtocolLib.*;
 import cn.superiormc.enchantmentslots.protolcol.eco.EcoDisplayModule;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
+import com.github.retrooper.packetevents.PacketEvents;
 import org.bukkit.Bukkit;
 
 public abstract class GeneralProtolcol {
 
     public static void init() {
         String plugin = EnchantmentSlots.instance.getConfig().getString("settings.add-lore.use-listener-plugin",
-                EnchantmentSlots.instance.getConfig().getString("settings.use-listener-plugin", "ProtocolLib"));
-        if (plugin.equals("ProtocolLib") &&
-                CommonUtil.checkPluginLoad("ProtocolLib")) {
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into ProtocolLib....");
-            new SetCreativeSlots();
-            new SetSlots();
-            new WindowItem();
-            new WindowMerchant();
+                EnchantmentSlots.instance.getConfig().getString("settings.use-listener-plugin", "packetevents"));
+        if (plugin.equals("packetevents") &&
+                CommonUtil.checkPluginLoad("packetevents")) {
+            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into packetevents....");
+            PacketEvents.getAPI().getEventManager().registerListener(new SetSlots(), ConfigManager.configManager.getPriority());
+            PacketEvents.getAPI().getEventManager().registerListener(new WindowItem(), ConfigManager.configManager.getPriority());
+            PacketEvents.getAPI().getEventManager().registerListener(new WindowMerchant(), ConfigManager.configManager.getPriority());
+            PacketEvents.getAPI().getEventManager().registerListener(new SetCreativeSlots(), ConfigManager.configManager.getPriority());
             AddLore.lorePrefix = ConfigManager.configManager.getString("settings.add-lore.lore-prefix", "§y");
         } else if (plugin.equals("eco") &&
                 CommonUtil.checkPluginLoad("eco")) {

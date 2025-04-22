@@ -109,7 +109,7 @@ public class SlotUtil {
                     break;
                 }
                 meta.removeEnchant(enchant);
-                removeAmount--;
+                removeAmount = removeAmount - EnchantsUtil.getUsedSlot(enchant);
             }
             if (!ConfigManager.configManager.getBoolean("settings.set-slot-trigger.SetSlotPacket.remove-illegal-excess-enchant.hide-remove-message", false)) {
                 LanguageManager.languageManager.sendStringText(player, "remove-excess-enchants", "max", String.valueOf(maxEnchantments), "remove", String.valueOf(loggedRemoveAmount));

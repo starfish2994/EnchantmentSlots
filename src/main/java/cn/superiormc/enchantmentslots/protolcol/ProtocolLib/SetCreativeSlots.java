@@ -1,42 +1,27 @@
 package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 
-import cn.superiormc.enchantmentslots.EnchantmentSlots;
-
-import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.methods.AddLore;
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.reflect.StructureModifier;
-import org.bukkit.Bukkit;
+import cn.superiormc.enchantmentslots.utils.ItemUtil;
+import com.github.retrooper.packetevents.event.PacketListener;
+import com.github.retrooper.packetevents.event.PacketReceiveEvent;
+import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientCreativeInventoryAction;
+import io.github.retrooper.packetevents.util.SpigotConversionUtil;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class SetCreativeSlots extends GeneralPackets {
-
-    // 客户端发给服务端
-    public SetCreativeSlots() {
-        super();
-    }
+public class SetCreativeSlots implements PacketListener {
 
     @Override
-    protected void initPacketAdapter() {
-        packetAdapter = new PacketAdapter(EnchantmentSlots.instance, ConfigManager.configManager.getPriority(), PacketType.Play.Client.SET_CREATIVE_SLOT) {
-            @Override
-            public void onPacketReceiving(PacketEvent event) {
-                if (ConfigManager.configManager.getBoolean("debug", false)) {
-                    Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §f" +
-                            "Found SetCreativeSlots packet.");
-                }
-                PacketContainer packet = event.getPacket();
-                StructureModifier<ItemStack> itemStackStructureModifier = packet.getItemModifier();
-                ItemStack clientItemStack = itemStackStructureModifier.read(0);
-                if (clientItemStack.getType().isAir()) {
-                    return;
-                }
-                ItemStack serverItemStack = AddLore.removeLore(clientItemStack);
-                itemStackStructureModifier.write(0, serverItemStack);
-            }
-        };
+    public void onPacketReceive(PacketReceiveEvent event) {
+        Player player = event.getPlayer();
+        if (player == null) {
+            return;
+        }
+        WrapperPlayClientCreativeInventoryAction creative = new WrapperPlayClientCreativeInventoryAction(event);
+        ItemStack item = SpigotConversionUtil.toBukkitItemStack(creative.getItemStack());
+        if (!ItemUtil.isValid(item)) {
+            return;
+        }
+        creative.setItemStack(SpigotConversionUtil.fromBukkitItemStack(AddLore.removeLore(item)));
     }
 }

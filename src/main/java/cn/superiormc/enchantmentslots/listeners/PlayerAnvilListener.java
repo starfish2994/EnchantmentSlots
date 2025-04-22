@@ -3,7 +3,6 @@ package cn.superiormc.enchantmentslots.listeners;
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.managers.LanguageManager;
 import cn.superiormc.enchantmentslots.methods.EnchantsUtil;
-import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import cn.superiormc.enchantmentslots.methods.SlotUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

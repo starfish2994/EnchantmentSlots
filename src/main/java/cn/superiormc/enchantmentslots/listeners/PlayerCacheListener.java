@@ -19,6 +19,7 @@ public class PlayerCacheListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         long time = ConfigManager.configManager.getLong("settings.set-slot-trigger.SetSlotPacket.remove-illegal-excess-enchant.ignore-join-time", -1);
         if (time < 0) {
+            loadedPlayers.add(event.getPlayer());
             return;
         }
         SchedulerUtil.runTaskLater(() -> loadedPlayers.add(event.getPlayer()), time);

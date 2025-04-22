@@ -5,6 +5,7 @@ import cn.superiormc.enchantmentslots.managers.LanguageManager;
 import cn.superiormc.enchantmentslots.methods.EnchantsUtil;
 import cn.superiormc.enchantmentslots.utils.SchedulerUtil;
 import cn.superiormc.enchantmentslots.methods.SlotUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -29,18 +30,21 @@ public class PlayerEnchantListener implements Listener {
         int maxEnchantments = SlotUtil.getSlot(item);
         if (!ConfigManager.configManager.isIgnore(item) && EnchantsUtil.getUsedSlot(event.getEnchantsToAdd().keySet()) + EnchantsUtil.getUsedSlot(item) > maxEnchantments) {
 
-            int removeAmount = item.getEnchantments().size() - maxEnchantments;
-            if (!ConfigManager.configManager.getBoolean("settings.set-slot-trigger.EnchantItemEvent.cancel-if-reached-slot", true) && item.getType() != Material.BOOK && removeAmount < event.getEnchantsToAdd().size()) {
+            int removeAmount = EnchantsUtil.getUsedSlot(event.getEnchantsToAdd().keySet()) + EnchantsUtil.getUsedSlot(item) - maxEnchantments;
+
+           if (!ConfigManager.configManager.getBoolean("settings.set-slot-trigger.EnchantItemEvent.cancel-if-reached-slot", true) &&
+                    item.getType() != Material.BOOK && removeAmount > 0) {
                 SchedulerUtil.runSync(() -> {
+                    ItemMeta otherMeta = item.getItemMeta();
                     int realRemoveAmount = removeAmount;
-                    for (Enchantment enchant : meta.getEnchants().keySet()) {
+                    for (Enchantment enchant : otherMeta.getEnchants().keySet()) {
                         if (realRemoveAmount <= 0) {
                             break;
                         }
-                        meta.removeEnchant(enchant);
-                        realRemoveAmount--;
+                        otherMeta.removeEnchant(enchant);
+                        realRemoveAmount = realRemoveAmount - EnchantsUtil.getUsedSlot(enchant);
                     }
-                    item.setItemMeta(meta);
+                    item.setItemMeta(otherMeta);
                     LanguageManager.languageManager.sendStringText(player, "slots-limit-reached-enchant", "max", String.valueOf(maxEnchantments), "remove", String.valueOf(removeAmount));
                 });
             } else {

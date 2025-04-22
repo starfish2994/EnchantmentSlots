@@ -3,7 +3,7 @@ package cn.superiormc.enchantmentslots.managers;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.objects.ObjectExtraSlotsItem;
 import cn.superiormc.enchantmentslots.objects.ObjectItemSlot;
-import com.comphenix.protocol.events.ListenerPriority;
+import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.willfp.eco.core.display.DisplayPriority;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
@@ -154,8 +154,8 @@ public class ConfigManager {
         return config.getLong(path, defaultValue);
     }
 
-    public ListenerPriority getPriority() {
-        return ListenerPriority.valueOf(EnchantmentSlots.instance.getConfig().getString(
+    public PacketListenerPriority getPriority() {
+        return PacketListenerPriority.valueOf(EnchantmentSlots.instance.getConfig().getString(
                 "settings.add-lore.packet-listener-priority", EnchantmentSlots.instance.getConfig().getString(
                         "settings.packet-listener-priority", "MONITOR")).toUpperCase());
     }

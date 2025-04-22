@@ -14,9 +14,10 @@ softdepend:
   - NeigeItems
   - ItemsAdder
   - Oraxen
-  - ProtocolLib
+  - packetevents
   - eco
   - NBTAPI
+  - CraftEngine
   - EnchantGui
   - ExecutableItems
   - InteractiveChat

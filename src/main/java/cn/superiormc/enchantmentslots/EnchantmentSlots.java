@@ -3,7 +3,6 @@ package cn.superiormc.enchantmentslots;
 import cn.superiormc.enchantmentslots.managers.*;
 import cn.superiormc.enchantmentslots.protolcol.GeneralProtolcol;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
-import com.comphenix.protocol.ProtocolLibrary;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -67,9 +66,6 @@ public final class EnchantmentSlots extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if (CommonUtil.checkPluginLoad("ProtocolLib")){
-            ProtocolLibrary.getProtocolManager().removePacketListeners(this);
-        }
         Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fPlugin is disabled. Author: PQguanfang.");
     }
 }

@@ -1,61 +1,52 @@
 package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 
-import cn.superiormc.enchantmentslots.EnchantmentSlots;
-import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.methods.AddLore;
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.reflect.StructureModifier;
-import org.bukkit.Bukkit;
+import cn.superiormc.enchantmentslots.utils.ItemUtil;
+import com.github.retrooper.packetevents.event.PacketSendEvent;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWindowItems;
+import io.github.retrooper.packetevents.util.SpigotConversionUtil;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import com.github.retrooper.packetevents.event.PacketListener;
 
 // 服务端发给客户端
-public class WindowItem extends GeneralPackets {
+public class WindowItem implements PacketListener {
 
-    public WindowItem() {
-        super();
-    }
 
     @Override
-    protected void initPacketAdapter() {
-        packetAdapter = new PacketAdapter(EnchantmentSlots.instance, ConfigManager.configManager.getPriority(), PacketType.Play.Server.WINDOW_ITEMS) {
-            @Override
-            public void onPacketSending(PacketEvent event) {
-                if (ConfigManager.configManager.getBoolean("debug", false)) {
-                    Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §f" +
-                            "Found WindowsItem packet. Window ID: " + event.getPacket().getIntegers().read(0));
-                }
-                if (event.getPlayer() == null) {
-                    return;
-                }
-                PacketContainer packet = event.getPacket();
-                StructureModifier<ItemStack> singleItemStackStructureModifier = packet.getItemModifier();
-                if (singleItemStackStructureModifier.size() != 0) {
-                    ItemStack serverItemStack = singleItemStackStructureModifier.read(0);
-                    // client 是加过 Lore 的，server 是没加过的！
-                    singleItemStackStructureModifier.write(0, AddLore.autoAddLore(serverItemStack, event.getPlayer(), true));
-                }
-                StructureModifier<List<ItemStack>> itemStackStructureModifier = packet.getItemListModifier();
-                List<ItemStack> serverItemStack = itemStackStructureModifier.read(0);
-                List<ItemStack> clientItemStack = new ArrayList<>();
-                int index = 1;
-                for (ItemStack itemStack : serverItemStack) {
-                    if (itemStack.getType().isAir()) {
-                        clientItemStack.add(itemStack);
-                        continue;
-                    }
-                    boolean isPlayerInventory = event.getPacket().getIntegers().read(0) == 0 || index > serverItemStack.size() - 36;
-                    clientItemStack.add(AddLore.autoAddLore(itemStack, event.getPlayer(), isPlayerInventory));
-                    index ++;
-                }
-                // client 是加过 Lore 的，server 是没加过的！
-                itemStackStructureModifier.write(0, clientItemStack);
+    public void onPacketSend(PacketSendEvent event) {
+        Player player = event.getPlayer();
+        if (player == null) {
+            return;
+        }
+        WrapperPlayServerWindowItems windowItems = new WrapperPlayServerWindowItems(event);
+        Optional<com.github.retrooper.packetevents.protocol.item.ItemStack> optionalCarriedItem = windowItems.getCarriedItem();
+        if (optionalCarriedItem.isPresent()) {
+            ItemStack carriedItem = SpigotConversionUtil.toBukkitItemStack(optionalCarriedItem.get());
+            if (ItemUtil.isValid(carriedItem)) {
+                ItemStack clientItemStack = AddLore.autoAddLore(carriedItem, event.getPlayer(), true);
+                windowItems.setCarriedItem(SpigotConversionUtil.fromBukkitItemStack(clientItemStack));
             }
-        };
+        }
+        List<com.github.retrooper.packetevents.protocol.item.ItemStack> tempItems = windowItems.getItems();
+        List<com.github.retrooper.packetevents.protocol.item.ItemStack> clientItemStack = new ArrayList<>();
+        int index = 1;
+        for (com.github.retrooper.packetevents.protocol.item.ItemStack item : tempItems) {
+            if (item.isEmpty()) {
+                clientItemStack.add(item);
+                index ++;
+                continue;
+            }
+            boolean isPlayerInventory = windowItems.getWindowId() == 0 || index > windowItems.getItems().size() - 36;
+            clientItemStack.add(SpigotConversionUtil.fromBukkitItemStack(AddLore.autoAddLore(SpigotConversionUtil.toBukkitItemStack(item), player, isPlayerInventory)
+            ));
+            index ++;
+        }
+        windowItems.setItems(clientItemStack);
     }
 }

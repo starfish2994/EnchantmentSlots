@@ -89,6 +89,9 @@ public class HookManager {
         if (CommonUtil.checkPluginLoad("ExecutableItems")) {
             registerNewItemHook("ExecutableItems", new ItemExecutableItemsHook());
         }
+        if (CommonUtil.checkPluginLoad("CraftEngine")) {
+            registerNewItemHook("CraftEngine", new ItemCraftEngineHook());
+        }
     }
 
     private void initEnchantHook() {
@@ -113,7 +116,7 @@ public class HookManager {
     public void registerNewItemHook(String pluginName,
                                     AbstractItemHook itemHook) {
         if (!itemHooks.containsKey(pluginName)) {
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into " + pluginName + ".");
+            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into " + pluginName + "...");
             itemHooks.put(pluginName, itemHook);
         }
     }
@@ -121,7 +124,7 @@ public class HookManager {
     public void registerNewEnchantHook(String pluginName,
                                     AbstractEnchantHook enchantHook) {
         if (!enchantHooks.containsKey(pluginName)) {
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into " + pluginName + ".");
+            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into " + pluginName + "...");
             enchantHooks.put(pluginName, enchantHook);
         }
     }

@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.CraftingInventory;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
@@ -46,6 +47,21 @@ public class CommonUtil {
             return slot >= 5 && slot <= 44;
         }
         return slot >= topSize;
+    }
+
+    public static ItemStack getItemFromSlot(Player player, int slot) {
+        if (slot == 36) {
+            return player.getInventory().getItem(EquipmentSlot.HAND);
+        } else if (slot == 37) {
+            return player.getInventory().getItem(EquipmentSlot.CHEST);
+        } else if (slot == 38) {
+            return player.getInventory().getItem(EquipmentSlot.LEGS);
+        } else if (slot == 39) {
+            return player.getInventory().getItem(EquipmentSlot.FEET);
+        } else if (slot == 40) {
+            return player.getInventory().getItem(EquipmentSlot.OFF_HAND);
+        }
+        return player.getInventory().getItem(slot);
     }
 
     public static void dispatchCommand(String command) {
@@ -146,6 +162,40 @@ public class CommonUtil {
             String parentPath = parentFile.getPath();
             mkDir(new File(parentPath));
             dir.mkdir();
+        }
+    }
+
+    public static int convertNMSSlotToBukkitSlot(int slot, int windowID, Player player) {
+        if (windowID == 0) {
+            if (slot < 5 || slot > 44) {
+                return -1;
+            }
+            int spigotSlot;
+            if (slot >= 36) {
+                spigotSlot = slot - 36;
+            } else if (slot <= 8) {
+                spigotSlot = slot + 31;
+            } else {
+                spigotSlot = slot;
+            }
+            return spigotSlot;
+        } else {
+            int topSize = player.getOpenInventory().getTopInventory().getSize();
+            if (topSize == 5 && CommonUtil.inPlayerInventory(player, slot, windowID)) {
+                topSize = 9;
+            }
+            if (slot < topSize || slot > topSize + 36) {
+                return -1;
+            }
+            int spigotSlot;
+            // 如果是最后9个格子
+            if (slot >= 27 + topSize) {
+                spigotSlot = slot - 27 - topSize;
+                // 如果是中间三排
+            } else {
+                spigotSlot = slot - topSize + 9;
+            }
+            return spigotSlot;
         }
     }
 }

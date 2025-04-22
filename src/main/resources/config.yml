@@ -70,8 +70,8 @@ settings:
           - enchanted_book
     # Support plugin:
     #   - eco (Do not change unless you are know what you are doing)
-    #   - ProtocolLib (Classic and stable choice)
-    use-listener-plugin: ProtocolLib
+    #   - packetevents (Classic and stable choice)
+    use-listener-plugin: packetevents
     # ProtocolLib Support value:
     #    LOWEST(0),
     #    LOW(1),
