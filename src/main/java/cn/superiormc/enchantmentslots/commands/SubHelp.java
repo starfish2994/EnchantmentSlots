@@ -13,7 +13,7 @@ public class SubHelp extends AbstractCommand {
 
     @Override
     public void executeCommandInGame(String[] args, Player player) {
-        if (player.hasPermission("mythictotem.admin")) {
+        if (player.hasPermission("enchantmentslots.admin")) {
             LanguageManager.languageManager.sendStringText(player, "help-main-admin");
             return;
         }

@@ -9,7 +9,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class PlayerClickListener implements Listener {
 
@@ -36,6 +38,11 @@ public class PlayerClickListener implements Listener {
                     return;
                 }
             }
+            ItemMeta meta = tempItemStack.getItemMeta();
+            if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.add-hide-enchant-flag", false)) {
+                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            }
+            tempItemStack.setItemMeta(meta);
             SlotUtil.setSlot(tempItemStack, player, false);
         }
     }

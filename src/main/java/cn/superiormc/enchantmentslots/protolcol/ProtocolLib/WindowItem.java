@@ -3,6 +3,7 @@ package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 import cn.superiormc.enchantmentslots.methods.AddLore;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
+import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWindowItems;
 import io.github.retrooper.packetevents.util.SpigotConversionUtil;
 import org.bukkit.entity.Player;
@@ -20,6 +21,9 @@ public class WindowItem implements PacketListener {
 
     @Override
     public void onPacketSend(PacketSendEvent event) {
+        if (!event.getPacketType().equals(PacketType.Play.Server.WINDOW_ITEMS)) {
+            return;
+        }
         Player player = event.getPlayer();
         if (player == null) {
             return;

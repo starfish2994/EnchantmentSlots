@@ -25,14 +25,12 @@ public class PlayerEnchantListener implements Listener {
             return;
         }
         if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.EnchantItemEvent.enabled", true)) {
-            item.setItemMeta(SlotUtil.setSlot(item, meta, player, false));
+            SlotUtil.setSlot(item, player, false);
         }
         int maxEnchantments = SlotUtil.getSlot(item);
         if (!ConfigManager.configManager.isIgnore(item) && EnchantsUtil.getUsedSlot(event.getEnchantsToAdd().keySet()) + EnchantsUtil.getUsedSlot(item) > maxEnchantments) {
-
             int removeAmount = EnchantsUtil.getUsedSlot(event.getEnchantsToAdd().keySet()) + EnchantsUtil.getUsedSlot(item) - maxEnchantments;
-
-           if (!ConfigManager.configManager.getBoolean("settings.set-slot-trigger.EnchantItemEvent.cancel-if-reached-slot", true) &&
+            if (!ConfigManager.configManager.getBoolean("settings.set-slot-trigger.EnchantItemEvent.cancel-if-reached-slot", true) &&
                     item.getType() != Material.BOOK && removeAmount > 0) {
                 SchedulerUtil.runSync(() -> {
                     ItemMeta otherMeta = item.getItemMeta();

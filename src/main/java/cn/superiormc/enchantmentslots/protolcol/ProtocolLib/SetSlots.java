@@ -9,10 +9,12 @@ import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import cn.superiormc.enchantmentslots.utils.SchedulerUtil;
 import com.github.retrooper.packetevents.event.PacketListener;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
+import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSetSlot;
 import io.github.retrooper.packetevents.util.SpigotConversionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -20,6 +22,9 @@ public class SetSlots implements PacketListener {
 
     @Override
     public void onPacketSend(PacketSendEvent event) {
+        if (!event.getPacketType().equals(PacketType.Play.Server.SET_SLOT)) {
+            return;
+        }
         Player player = event.getPlayer();
         if (player == null) {
             return;
@@ -31,7 +36,13 @@ public class SetSlots implements PacketListener {
             return;
         }
         int slot = serverSetSlot.getSlot();
+        if (slot < 0) {
+            return;
+        }
         int spigotSlot = CommonUtil.convertNMSSlotToBukkitSlot(slot, windowID, event.getPlayer());
+        if (spigotSlot < 0) {
+            return;
+        }
         boolean inPlayerInventory = CommonUtil.inPlayerInventory(event.getPlayer(), slot, windowID);
         if (inPlayerInventory && (ConfigManager.configManager.getBoolean(
                 "settings.set-slot-trigger.SetSlotPacket.enabled", true) ||
@@ -42,14 +53,18 @@ public class SetSlots implements PacketListener {
             if (ItemUtil.isValid(targetItem)) {
                 ItemMeta meta = targetItem.getItemMeta();
                 if (meta != null) {
+                    if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.add-hide-enchant-flag", false)) {
+                        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                        targetItem.setItemMeta(meta);
+                    }
                     if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.SetSlotPacket.enabled", true)) {
-                        targetItem.setItemMeta(SlotUtil.setSlot(targetItem, meta, event.getPlayer(), false));
+                        SlotUtil.setSlot(targetItem, event.getPlayer(), false);
                     }
                     if (PlayerCacheListener.loadedPlayers.contains(event.getPlayer()) && !ConfigManager.configManager.isIgnore(targetItem) && ConfigManager.configManager.getBoolean("settings.set-slot-trigger.SetSlotPacket.remove-illegal-excess-enchant.enabled", true)) {
                         if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.SetSlotPacket.remove-illegal-excess-enchant.run-sync", true)) {
-                            SchedulerUtil.runSync(() -> targetItem.setItemMeta(SlotUtil.removeExcessEnchantments(meta, event.getPlayer())));
+                            SchedulerUtil.runSync(() -> SlotUtil.removeExcessEnchantments(targetItem, event.getPlayer()));
                         } else {
-                            targetItem.setItemMeta(SlotUtil.removeExcessEnchantments(meta, event.getPlayer()));
+                            SlotUtil.removeExcessEnchantments(targetItem, event.getPlayer());
                         }
                     }
                 }

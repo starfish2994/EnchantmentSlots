@@ -20,27 +20,21 @@ public class SlotUtil {
         if (meta == null) {
             return item;
         }
-        item.setItemMeta(setSlot(item, meta, player, override));
-        return item;
-    }
-
-    public static ItemMeta setSlot(ItemStack item, ItemMeta meta, Player player, boolean override) {
         if (override) {
             meta.getPersistentDataContainer().remove(ENCHANTMENT_SLOTS_KEY);
         }
         if (meta.getPersistentDataContainer().has(ENCHANTMENT_SLOTS_KEY, PersistentDataType.INTEGER)) {
-            return meta;
+            return item;
         }
         int defaultSlot = ConfigManager.configManager.getDefaultLimits(item, player);
         if (defaultSlot > 0) {
             meta.getPersistentDataContainer().set(ENCHANTMENT_SLOTS_KEY,
                     PersistentDataType.INTEGER, defaultSlot);
         }
-        if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.add-hide-enchant-flag", false)) {
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        }
-        return meta;
+        item.setItemMeta(meta);
+        return item;
     }
+
 
     public static ItemStack setSlot(ItemStack item, int slotValue, boolean override) {
         ItemMeta meta = item.getItemMeta();
@@ -57,9 +51,6 @@ public class SlotUtil {
             meta.getPersistentDataContainer().set(ENCHANTMENT_SLOTS_KEY,
                     PersistentDataType.INTEGER,
                     slotValue);
-        }
-        if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.add-hide-enchant-flag", false)) {
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
         item.setItemMeta(meta);
         return item;
