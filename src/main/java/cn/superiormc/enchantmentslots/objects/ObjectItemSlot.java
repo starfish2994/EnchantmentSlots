@@ -1,9 +1,12 @@
 package cn.superiormc.enchantmentslots.objects;
 
+import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.managers.MatchItemManager;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
@@ -21,6 +24,8 @@ public class ObjectItemSlot {
 
     private final boolean autoAddLore;
 
+    private final boolean autoHideEnchants;
+
     public ObjectItemSlot(String id, ConfigurationSection section) {
         this.id = id;
         this.matchItemSection = section.getConfigurationSection("match-item");
@@ -28,10 +33,20 @@ public class ObjectItemSlot {
         this.maxSlotsSection = section.getConfigurationSection("max-slots");
         this.conditionSection = section.getConfigurationSection("slots-conditions");
         this.autoAddLore = section.getBoolean("auto-add-lore", false);
+        this.autoHideEnchants = section.getBoolean("auto-hide-enchants", true);
     }
 
     public int getDefaultSlot(ItemStack item, Player player) {
+        return getDefaultSlot(item, player, true);
+    }
+
+    public int getDefaultSlot(ItemStack item, Player player, boolean addHideEnchantsFlag) {
         if (matchItemSection == null || MatchItemManager.matchItemManager.getMatch(matchItemSection, item)) {
+            if (addHideEnchantsFlag && autoHideEnchants) {
+                ItemMeta meta = item.getItemMeta();
+                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                item.setItemMeta(meta);
+            }
             if (defaultSlotsSection == null) {
                 return -1;
             }
@@ -57,7 +72,7 @@ public class ObjectItemSlot {
 
     public int getMaxSlot(ItemStack item, Player player) {
         if (matchItemSection == null || MatchItemManager.matchItemManager.getMatch(matchItemSection, item)) {
-            if (matchItemSection == null) {
+            if (maxSlotsSection == null) {
                 return -1;
             }
             if (conditionSection == null) {
@@ -85,6 +100,10 @@ public class ObjectItemSlot {
             return false;
         }
         return autoAddLore;
+    }
+
+    public String getId() {
+        return id;
     }
 
     private int parseInt(ConfigurationSection section, String key, String defaultValue) {

@@ -68,6 +68,7 @@ public class AddLore {
                     itemLore.add(index, value);
                     index++;
                 }
+                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 continue;
             }
             if (line.equals("{empty_slots}")) {
@@ -89,9 +90,6 @@ public class AddLore {
                     "used_slot_amount", String.valueOf(EnchantsUtil.getUsedSlot(enchantments.keySet())))));
             index++;
 
-        }
-        if (ConfigManager.configManager.getBoolean("settings.add-lore.auto-hide-enchants", false)) {
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
         meta.setLore(itemLore);
         item.setItemMeta(meta);

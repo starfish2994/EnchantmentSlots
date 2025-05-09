@@ -67,6 +67,7 @@ match-item:
     - mace
 
 auto-add-lore: false
+auto-hide-enchants: true
 
 default-slots:
   default: 3

@@ -38,12 +38,8 @@ public class PlayerClickListener implements Listener {
                     return;
                 }
             }
-            ItemMeta meta = tempItemStack.getItemMeta();
-            if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.add-hide-enchant-flag", false)) {
-                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-            }
-            tempItemStack.setItemMeta(meta);
-            SlotUtil.setSlot(tempItemStack, player, false);
+            int defaultSlot = ConfigManager.configManager.getDefaultLimits(tempItemStack, player);
+            SlotUtil.setSlot(tempItemStack, defaultSlot, false);
         }
     }
 }
