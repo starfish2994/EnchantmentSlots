@@ -13,9 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class EcoDisplayModule extends DisplayModule {
+
     public static void init() {
-        Display.registerDisplayModule(new EcoDisplayModule(EcoPlugin.getPlugin("eco"),
-                ConfigManager.configManager.getEcoPriority()));
+        Display.registerDisplayModule(new EcoDisplayModule(EcoPlugin.getPlugin("eco"), ConfigManager.configManager.getEcoPriority()));
     }
 
     protected EcoDisplayModule(@NotNull EcoPlugin plugin, @NotNull DisplayPriority priority) {

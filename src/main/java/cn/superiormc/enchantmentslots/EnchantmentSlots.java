@@ -1,7 +1,6 @@
 package cn.superiormc.enchantmentslots;
 
 import cn.superiormc.enchantmentslots.managers.*;
-import cn.superiormc.enchantmentslots.protolcol.GeneralProtolcol;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -51,9 +50,6 @@ public final class EnchantmentSlots extends JavaPlugin {
         new ListenerManager();
         new CommandManager();
         new MatchItemManager();
-        if (LicenseManager.licenseManager.checkJarFiles()) {
-            GeneralProtolcol.init();
-        }
         new LanguageManager();
         if (!CommonUtil.checkClass("com.mojang.authlib.properties.Property", "getValue") && CommonUtil.getMinorVersion(21, 1)) {
             newSkullMethod = true;

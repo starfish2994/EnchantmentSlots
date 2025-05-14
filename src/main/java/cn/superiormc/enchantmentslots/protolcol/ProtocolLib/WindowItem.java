@@ -18,7 +18,6 @@ import com.github.retrooper.packetevents.event.PacketListener;
 // 服务端发给客户端
 public class WindowItem implements PacketListener {
 
-
     @Override
     public void onPacketSend(PacketSendEvent event) {
         if (!event.getPacketType().equals(PacketType.Play.Server.WINDOW_ITEMS)) {

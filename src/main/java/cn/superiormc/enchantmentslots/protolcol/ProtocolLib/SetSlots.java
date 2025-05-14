@@ -33,13 +33,7 @@ public class SetSlots implements PacketListener {
             return;
         }
         int slot = serverSetSlot.getSlot();
-        if (slot < 0) {
-            return;
-        }
         int spigotSlot = CommonUtil.convertNMSSlotToBukkitSlot(slot, windowID, event.getPlayer());
-        if (spigotSlot < 0) {
-            return;
-        }
         boolean inPlayerInventory = CommonUtil.inPlayerInventory(event.getPlayer(), slot, windowID);
         if (inPlayerInventory && (ConfigManager.configManager.getBoolean(
                 "settings.set-slot-trigger.SetSlotPacket.enabled", true) ||
@@ -47,7 +41,7 @@ public class SetSlots implements PacketListener {
                         "settings.set-slot-trigger.SetSlotPacket.remove-illegal-excess-enchant.enabled",
                         true))) {
             ItemStack targetItem = CommonUtil.getItemFromSlot(event.getPlayer(), spigotSlot);
-            if (ItemUtil.isValid(targetItem)) {
+            if (ItemUtil.isValid(targetItem) && spigotSlot != -1) {
                 int defaultSlot = ConfigManager.configManager.getDefaultLimits(targetItem, player);
                 if (defaultSlot > 0) {
                     if (ConfigManager.configManager.getBoolean("settings.set-slot-trigger.SetSlotPacket.enabled", true)) {
