@@ -3,6 +3,7 @@ package cn.superiormc.enchantmentslots.managers;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.objects.ObjectExtraSlotsItem;
 import cn.superiormc.enchantmentslots.objects.ObjectItemSlot;
+import cn.superiormc.enchantmentslots.utils.TextUtil;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.willfp.eco.core.display.DisplayPriority;
 import org.bukkit.Bukkit;
@@ -59,12 +60,12 @@ public class ConfigManager {
                 if (fileName.endsWith(".yml")) {
                     String substring = fileName.substring(0, fileName.length() - 4);
                     if (extraSlotsItemMap.containsKey(substring)) {
-                        ErrorManager.errorManager.sendErrorMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §cError: Already loaded a extra slot item config called: " +
+                        ErrorManager.errorManager.sendErrorMessage("§cError: Already loaded a extra slot item config called: " +
                                 fileName + "!");
                         continue;
                     }
                     extraSlotsItemMap.put(substring, new ObjectExtraSlotsItem(substring, YamlConfiguration.loadConfiguration(file)));
-                    Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fLoaded extra slot item: " + substring + "!");
+                    Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fLoaded extra slot item: " + substring + "!");
                 }
             }
         }
@@ -91,12 +92,12 @@ public class ConfigManager {
                 if (fileName.endsWith(".yml")) {
                     String substring = fileName.substring(0, fileName.length() - 4);
                     if (itemSlotMap.containsKey(substring)) {
-                        ErrorManager.errorManager.sendErrorMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §cError: Already loaded a item slot config called: " +
+                        ErrorManager.errorManager.sendErrorMessage("§cError: Already loaded a item slot config called: " +
                                 fileName + "!");
                         continue;
                     }
                     itemSlotMap.put(substring, new ObjectItemSlot(substring, YamlConfiguration.loadConfiguration(file)));
-                    Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fLoaded item slot config: " + substring + "!");
+                    Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fLoaded item slot config: " + substring + "!");
                 }
             }
         }

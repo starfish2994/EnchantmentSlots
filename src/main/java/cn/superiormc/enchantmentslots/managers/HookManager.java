@@ -42,20 +42,20 @@ public class HookManager {
     private void initNormalHook() {
         if (CommonUtil.checkPluginLoad("PlaceholderAPI")) {
             PlaceholderAPIExpansion.papi = new PlaceholderAPIExpansion(EnchantmentSlots.instance);
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into PlaceholderAPI...");
+            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fHooking into PlaceholderAPI...");
             if (PlaceholderAPIExpansion.papi.register()) {
-                Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fFinished hook!");
+                Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fFinished hook!");
             }
         }
         if (CommonUtil.checkPluginLoad("InteractiveChat")) {
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into InteractiveChat...");
+            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fHooking into InteractiveChat...");
             InteractiveChatAPI.registerItemStackTransformProvider(EnchantmentSlots.instance, 10, (itemStack, uuid) -> {
                 ICPlayer icPlayer = ICPlayerFactory.getICPlayer(uuid);
                 return AddLore.addLore(itemStack, icPlayer.getLocalPlayer());
             });
         }
         if (CommonUtil.checkPluginLoad("TrChat")) {
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into TrChat...");
+            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fHooking into TrChat...");
             HookPlugin.INSTANCE.registerDisplayItemHook("EnchantmentSlots", AddLore::addLore);
         }
     }
@@ -104,7 +104,7 @@ public class HookManager {
         }
         if (CommonUtil.checkPluginLoad("ExcellentEnchants")) {
             if (CommonUtil.getClass("su.nightexpress.excellentenchants.api.enchantment.EnchantmentData")) {
-                Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §6Warning: Seems that you are using ExcellentEnchants old version, enabled compatibility mode, " +
+                Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §6Warning: Seems that you are using ExcellentEnchants old version, enabled compatibility mode, " +
                         "this mode will be removed in future updates, please consider update it to latest.");
                 registerNewEnchantHook("ExcellentEnchants", new EnchantExcellentEnchantsLegacyHook());
             } else {
@@ -116,7 +116,7 @@ public class HookManager {
     public void registerNewItemHook(String pluginName,
                                     AbstractItemHook itemHook) {
         if (!itemHooks.containsKey(pluginName)) {
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into " + pluginName + "...");
+            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fHooking into " + pluginName + "...");
             itemHooks.put(pluginName, itemHook);
         }
     }
@@ -124,7 +124,7 @@ public class HookManager {
     public void registerNewEnchantHook(String pluginName,
                                     AbstractEnchantHook enchantHook) {
         if (!enchantHooks.containsKey(pluginName)) {
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fHooking into " + pluginName + "...");
+            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fHooking into " + pluginName + "...");
             enchantHooks.put(pluginName, enchantHook);
         }
     }

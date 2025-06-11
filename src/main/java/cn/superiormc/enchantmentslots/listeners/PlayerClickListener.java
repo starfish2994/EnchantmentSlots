@@ -3,6 +3,7 @@ package cn.superiormc.enchantmentslots.listeners;
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.methods.SlotUtil;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
+import cn.superiormc.enchantmentslots.utils.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,7 +22,7 @@ public class PlayerClickListener implements Listener {
             return;
         }
         if (ConfigManager.configManager.getBoolean("debug", false)) {
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §f" +
+            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §f" +
                     "Found WindowsClick packet.");
         }
         if (!(event.getWhoClicked() instanceof Player player)) {

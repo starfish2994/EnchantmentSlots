@@ -1,6 +1,7 @@
 package cn.superiormc.enchantmentslots.managers;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
+import cn.superiormc.enchantmentslots.utils.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -18,7 +19,7 @@ public class ErrorManager {
 
     public void sendErrorMessage(String message){
         if (!getError || !message.equals(lastErrorMessage)) {
-            Bukkit.getConsoleSender().sendMessage(message);
+            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " " + message);
             lastErrorMessage = message;
             getError = true;
             try {

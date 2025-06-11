@@ -2,6 +2,7 @@ package cn.superiormc.enchantmentslots;
 
 import cn.superiormc.enchantmentslots.managers.*;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
+import cn.superiormc.enchantmentslots.utils.TextUtil;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,15 +29,15 @@ public final class EnchantmentSlots extends JavaPlugin {
             majorVersion = versionParts.length > 1 ? Integer.parseInt(versionParts[1]) : 0;
             minorVersion = versionParts.length > 2 ? Integer.parseInt(versionParts[2]) : 0;
         } catch (Throwable throwable) {
-            ErrorManager.errorManager.sendErrorMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §cError: Can not get your Minecraft version! Default set to 1.0.0.");
+            ErrorManager.errorManager.sendErrorMessage("§cError: Can not get your Minecraft version! Default set to 1.0.0.");
         }
         if (CommonUtil.getClass("com.destroystokyo.paper.PaperConfig")) {
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fPaper is found, enabled Paper only feature!");
+            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fPaper is found, enabled Paper only feature!");
             isPaper = true;
         }
         if (CommonUtil.getClass("io.papermc.paper.threadedregions.RegionizedServerInitEvent")) {
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fFolia is found, enabled Folia compatibility feature!");
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §6Warning: Folia support is not fully test, major bugs maybe found! " +
+            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fFolia is found, enabled Folia compatibility feature!");
+            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §6Warning: Folia support is not fully test, major bugs maybe found! " +
                     "Please do not use in production environment!");
             isFolia = true;
         }
@@ -53,15 +54,15 @@ public final class EnchantmentSlots extends JavaPlugin {
         new LanguageManager();
         if (!CommonUtil.checkClass("com.mojang.authlib.properties.Property", "getValue") && CommonUtil.getMinorVersion(21, 1)) {
             newSkullMethod = true;
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fNew AuthLib found, enabled new skull get method!");
+            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fNew AuthLib found, enabled new skull get method!");
         }
         new Metrics(this, 23653);
-        Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fYour Minecraft version is: 1." + majorVersion + "." + minorVersion + "!");
-        Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fPlugin is loaded. Author: PQguanfang.");
+        Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fYour Minecraft version is: 1." + majorVersion + "." + minorVersion + "!");
+        Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fPlugin is loaded. Author: PQguanfang.");
     }
 
     @Override
     public void onDisable() {
-        Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[EnchantmentSlots] §fPlugin is disabled. Author: PQguanfang.");
+        Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fPlugin is disabled. Author: PQguanfang.");
     }
 }
