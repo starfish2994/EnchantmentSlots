@@ -10,6 +10,9 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/core/pom.xml" />
+        <option value="$PROJECT_DIR$/paper/pom.xml" />
+        <option value="$PROJECT_DIR$/plugin/pom.xml" />
       </list>
     </option>
   </component>
