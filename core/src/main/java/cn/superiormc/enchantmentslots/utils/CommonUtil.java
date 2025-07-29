@@ -1,6 +1,7 @@
 package cn.superiormc.enchantmentslots.utils;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.CraftingInventory;
@@ -60,7 +61,7 @@ public class CommonUtil {
         } else if (slot == 40) {
             return player.getInventory().getItem(EquipmentSlot.OFF_HAND);
         } else if (slot == -10000) {
-            return player.getInventory().getItem(EquipmentSlot.HAND);
+            return new ItemStack(Material.AIR);
         }
         return player.getInventory().getItem(slot);
     }

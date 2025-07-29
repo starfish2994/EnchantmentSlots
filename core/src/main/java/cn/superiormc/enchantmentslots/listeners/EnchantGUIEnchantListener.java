@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class EnchantGUIEnchantListener implements Listener {
@@ -22,15 +23,17 @@ public class EnchantGUIEnchantListener implements Listener {
         ItemStack item = event.getItem();
         SlotUtil.setSlot(item, player, false);
         int maxEnchantments = SlotUtil.getSlot(item);
-        if (EnchantsUtil.getUsedSlot(item) >= maxEnchantments) {
+        if (EnchantsUtil.getUsedSlot(item) > maxEnchantments) {
             int buyLevel = event.getLevel();
             int nowLevel = event.getItem().getEnchantmentLevel(event.getEnchantment());
             int originalLevel = nowLevel - buyLevel;
             if (item.hasItemMeta()) {
-                item.getItemMeta().removeEnchant(event.getEnchantment());
+                ItemMeta meta = item.getItemMeta();
+                meta.removeEnchant(event.getEnchantment());
                 if (originalLevel > 0) {
-                    item.getItemMeta().addEnchant(event.getEnchantment(), originalLevel, true);
+                    meta.addEnchant(event.getEnchantment(), originalLevel, true);
                 }
+                item.setItemMeta(meta);
             }
             event.getPlayer().giveExp(event.getCost().getExp());
             event.getPlayer().giveExpLevels(event.getCost().getLevel());

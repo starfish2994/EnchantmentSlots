@@ -49,7 +49,7 @@ public class AddLore {
             itemLore = new ArrayList<>();
         }
         if (ConfigManager.configManager.getBoolean("settings.add-lore.remove-lore-first", true)) {
-            itemLore.removeIf(tempVal1 -> tempVal1.startsWith(lorePrefix));
+            itemLore.removeIf(tempVal1 -> tempVal1.contains(lorePrefix));
         }
         int index = 0;
         if (!ConfigManager.configManager.getBoolean("settings.add-lore.at-first-or-last", false)) {
@@ -107,7 +107,7 @@ public class AddLore {
         } else {
             itemLore = new ArrayList<>();
         }
-        itemLore.removeIf(tempVal1 -> tempVal1.startsWith(lorePrefix));
+        itemLore.removeIf(tempVal1 -> tempVal1.contains(lorePrefix));
         EnchantmentSlots.methodUtil.setItemLore(meta, itemLore);
         item.setItemMeta(meta);
         return item;
