@@ -2,9 +2,11 @@ package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.methods.SlotUtil;
+import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import cn.superiormc.enchantmentslots.utils.TextUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

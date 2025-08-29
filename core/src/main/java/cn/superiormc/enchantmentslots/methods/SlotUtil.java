@@ -51,8 +51,8 @@ public class SlotUtil {
             meta.getPersistentDataContainer().set(ENCHANTMENT_SLOTS_KEY,
                     PersistentDataType.INTEGER,
                     slotValue);
+            item.setItemMeta(meta);
         }
-        item.setItemMeta(meta);
         return item;
     }
 

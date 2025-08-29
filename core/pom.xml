@@ -6,19 +6,18 @@
     <parent>
         <groupId>cn.superiormc</groupId>
         <artifactId>EnchantmentSlots</artifactId>
-        <version>4.6.1</version>
+        <version>4.6.3</version>
     </parent>
 
     <artifactId>core</artifactId>
 
     <dependencies>
-        <!-- To other developers: ManyouItems already built-in this project, so you can simply remove this dependency. -->
         <dependency>
             <groupId>cn.superiormc</groupId>
-            <artifactId>ManyouItems</artifactId>
+            <artifactId>LegacyCodesCompatibility</artifactId>
             <version>1.0.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/ManyouItems-1.0.0.jar</systemPath>
+            <systemPath>${project.basedir}/lib/LegacyCodesCompatibility.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>io.papermc.paper</groupId>
@@ -115,9 +114,8 @@
         <dependency>
             <groupId>com.willfp</groupId>
             <artifactId>libreforge</artifactId>
-            <version>4.58.1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/libreforge-4.58.1.jar</systemPath>
+            <version>4.51.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.willfp</groupId>
@@ -191,7 +189,7 @@
         <dependency>
             <groupId>com.ghostchu</groupId>
             <artifactId>quickshop-bukkit</artifactId>
-            <version>6.2.0.6</version>
+            <version>6.2.0.10</version>
             <scope>provided</scope>
             <classifier>shaded</classifier>
         </dependency>
