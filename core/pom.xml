@@ -17,7 +17,7 @@
             <artifactId>LegacyCodesCompatibility</artifactId>
             <version>1.0.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/LegacyCodesCompatibility.jar</systemPath>
+
         </dependency>
         <dependency>
             <groupId>io.papermc.paper</groupId>
@@ -206,7 +206,7 @@
             <artifactId>aiyatsbus</artifactId>
             <version>1.0.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/Aiyatsbus-1.0.0-RC.jar</systemPath>
+
         </dependency>
         <dependency>
             <groupId>net.momirealms</groupId>
