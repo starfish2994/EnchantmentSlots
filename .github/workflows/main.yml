@@ -1,42 +1,52 @@
 name: Build Plugin
 
-# 触发条件：推送代码或创建 Pull Request 时
+# 触发条件：保留原有触发方式，补充代码推送和PR触发
 on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - '**.yml'
+      - '!.github/workflows/main.yml'
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
   repository_dispatch:
     types: [after_sync]
+
 jobs:
   build:
-    runs-on: ubuntu-latest  # 使用 Ubuntu 环境
-
+    runs-on: ubuntu-latest
     steps:
-      # 步骤1：拉取代码仓库
+      # 拉取代码（包含含完整历史，支持子模块）
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      # 步骤2：配置 JDK 21（代码中指定的 Java 版本）
-      - name: Set up JDK 21
+      # 配置JDK 16（匹配pom.xml中maven-compiler-plugin的source/target版本）
+      - name: Set up JDK 16
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: 'temurin'  # 使用 Eclipse Temurin JDK
-          cache: gradle  # 缓存 Gradle 依赖，加速构建
+          java-version: '16'
+          distribution: 'temurin'
+          cache: maven  # 缓存Maven依赖，加速构建
 
-      # 步骤3：给 Gradle 脚本添加执行权限
-      - name: Make Gradle wrapper executable
-        run: chmod +x ./gradlew
+      # 配置Git身份（解决可能的版本控制相关操作）
+      - name: Configure Git
+        run: |
+          git config --global user.name "starfish2994"
 
-      # 步骤附加：git参数设置
-      - name: Git Config Set
-        run: git config --global user.name "starfish2994"
+      # 执行Maven构建（清理并打包，跳过测试以加速）
+      - name: Build with Maven
+        run: mvn clean package -DskipTests
 
-      # 步骤4：执行 Gradle 构建任务（使用 shadowJar 打包）
-      - name: Build with Gradle
-        run: ./gradlew clean build  # 对应代码中 loader 模块的 shadowJar 任务
-
-      # 步骤5：上传构建产物（插件 JAR）
+      # 上传构建产物（plugin模块的JAR，匹配pom.xml中finalName配置）
       - name: Upload plugin JAR
         uses: actions/upload-artifact@v4
         with:
-          name: build-plugin
-          path: /*  # 代码中 shadowJar 输出目录为 rootDir/target
+          name: EnchantmentSlots-${{ github.sha }}
+          path: |
+            plugin/target/*.jar  # plugin模块的打包输出目录
+            !plugin/target/*-sources.jar  # 排除源码JAR
+          retention-days: 14
