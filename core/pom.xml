@@ -37,10 +37,12 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>me.clip</groupId>
-            <artifactId>placeholderapi</artifactId>
-            <version>2.11.2</version>
-            <scope>provided</scope>
+             <groupId>me.clip</groupId>
+             <artifactId>placeholderapi</artifactId>
+             <version>2.11.2</version>
+             <scope>system</scope>
+             <!-- 路径指向core/lib目录下的JAR -->
+             <systemPath>${project.basedir}/lib/placeholderapi-2.11.2.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.mojang</groupId>
