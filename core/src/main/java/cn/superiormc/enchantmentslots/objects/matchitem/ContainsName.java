@@ -18,7 +18,9 @@ public class ContainsName extends AbstractMatchItemRule {
         }
         for (String requiredName : section.getStringList("contains-name")) {
             String itemName = EnchantmentSlots.methodUtil.getItemName(meta);
-            return TextUtil.clear(itemName).contains(TextUtil.clear(requiredName));
+            if (TextUtil.clear(itemName).contains(TextUtil.clear(requiredName))) {
+                return true;
+            }
         }
         return false;
     }
