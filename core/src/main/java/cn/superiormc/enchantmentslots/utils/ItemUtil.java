@@ -1,6 +1,7 @@
 package cn.superiormc.enchantmentslots.utils;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
+import cn.superiormc.enchantmentslots.managers.ErrorManager;
 import com.google.common.base.Enums;
 import com.google.common.collect.MultimapBuilder;
 import org.bukkit.Bukkit;
@@ -8,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -16,9 +18,14 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.*;
 
 public class ItemUtil {
-    
+
     public static ItemStack buildItemStack(ConfigurationSection section) {
         ItemStack item = new ItemStack(Material.STONE);
+        if (section == null) {
+            ErrorManager.errorManager.sendErrorMessage("§cError: Can not parse item because the " +
+                    "config section is null.");
+            return item;
+        }
         String materialKey = section.getString("material");
         if (materialKey != null) {
             Material material = Material.getMaterial(materialKey.toUpperCase());
@@ -35,20 +42,27 @@ public class ItemUtil {
             return item;
         }
 
+        // Name
         String displayNameKey = section.getString("name");
         if (displayNameKey != null) {
             EnchantmentSlots.methodUtil.setItemName(meta, displayNameKey);
         }
+
+        // Lore
         List<String> loreKey = section.getStringList("lore");
         if (!loreKey.isEmpty()) {
             EnchantmentSlots.methodUtil.setItemLore(meta, loreKey);
         }
+
+        // Custom Model Data
         if (CommonUtil.getMajorVersion(14)) {
             int customModelDataKey = section.getInt("custom-model-data", section.getInt("cmd", -1));
             if (customModelDataKey > 0) {
                 meta.setCustomModelData(customModelDataKey);
             }
         }
+
+        // Flags
         List<String> itemFlagKey = section.getStringList("flags");
         if (!itemFlagKey.isEmpty()) {
             for (String flag : itemFlagKey) {
@@ -62,6 +76,8 @@ public class ItemUtil {
                 }
             }
         }
+
+        // Enchants
         ConfigurationSection enchantsKey = section.getConfigurationSection("enchants");
         if (enchantsKey != null) {
             for (String ench : enchantsKey.getKeys(false)) {
@@ -71,19 +87,36 @@ public class ItemUtil {
                 }
             }
         }
+
+        // Glow
+        if (CommonUtil.getMinorVersion(20, 5)) {
+            if (section.get("glow") != null) {
+                meta.setEnchantmentGlintOverride(section.getBoolean("glow"));
+            }
+        }
+
+        if (CommonUtil.getMinorVersion(21, 2)) {
+            // Item Model
+            String itemModel = section.getString("item-model", null);
+            if (itemModel != null) {
+                meta.setItemModel(CommonUtil.parseNamespacedKey(itemModel));
+            }
+
+            // Tooltip Style
+            String tooltipStyle = section.getString("tooltip-style", null);
+            if (tooltipStyle != null) {
+                meta.setTooltipStyle(CommonUtil.parseNamespacedKey(tooltipStyle));
+            }
+        }
+
         // Skull
         if (meta instanceof SkullMeta) {
             SkullMeta skullMeta = (SkullMeta) meta;
             String skullTextureNameKey = section.getString("skull-meta", section.getString("skull"));
             if (skullTextureNameKey != null) {
-                if (skullTextureNameKey.length() > 16) {
-                    EnchantmentSlots.methodUtil.setSkullMeta(skullMeta, skullTextureNameKey);
-                } else {
-                    skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(skullTextureNameKey));
-                }
+                EnchantmentSlots.methodUtil.setSkullMeta(skullMeta, skullTextureNameKey);
             }
         }
-
         item.setItemMeta(meta);
         return item;
     }
