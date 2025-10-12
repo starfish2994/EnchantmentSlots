@@ -24,9 +24,9 @@ public class ActionEntitySpawn extends AbstractRunAction {
         } else {
             World world = Bukkit.getWorld(worldName);
             location = new Location(world,
-                    singleAction.getDouble("x"),
-                    singleAction.getDouble("y"),
-                    singleAction.getDouble("z"));
+                    singleAction.getDouble("x", player, amount),
+                    singleAction.getDouble("y", player, amount),
+                    singleAction.getDouble("z", player, amount));
 
         }
         EnchantmentSlots.methodUtil.spawnEntity(location, entity);

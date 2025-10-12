@@ -15,6 +15,9 @@ public class ItemMMOItemsHook extends AbstractItemHook {
 
     @Override
     public ItemStack getHookItemByID(Player player, String hookItemID) {
+        if (hookItemID.split(";;").length != 2) {
+            return returnNullItem(hookItemID);
+        }
         ItemStack resultItem = MMOItems.plugin.getItem(hookItemID.split(";;")[0], hookItemID.split(";;")[1]);
         if (resultItem == null) {
             return returnNullItem(hookItemID);

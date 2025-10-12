@@ -15,9 +15,9 @@ public class ActionTeleport extends AbstractRunAction {
     @Override
     protected void onDoAction(ObjectSingleAction singleAction, Player player, int amount) {
         Location loc = new Location(Bukkit.getWorld(singleAction.getString("world")),
-                    singleAction.getDouble("x"),
-                    singleAction.getDouble("y"),
-                    singleAction.getDouble("z"),
+                    singleAction.getDouble("x", player, amount),
+                    singleAction.getDouble("y", player, amount),
+                    singleAction.getDouble("z", player, amount),
                     singleAction.getInt("yaw", (int) player.getLocation().getYaw()),
                     singleAction.getInt("pitch", (int) player.getLocation().getPitch()));
         EnchantmentSlots.methodUtil.playerTeleport(player, loc);
