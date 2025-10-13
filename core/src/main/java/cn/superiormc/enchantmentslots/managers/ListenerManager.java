@@ -69,6 +69,7 @@ class PacketEventsListener {
         PacketEvents.getAPI().getEventManager().registerListener(new SetCreativeSlots(), ConfigManager.configManager.getPriority());
         if (CommonUtil.getMinorVersion(21, 5)) {
             PacketEvents.getAPI().getEventManager().registerListener(new SetCursorItem(), ConfigManager.configManager.getPriority());
+            PacketEvents.getAPI().getEventManager().registerListener(new ContainerClick(), ConfigManager.configManager.getPriority());
         }
     }
 }

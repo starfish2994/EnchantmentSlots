@@ -1,6 +1,7 @@
 package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
+import cn.superiormc.enchantmentslots.protolcol.ProtocolLib.SetCursorItem;
 import cn.superiormc.enchantmentslots.utils.SchedulerUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,5 +29,6 @@ public class PlayerCacheListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         loadedPlayers.remove(event.getPlayer());
+        SetCursorItem.hashedStackMap.remove(event.getPlayer());
     }
 }
