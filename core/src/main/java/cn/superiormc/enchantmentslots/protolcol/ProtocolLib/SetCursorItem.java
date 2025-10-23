@@ -1,5 +1,6 @@
 package cn.superiormc.enchantmentslots.protolcol.ProtocolLib;
 
+import cn.superiormc.enchantmentslots.listeners.PlayerCacheListener;
 import cn.superiormc.enchantmentslots.methods.AddLore;
 import cn.superiormc.enchantmentslots.utils.ItemUtil;
 import com.github.retrooper.packetevents.event.PacketListener;
@@ -11,13 +12,7 @@ import io.github.retrooper.packetevents.util.SpigotConversionUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
 public class SetCursorItem implements PacketListener {
-
-    public static Map<Player, Optional<HashedStack>> hashedStackMap = new HashMap<>();
 
     @Override
     public void onPacketSend(PacketSendEvent event) {
@@ -36,6 +31,6 @@ public class SetCursorItem implements PacketListener {
         }
         com.github.retrooper.packetevents.protocol.item.ItemStack result = SpigotConversionUtil.fromBukkitItemStack(AddLore.autoAddLore(item, player, true));
         serverSetSlot.setStack(result);
-        hashedStackMap.put(player, HashedStack.fromItemStack(original));
+        PlayerCacheListener.hashedStackMap.put(player, HashedStack.fromItemStack(original));
     }
 }

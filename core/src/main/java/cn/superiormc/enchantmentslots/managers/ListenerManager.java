@@ -14,6 +14,8 @@ public class ListenerManager {
 
     public static ListenerManager listenerManager;
 
+    private String plugin;
+
     public ListenerManager() {
         listenerManager = this;
         registerListeners();
@@ -44,8 +46,8 @@ public class ListenerManager {
     }
 
     private void registerPacketListeners() {
-        String plugin = EnchantmentSlots.instance.getConfig().getString("settings.add-lore.use-listener-plugin",
-                EnchantmentSlots.instance.getConfig().getString("settings.use-listener-plugin", "packetevents"));
+        plugin = ConfigManager.configManager.getString("settings.add-lore.use-listener-plugin",
+                ConfigManager.configManager.getString("settings.use-listener-plugin", "packetevents"));
         if (plugin.equals("packetevents") && CommonUtil.checkPluginLoad("packetevents")) {
             Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fHooking into packetevents....");
             PacketEventsListener.registerPacketEventsListener();
@@ -58,6 +60,10 @@ public class ListenerManager {
             Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §cCan not found any packet " +
                     "listener plugin, enchantment slot won't displayed in your server!");
         }
+    }
+
+    public String getPlugin() {
+        return plugin;
     }
 }
 
