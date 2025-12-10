@@ -180,3 +180,29 @@ enchant-used-slot:
     3: '&f☆'
     4: '&e☆'
     5: '&6☆'
+
+# Enchant UI
+enchant-gui:
+  enabled: true
+  title: 'Enchant UI'
+  size: 27
+  item-slot: 11
+  book-slot: 15
+  confirm-slot: 22
+  confirm-item:
+    material: ANVIL
+    name: '&eConfirm'
+    lore:
+      - '&7Click to confirm enchant the item!'
+  custom-item:
+    2:
+      material: PAPER
+      name: '&bDrag the item you want enchant below.'
+    6:
+      material: BOOK
+      name: '&bDrag the enchanted book below.'
+  override-allow:
+    sharpness:
+      - 'player_head'
+    mending:
+      - 'player_head'

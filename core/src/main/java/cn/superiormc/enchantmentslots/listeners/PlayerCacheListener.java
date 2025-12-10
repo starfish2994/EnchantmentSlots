@@ -2,7 +2,6 @@ package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.managers.ListenerManager;
-import cn.superiormc.enchantmentslots.protolcol.ProtocolLib.SetCursorItem;
 import cn.superiormc.enchantmentslots.utils.SchedulerUtil;
 import com.github.retrooper.packetevents.protocol.item.HashedStack;
 import org.bukkit.entity.Player;
@@ -15,7 +14,7 @@ import java.util.*;
 
 public class PlayerCacheListener implements Listener {
 
-    public static Map<Player, Optional<HashedStack>> hashedStackMap = new HashMap<>();
+    public static Map<Player, HashedStack> hashedStackMap = new HashMap<>();
 
     public static Collection<Player> loadedPlayers = new ArrayList<>();
 

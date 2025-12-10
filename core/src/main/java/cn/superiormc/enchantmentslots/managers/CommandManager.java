@@ -11,7 +11,7 @@ public class CommandManager {
 
     public static CommandManager commandManager;
 
-    private Map<String, AbstractCommand> registeredCommands = new HashMap<>();
+    private final Map<String, AbstractCommand> registeredCommands = new HashMap<>();
 
     public CommandManager(){
         commandManager = this;
@@ -29,6 +29,9 @@ public class CommandManager {
         registerNewSubCommand(new SubGiveSlots());
         registerNewSubCommand(new SubSetSlots());
         registerNewSubCommand(new SubReload());
+        if (ConfigManager.configManager.getBoolean("enchant-gui.enabled", true)) {
+            registerNewSubCommand(new SubOpenEnchantGUI());
+        }
     }
 
     public Map<String, AbstractCommand> getSubCommandsMap() {

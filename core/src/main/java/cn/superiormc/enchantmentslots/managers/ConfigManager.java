@@ -151,6 +151,10 @@ public class ConfigManager {
         return s.replace("{plugin_folder}", String.valueOf(EnchantmentSlots.instance.getDataFolder()));
     }
 
+    public int getInt(String path, int defaultValue) {
+        return config.getInt(path, defaultValue);
+    }
+
     public long getLong(String path, long defaultValue) {
         return config.getLong(path, defaultValue);
     }

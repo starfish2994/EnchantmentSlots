@@ -21,6 +21,7 @@ success-add: "&#98FB98[EnchantmentSlots] &aAdd %amount% extra main hand item enc
 success-set: "&#98FB98[EnchantmentSlots] &aSet main hand item enchantment slot to %amount%!"
 slots-limit-reached: "&#98FB98[EnchantmentSlots] &cYour item has reached its enchantment limits!"
 max-slots-reached: "&#98FB98[EnchantmentSlots] &cYour item can not have more enchantments!"
+same-enchants: "&#98FB98[EnchantmentSlots] &cThis item already has this enchantment!"
 slots-limit-reached-enchant: "&#98FB98[EnchantmentSlots] &cThe enchantments you obtained may be different from what was previously displayed on the enchantment table, as your item exceeded the slot limit after being enchanted, and the plugin automatically removed the excess enchantment"
 slots-limit-reached-after-smith: "&#98FB98[EnchantmentSlots] &cYou can not upgrade this item because after upgrade it will reached enchantment slot limit!"
 error-args: "&#98FB98[EnchantmentSlots] &cWrong command usage, if you need help, use /es help!"
