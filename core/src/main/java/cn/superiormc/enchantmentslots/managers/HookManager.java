@@ -30,7 +30,7 @@ public class HookManager {
 
     private Map<String, AbstractEnchantHook> enchantHooks;
 
-    private final Map<Enchantment, String> enchantmentNameCache = new HashMap<>();
+    private final Map<String, Map<Enchantment, String>> enchantmentNameCache = new HashMap<>();
 
     public HookManager() {
         hookManager = this;
@@ -42,20 +42,20 @@ public class HookManager {
     private void initNormalHook() {
         if (CommonUtil.checkPluginLoad("PlaceholderAPI")) {
             PlaceholderAPIExpansion.papi = new PlaceholderAPIExpansion(EnchantmentSlots.instance);
-            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fHooking into PlaceholderAPI...");
+            TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §fHooking into PlaceholderAPI...");
             if (PlaceholderAPIExpansion.papi.register()) {
-                Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fFinished hook!");
+                TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §fFinished hook!");
             }
         }
         if (CommonUtil.checkPluginLoad("InteractiveChat")) {
-            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fHooking into InteractiveChat...");
+            TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §fHooking into InteractiveChat...");
             InteractiveChatAPI.registerItemStackTransformProvider(EnchantmentSlots.instance, 10, (itemStack, uuid) -> {
                 ICPlayer icPlayer = ICPlayerFactory.getICPlayer(uuid);
                 return AddLore.addLore(itemStack, icPlayer.getLocalPlayer());
             });
         }
         if (CommonUtil.checkPluginLoad("TrChat")) {
-            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fHooking into TrChat...");
+            TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §fHooking into TrChat...");
             HookPlugin.INSTANCE.registerDisplayItemHook("EnchantmentSlots", AddLore::addLore);
         }
     }
@@ -104,7 +104,7 @@ public class HookManager {
         }
         if (CommonUtil.checkPluginLoad("ExcellentEnchants")) {
             if (CommonUtil.getClass("su.nightexpress.excellentenchants.api.enchantment.EnchantmentData")) {
-                Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §6Warning: Seems that you are using ExcellentEnchants old version, enabled compatibility mode, " +
+                TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §6Warning: Seems that you are using ExcellentEnchants old version, enabled compatibility mode, " +
                         "this mode will be removed in future updates, please consider update it to latest.");
                 registerNewEnchantHook("ExcellentEnchants", new EnchantExcellentEnchantsLegacyHook());
             } else {
@@ -116,7 +116,7 @@ public class HookManager {
     public void registerNewItemHook(String pluginName,
                                     AbstractItemHook itemHook) {
         if (!itemHooks.containsKey(pluginName)) {
-            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fHooking into " + pluginName + "...");
+            TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §fHooking into " + pluginName + "...");
             itemHooks.put(pluginName, itemHook);
         }
     }
@@ -124,7 +124,7 @@ public class HookManager {
     public void registerNewEnchantHook(String pluginName,
                                     AbstractEnchantHook enchantHook) {
         if (!enchantHooks.containsKey(pluginName)) {
-            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fHooking into " + pluginName + "...");
+            TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §fHooking into " + pluginName + "...");
             enchantHooks.put(pluginName, enchantHook);
         }
     }
@@ -145,10 +145,14 @@ public class HookManager {
     // Without color code.
     public String getEnchantName(ItemStack item, Enchantment enchantment, Player player, boolean showTierColor) {
         try {
-            if (enchantmentNameCache.containsKey(enchantment)) {
-                return enchantmentNameCache.get(enchantment);
+            if (!enchantmentNameCache.containsKey(player.getLocale())) {
+                enchantmentNameCache.put(player.getLocale(), new HashMap<>());
             }
-            String enchantmentName = ConfigManager.configManager.getString("enchant-name." + enchantment.getKey().getKey(), enchantment.getKey().getKey());
+            Map<Enchantment, String> enchantmentStringMap = enchantmentNameCache.get(player.getLocale());
+            if (enchantmentStringMap.containsKey(enchantment)) {
+                return enchantmentStringMap.get(enchantment);
+            }
+            String enchantmentName = ConfigManager.configManager.getString(player, "enchant-name." + enchantment.getKey().getKey(), enchantment.getKey().getKey());
             if (enchantmentName.equals(enchantment.getKey().getKey())) {
                 for (AbstractEnchantHook enchantHook : enchantHooks.values()) {
                     String tempVal1;
@@ -162,7 +166,7 @@ public class HookManager {
                     }
                 }
             }
-            enchantmentNameCache.put(enchantment, enchantmentName);
+            enchantmentStringMap.put(enchantment, enchantmentName);
             return enchantmentName;
         } catch (Throwable throwable) {
             return "ERROR";

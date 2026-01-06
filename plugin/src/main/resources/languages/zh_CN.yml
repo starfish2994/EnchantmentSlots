@@ -30,3 +30,82 @@ error-no-item: "&#98FB98[EnchantmentSlots] &c你的手上没有物品!"
 error-item-not-found: "&#98FB98[EnchantmentSlots] &c找不到这个名字的扩槽器!"
 error-player-not-found: "&#98FB98[EnchantmentSlots] &c找不到玩家 %player%!"
 error-creative-mode: "&#98FB98[EnchantmentSlots] &c这个功能目前不支持创造模式使用!"
+
+override-lang:
+  settings:
+    add-lore:
+      display-value:
+        - "&#ff3300附魔槽位：{used_slot_amount}/{slot_amount}"
+        - "{enchants}"
+        - "{empty_slots}"
+      placeholder:
+        enchants:
+          format: '&6  {enchant_name}{enchant_level}{enchant_used_slot}'
+        empty-slots:
+          format: '&7  —— 空槽位 ——'
+
+  enchant-level:
+    1: ''
+
+  enchant-name:
+    protection: '保护'
+    fire_protection: '火焰保护'
+    feather_falling: '摔落保护'
+    blast_protection: '爆炸保护'
+    projectile_protection: '弹射物保护'
+    respiration: '水下呼吸'
+    aqua_affinity: '水下速掘'
+    thorns: '荆棘'
+    depth_strider: '深海探索者'
+    frost_walker: '冰霜行者'
+    binding_curse: '绑定诅咒'
+    sharpness: '锋利'
+    smite: '亡灵杀手'
+    bane_of_arthropods: '节肢杀手'
+    knockback: '击退'
+    fire_aspect: '火焰附加'
+    looting: '抢夺'
+    sweeping: '横扫'
+    # For 1.21+
+    sweeping_edge: '横扫之刃'
+    efficiency: '效率'
+    silk_touch: '精准采集'
+    unbreaking: '耐久'
+    fortune: '时运'
+    power: '力量'
+    punch: '冲击'
+    flame: '火矢'
+    infinity: '无限'
+    luck_of_the_sea: '海之眷顾'
+    lure: '饵钓'
+    loyalty: '忠诚'
+    impaling: '穿刺'
+    riptide: '激流'
+    channeling: '引雷'
+    multishot: '多重射击'
+    quick_charge: '快速装填'
+    piercing: '穿透'
+    mending: '经验修补'
+    vanishing_curse: '消失诅咒'
+    soul_speed: '灵魂疾行'
+    wind_burst: '风爆'
+    breach: '破甲'
+    density: '致密'
+    lunge: '突进'
+
+  enchant-used-slot:
+    placeholder:
+      0: '&c☆'
+      1: ''
+      2: '&7☆'
+      3: '&f☆'
+      4: '&e☆'
+      5: '&6☆'
+
+  enchant-ui:
+    title: '附魔界面'
+
+  confirm-item-name: '&e确认'
+  confirm-item-lore: '&7点击确认为物品进行附魔！'
+  custom-item-1-name: '&b请将需要附魔的物品拖入下方'
+  custom-item-2-name: '&b请将附魔书拖入下方'

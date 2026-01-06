@@ -87,7 +87,7 @@ public class LicenseManager {
             }
         }
         if (!getUserName.isEmpty() && !getUserName.contains("%")) {
-            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fLicense to: " + getUserName + ".");
+            TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §fLicense to: " + getUserName + ".");
         }
     }
 

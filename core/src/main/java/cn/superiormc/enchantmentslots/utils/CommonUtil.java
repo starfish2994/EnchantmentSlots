@@ -10,7 +10,9 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class CommonUtil {
 
@@ -78,6 +80,30 @@ public class CommonUtil {
             }
         }
         return text;
+    }
+
+    public static List<String> modifyList(Player player, List<String> config, String... args) {
+        List<String> resultList = new ArrayList<>();
+        for (String s : config) {
+            for (int i = 0 ; i < args.length ; i += 2) {
+                String var = "{" + args[i] + "}";
+                if (args[i + 1] == null) {
+                    s = s.replace(var, "");
+                }
+                else {
+                    s = s.replace(var, args[i + 1]);
+                }
+            }
+            String[] tempVal1 = s.split(";;");
+            if (tempVal1.length > 1) {
+                for (String string : tempVal1) {
+                    resultList.add(TextUtil.withPAPI(string, player));
+                }
+                continue;
+            }
+            resultList.add(TextUtil.withPAPI(s, player));
+        }
+        return resultList;
     }
 
     public static boolean getClass(String className) {

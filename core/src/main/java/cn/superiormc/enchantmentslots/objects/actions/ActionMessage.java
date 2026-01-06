@@ -12,6 +12,6 @@ public class ActionMessage extends AbstractRunAction {
 
     @Override
     protected void onDoAction(ObjectSingleAction singleAction, Player player, int amount) {
-        EnchantmentSlots.methodUtil.sendMessage(player, singleAction.getString("message", player, amount));
+        EnchantmentSlots.methodUtil.sendChat(player, singleAction.getString("message", player, amount));
     }
 }

@@ -48,12 +48,12 @@ public class ObjectExtraSlotsItem {
         this.section = section;
     }
 
-    public ItemStack getItem() {
+    public ItemStack getItem(Player player) {
         ConfigurationSection itemSection = section.getConfigurationSection("display-item");
         if (itemSection == null) {
             itemSection = section;
         }
-        ItemStack resultItem = ItemUtil.buildItemStack(itemSection);
+        ItemStack resultItem = ItemUtil.buildItemStack(player, itemSection);
         ItemMeta meta = resultItem.getItemMeta();
         meta.getPersistentDataContainer().set(ENCHANTMENT_SLOTS_EXTRA,
                 PersistentDataType.STRING,

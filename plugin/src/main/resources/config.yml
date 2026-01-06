@@ -5,6 +5,8 @@
 # Languages
 config-files:
   language: en_US
+  # PREMIUM version only
+  per-player-language: true
   force-parse-mini-message: true
 
 debug: false
@@ -91,19 +93,17 @@ settings:
     # Do not change this option when server started!
     # Only change this if your server has stopped!
     display-value:
-      - "&#ff3300Enchantment Slots: {used_slot_amount}/{slot_amount}"
-      - "{enchants}"
-      - "{empty_slots}"
+      - "{lang}"
     placeholder:
       auto-parse: true
       enchants:
         # Other placeholder: {enchant_level_roman}, {raw_enchant_name}, {enchant_used_slot}
-        format: '&6  {enchant_name}{enchant_level}{enchant_used_slot}'
+        format: '{lang}'
         sort: true
         auto-add-space: true
         level-hide-one: true
       empty-slots:
-        format: '&7  --- Empty Slot ---'
+        format: '{lang}'
   # Whether you use item tier instead of item ID in Items Match Rule
   # If this item plugin don't have tier, will still use Item ID as identify.
   # Supported plugins: EcoItems, EcoArmor, MMOItems
@@ -112,10 +112,11 @@ settings:
   # Whether cancel add slot or just set item slot to max slot value and still consume add slot item
   # if item reached max slot limit after using add slot items.
   cancel-add-slot-if-reached-max-slot: true
+  cache-enchant-name: false
 
 # Enchant Level
 enchant-level:
-  1: ''
+  1: '{lang}'
 
 # Enchant Name
 enchant-name:
@@ -125,82 +126,83 @@ enchant-name:
   # If you are not using the 2 plugins, please using "Enchantment Key: Enchantment Display Name" format
   # Like:
   # an_other_enchantment: 'This is just an example here!'
-  protection: 'Protection'
-  fire_protection: 'Fire Protection'
-  feather_falling: 'Feather Falling'
-  blast_protection: 'Blast Protection'
-  projectile_protection: 'Projectile Protection'
-  respiration: 'Respiration'
-  aqua_affinity: 'Aqua Affinity'
-  thorns: 'Thorns'
-  depth_strider: 'Depth Strider'
-  frost_walker: 'Frost Walker'
-  binding_curse: 'Binding Curse'
-  sharpness: 'Sharpness'
-  smite: 'Smite'
-  bane_of_arthropods: 'Bane of Arthropods'
-  knockback: 'Knockback'
-  fire_aspect: 'Fire Aspect'
-  looting: 'Looting'
-  sweeping: 'Sweeping'
+  protection: '{lang}'
+  fire_protection: '{lang}'
+  feather_falling: '{lang}'
+  blast_protection: '{lang}'
+  projectile_protection: '{lang}'
+  respiration: '{lang}'
+  aqua_affinity: '{lang}'
+  thorns: '{lang}'
+  depth_strider: '{lang}'
+  frost_walker: '{lang}'
+  binding_curse: '{lang}'
+  sharpness: '{lang}'
+  smite: '{lang}'
+  bane_of_arthropods: '{lang}'
+  knockback: '{lang}'
+  fire_aspect: '{lang}'
+  looting: '{lang}'
+  sweeping: '{lang}'
   # For 1.21+
-  sweeping_edge: 'Sweeping Edge'
-  efficiency: 'Efficiency'
-  silk_touch: 'Silk Touch'
-  unbreaking: 'Unbreaking'
-  fortune: 'Fortune'
-  power: 'Power'
-  punch: 'Punch'
-  flame: 'Flame'
-  infinity: 'Infinity'
-  luck_of_the_sea: 'Luck of the Sea'
-  lure: 'Lure'
-  loyalty: 'Loyalty'
-  impaling: 'Impaling'
-  riptide: 'Riptide'
-  channeling: 'Channeling'
-  multishot: 'Multishot'
-  quick_charge: 'Quick Charge'
-  piercing: 'Piercing'
-  mending: 'Mending'
-  vanishing_curse: 'Vanishing Curse'
-  soul_speed: 'Soul Speed'
-  wind_burst: 'Wind Burst'
-  breach: 'Breach'
-  density: 'Density'
+  sweeping_edge: '{lang}'
+  efficiency: '{lang}'
+  silk_touch: '{lang}'
+  unbreaking: '{lang}'
+  fortune: '{lang}'
+  power: '{lang}'
+  punch: '{lang}'
+  flame: '{lang}'
+  infinity: '{lang}'
+  luck_of_the_sea: '{lang}'
+  lure: '{lang}'
+  loyalty: '{lang}'
+  impaling: '{lang}'
+  riptide: '{lang}'
+  channeling: '{lang}'
+  multishot: '{lang}'
+  quick_charge: '{lang}'
+  piercing: '{lang}'
+  mending: '{lang}'
+  vanishing_curse: '{lang}'
+  soul_speed: '{lang}'
+  wind_burst: '{lang}'
+  breach: '{lang}'
+  density: '{lang}'
+  lunge: '{lang}'
 
 # Enchant Used Slot
 enchant-used-slot:
   values:
     # mending: 2
   placeholder:
-    0: '&c☆'
-    1: ''
-    2: '&7☆'
-    3: '&f☆'
-    4: '&e☆'
-    5: '&6☆'
+    0: '{lang}'
+    1: '{lang}'
+    2: '{lang}'
+    3: '{lang}'
+    4: '{lang}'
+    5: '{lang}'
 
 # Enchant UI
 enchant-gui:
   enabled: true
-  title: 'Enchant UI'
+  title: '{lang}'
   size: 27
   item-slot: 11
   book-slot: 15
   confirm-slot: 22
   confirm-item:
     material: ANVIL
-    name: '&eConfirm'
+    name: '{lang:confirm-item-name}'
     lore:
-      - '&7Click to confirm enchant the item!'
+      - '{lang:confirm-item-lore}'
   custom-item:
     2:
       material: PAPER
-      name: '&bDrag the item you want enchant below.'
+      name: '{lang:custom-item-1-name}'
     6:
       material: BOOK
-      name: '&bDrag the enchanted book below.'
+      name: '{lang:custom-item-2-name}'
   override-allow:
     sharpness:
       - 'player_head'

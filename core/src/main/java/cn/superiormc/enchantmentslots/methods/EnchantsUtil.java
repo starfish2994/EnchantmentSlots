@@ -4,6 +4,7 @@ import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.managers.HookManager;
 import cn.superiormc.enchantmentslots.utils.NumberUtil;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,7 +14,7 @@ import java.util.*;
 
 public class EnchantsUtil {
 
-    private static final Map<Integer, String> enchantmentLevelCache = new HashMap<>();
+    public static final Map<String, Map<Integer, String>> enchantmentLevelCache = new HashMap<>();
 
     public static int getUsedSlot(ItemStack item) {
         return getUsedSlot(getEnchantments(item, false).keySet());
@@ -36,9 +37,9 @@ public class EnchantsUtil {
         return ConfigManager.configManager.config.getInt("enchant-used-slot.values." + enchantment.getKey().getKey(), 1);
     }
 
-    public static String getUsedSlotPlaceholder(Enchantment enchantment) {
+    public static String getUsedSlotPlaceholder(Enchantment enchantment, Player player) {
         int value = getUsedSlot(enchantment);
-        String result = ConfigManager.configManager.config.getString("enchant-used-slot.placeholder." + value, String.valueOf(value));
+        String result = ConfigManager.configManager.getString(player, "enchant-used-slot.placeholder." + value, String.valueOf(value));
         if (ConfigManager.configManager.getBoolean("settings.add-lore.placeholder.enchants.auto-add-space", true) && !result.isEmpty()) {
             return " " + result;
         }
@@ -75,11 +76,11 @@ public class EnchantsUtil {
         }
     }
 
-    public static String getEnchantmentLevel(Enchantment enchantment, int level) {
+    public static String getEnchantmentLevel(Enchantment enchantment, int level, Player player) {
         if (ConfigManager.configManager.getBoolean("settings.add-lore.placeholder.enchants.level-hide-one", false) && level == enchantment.getMaxLevel() && enchantment.getMaxLevel() == 1) {
             return "";
         }
-        String result = getEnchantLevel(level);
+        String result = getEnchantLevel(level, player);
         if (ConfigManager.configManager.getBoolean("settings.add-lore.placeholder.enchants.auto-add-space", true) && !result.isEmpty()) {
             return " " + result;
         }
@@ -97,12 +98,16 @@ public class EnchantsUtil {
         return result;
     }
 
-    public static String getEnchantLevel(int level) {
-        if (enchantmentLevelCache.containsKey(level)) {
-            return enchantmentLevelCache.get(level);
+    public static String getEnchantLevel(int level, Player player) {
+        if (!enchantmentLevelCache.containsKey(player.getLocale())) {
+            enchantmentLevelCache.put(player.getLocale(), new HashMap<>());
         }
-        String levelName = ConfigManager.configManager.getString("enchant-level." + level, String.valueOf(level));
-        enchantmentLevelCache.put(level, levelName);
+        Map<Integer, String> enchantmentLevel = enchantmentLevelCache.get(player.getLocale());
+        if (enchantmentLevel.containsKey(level)) {
+            return enchantmentLevel.get(level);
+        }
+        String levelName = ConfigManager.configManager.getString(player, "enchant-level." + level, String.valueOf(level));
+        enchantmentLevel.put(level, levelName);
         return levelName;
     }
 }

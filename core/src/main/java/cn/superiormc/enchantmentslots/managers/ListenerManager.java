@@ -36,11 +36,11 @@ public class ListenerManager {
             Bukkit.getPluginManager().registerEvents(new PlayerSmithListener(), EnchantmentSlots.instance);
         }
         if (EnchantmentSlots.instance.getServer().getPluginManager().isPluginEnabled("EnchantGui")) {
-            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fHooking into EnchantGui...");
+            TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §fHooking into EnchantGui...");
             Bukkit.getPluginManager().registerEvents(new EnchantGUIEnchantListener(), EnchantmentSlots.instance);
         }
         if (CommonUtil.checkPluginLoad("QuickShop-Hikari")) {
-            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fHooking into QuickShop-Hikari...");
+            TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §fHooking into QuickShop-Hikari...");
             Bukkit.getPluginManager().registerEvents(new QuickShopListener(), EnchantmentSlots.instance);
         }
     }
@@ -49,15 +49,15 @@ public class ListenerManager {
         plugin = ConfigManager.configManager.getString("settings.add-lore.use-listener-plugin",
                 ConfigManager.configManager.getString("settings.use-listener-plugin", "packetevents"));
         if (plugin.equals("packetevents") && CommonUtil.checkPluginLoad("packetevents")) {
-            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fHooking into packetevents....");
+            TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §fHooking into packetevents....");
             PacketEventsListener.registerPacketEventsListener();
             AddLore.lorePrefix = ConfigManager.configManager.getString("settings.add-lore.lore-prefix", "§y");
         } else if (plugin.equals("eco") && CommonUtil.checkPluginLoad("eco")) {
-            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fHooking into eco....");
+            TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §fHooking into eco....");
             EcoDisplayModule.init();
             AddLore.lorePrefix = "§z";
         } else {
-            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §cCan not found any packet " +
+            TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §cCan not found any packet " +
                     "listener plugin, enchantment slot won't displayed in your server!");
         }
     }

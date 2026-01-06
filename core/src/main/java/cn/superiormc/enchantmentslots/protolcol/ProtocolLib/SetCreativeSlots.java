@@ -18,14 +18,11 @@ public class SetCreativeSlots implements PacketListener {
             return;
         }
         Player player = event.getPlayer();
-        if (player == null) {
-            return;
-        }
         WrapperPlayClientCreativeInventoryAction creative = new WrapperPlayClientCreativeInventoryAction(event);
         ItemStack item = SpigotConversionUtil.toBukkitItemStack(creative.getItemStack());
         if (!ItemUtil.isValid(item)) {
             return;
         }
-        creative.setItemStack(SpigotConversionUtil.fromBukkitItemStack(AddLore.removeLore(item)));
+        creative.setItemStack(SpigotConversionUtil.fromBukkitItemStack(AddLore.removeLore(item, player)));
     }
 }

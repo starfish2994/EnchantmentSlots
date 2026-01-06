@@ -14,12 +14,14 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class ItemUtil {
 
-    public static ItemStack buildItemStack(ConfigurationSection section) {
+    public static ItemStack buildItemStack(@NotNull Player player, @Nullable ConfigurationSection section, String... args) {
         ItemStack item = new ItemStack(Material.STONE);
         if (section == null) {
             ErrorManager.errorManager.sendErrorMessage("§cError: Can not parse item because the " +
@@ -45,13 +47,13 @@ public class ItemUtil {
         // Name
         String displayNameKey = section.getString("name");
         if (displayNameKey != null) {
-            EnchantmentSlots.methodUtil.setItemName(meta, displayNameKey);
+            EnchantmentSlots.methodUtil.setItemName(meta, CommonUtil.modifyString(displayNameKey, args), player);
         }
 
         // Lore
         List<String> loreKey = section.getStringList("lore");
         if (!loreKey.isEmpty()) {
-            EnchantmentSlots.methodUtil.setItemLore(meta, loreKey);
+            EnchantmentSlots.methodUtil.setItemLore(meta, CommonUtil.modifyList(player, loreKey, args), player);
         }
 
         // Custom Model Data

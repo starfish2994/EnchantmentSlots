@@ -2,12 +2,16 @@ package cn.superiormc.enchantmentslots.spigot;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.managers.ErrorManager;
+import cn.superiormc.enchantmentslots.utils.SchedulerUtil;
 import cn.superiormc.enchantmentslots.utils.SpecialMethodUtil;
 import cn.superiormc.enchantmentslots.utils.TextUtil;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -93,21 +97,12 @@ public class SpigotMethodUtil implements SpecialMethodUtil {
     }
 
     @Override
-    public void setItemName(ItemMeta meta, String name) {
-        meta.setDisplayName(TextUtil.parse(name));
+    public void setItemName(ItemMeta meta, String name, Player player) {
+        meta.setDisplayName(TextUtil.parse(name, player));
     }
 
     @Override
-    public void setItemItemName(ItemMeta meta, String itemName) {
-        if (itemName.isEmpty()) {
-            meta.setItemName(" ");
-        } else {
-            meta.setItemName(TextUtil.parse(itemName));
-        }
-    }
-
-    @Override
-    public void setItemLore(ItemMeta meta, List<String> lores) {
+    public void setItemLore(ItemMeta meta, List<String> lores, Player player) {
         List<String> newLore = new ArrayList<>();
         for (String lore : lores) {
             for (String singleLore : lore.split("\n")) {
@@ -115,7 +110,7 @@ public class SpigotMethodUtil implements SpecialMethodUtil {
                     newLore.add(" ");
                     continue;
                 }
-                newLore.add(TextUtil.parse(singleLore));
+                newLore.add(TextUtil.parse(singleLore, player));
             }
         }
         if (!newLore.isEmpty()) {
@@ -124,17 +119,44 @@ public class SpigotMethodUtil implements SpecialMethodUtil {
     }
 
     @Override
-    public void sendMessage(Player player, String text) {
+    public void sendChat(Player player, String text) {
         if (player == null) {
             Bukkit.getConsoleSender().sendMessage(TextUtil.parse(text));
         } else {
-            player.sendMessage(TextUtil.parse(player, text));
+            player.sendMessage(TextUtil.parse(text, player));
         }
     }
 
     @Override
     public void sendTitle(Player player, String title, String subTitle, int fadeIn, int stay, int fadeOut) {
-        player.sendTitle(title, subTitle, fadeIn, stay, fadeOut);
+        player.sendTitle(TextUtil.parse(title, player), TextUtil.parse(subTitle, player), fadeIn, stay, fadeOut);
+    }
+
+    @Override
+    public void sendActionBar(Player player, String message) {
+        player.spigot().sendMessage(
+                net.md_5.bungee.api.ChatMessageType.ACTION_BAR,
+                net.md_5.bungee.api.chat.TextComponent.fromLegacyText(TextUtil.parse(message, player))
+        );
+    }
+
+    @Override
+    public void sendBossBar(Player player,
+                            String title,
+                            float progress,
+                            String color,
+                            String style) {
+        BossBar bar = Bukkit.createBossBar(
+                title,
+                color == null ? BarColor.WHITE : BarColor.valueOf(color.toUpperCase()),
+                style == null ? BarStyle.SOLID : BarStyle.valueOf(style.toUpperCase())
+        );
+
+        bar.setProgress(Math.max(0.0, Math.min(1.0, progress)));
+        bar.addPlayer(player);
+        bar.setVisible(true);
+
+        SchedulerUtil.runTaskLater(bar::removeAll, 60);
     }
 
     @Override
@@ -161,6 +183,6 @@ public class SpigotMethodUtil implements SpecialMethodUtil {
 
     @Override
     public Inventory createNewInv(Player player, int size, String text) {
-        return Bukkit.createInventory(player, size, TextUtil.parse(player, text));
+        return Bukkit.createInventory(player, size, TextUtil.parse(text, player));
     }
 }

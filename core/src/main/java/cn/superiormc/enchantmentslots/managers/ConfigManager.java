@@ -65,7 +65,7 @@ public class ConfigManager {
                         continue;
                     }
                     extraSlotsItemMap.put(substring, new ObjectExtraSlotsItem(substring, YamlConfiguration.loadConfiguration(file)));
-                    Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fLoaded extra slot item: " + substring + "!");
+                    TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §fLoaded extra slot item: " + substring + "!");
                 }
             }
         }
@@ -97,18 +97,18 @@ public class ConfigManager {
                         continue;
                     }
                     itemSlotMap.put(substring, new ObjectItemSlot(substring, YamlConfiguration.loadConfiguration(file)));
-                    Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §fLoaded item slot config: " + substring + "!");
+                    TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §fLoaded item slot config: " + substring + "!");
                 }
             }
         }
     }
 
-    public ItemStack getExtraSlotItem(String itemID) {
+    public ItemStack getExtraSlotItem(String itemID, Player player) {
         ObjectExtraSlotsItem item = extraSlotsItemMap.get(itemID);
         if (item == null) {
             return null;
         }
-        return item.getItem();
+        return item.getItem(player);
     }
 
     public Map<String, ObjectExtraSlotsItem> getExtraSlotsItemMap() {
@@ -149,6 +149,17 @@ public class ConfigManager {
             }
         }
         return s.replace("{plugin_folder}", String.valueOf(EnchantmentSlots.instance.getDataFolder()));
+    }
+
+    public String getString(Player player, String path, String... args) {
+        String tempVal1 = getString(path, args);
+        if (tempVal1.equalsIgnoreCase("{lang}")) {
+            String tempVal2 = LanguageManager.languageManager.getStringText(player, "override-lang." + path, args);
+            if (tempVal2 != null) {
+                return tempVal2;
+            }
+        }
+        return tempVal1;
     }
 
     public int getInt(String path, int defaultValue) {
@@ -229,11 +240,15 @@ public class ConfigManager {
         return config.getStringList(path);
     }
 
-    public List<String> getStringListOrDefault(String originalPath, String newPath) {
-        if (config.getStringList(originalPath).isEmpty()) {
-            return config.getStringList(newPath);
+    public List<String> getStringList(Player player, String path) {
+        List<String> tempVal1 = config.getStringList(path);
+        if (tempVal1.contains("{lang}")) {
+            List<String> tempVal2 = LanguageManager.languageManager.getStringListText(player, "override-lang." + path);
+            if (tempVal2 != null) {
+                return tempVal2;
+            }
         }
-        return config.getStringList(originalPath);
+        return tempVal1;
     }
 
     public ConfigurationSection getSection(String path) {

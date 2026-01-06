@@ -39,14 +39,14 @@ public class SubGiveSlots extends AbstractCommand {
             LanguageManager.languageManager.sendStringText("success-set", "amount", String.valueOf(SlotUtil.getSlot(targetItem) + Integer.parseInt(args[1])));
             return;
         }
-        ItemStack item = ConfigManager.configManager.getExtraSlotItem(args[1]);
-        if (item == null) {
-            LanguageManager.languageManager.sendStringText(player, "error-item-not-found");
-            return;
-        }
         Player target = Bukkit.getPlayer(args[2]);
         if (target == null) {
             LanguageManager.languageManager.sendStringText(player, "error-player-not-found", "player", args[2]);
+            return;
+        }
+        ItemStack item = ConfigManager.configManager.getExtraSlotItem(args[1], target);
+        if (item == null) {
+            LanguageManager.languageManager.sendStringText(player, "error-item-not-found");
             return;
         }
         int amount = 1;
@@ -63,14 +63,14 @@ public class SubGiveSlots extends AbstractCommand {
 
     @Override
     public void executeCommandInConsole(String[] args) {
-        ItemStack item = ConfigManager.configManager.getExtraSlotItem(args[1]);
-        if (item == null) {
-            LanguageManager.languageManager.sendStringText("error-item-not-found");
-            return;
-        }
         Player target = Bukkit.getPlayer(args[2]);
         if (target == null) {
             LanguageManager.languageManager.sendStringText("error-player-not-found", "player", args[2]);
+            return;
+        }
+        ItemStack item = ConfigManager.configManager.getExtraSlotItem(args[1], target);
+        if (item == null) {
+            LanguageManager.languageManager.sendStringText("error-item-not-found");
             return;
         }
         int amount = 1;

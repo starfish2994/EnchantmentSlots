@@ -2,6 +2,7 @@ package cn.superiormc.enchantmentslots.listeners;
 
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.managers.ListenerManager;
+import cn.superiormc.enchantmentslots.methods.EnchantsUtil;
 import cn.superiormc.enchantmentslots.utils.SchedulerUtil;
 import com.github.retrooper.packetevents.protocol.item.HashedStack;
 import org.bukkit.entity.Player;

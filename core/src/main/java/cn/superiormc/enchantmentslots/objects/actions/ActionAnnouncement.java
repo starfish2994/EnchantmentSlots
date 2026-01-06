@@ -17,7 +17,7 @@ public class ActionAnnouncement extends AbstractRunAction {
     protected void onDoAction(ObjectSingleAction singleAction, Player player, int amount) {
         Collection<? extends Player> players = Bukkit.getOnlinePlayers();
         for (Player p : players) {
-            EnchantmentSlots.methodUtil.sendMessage(p, singleAction.getString("message", player, amount));
+            EnchantmentSlots.methodUtil.sendChat(p, singleAction.getString("message", player, amount));
         }
     }
 }

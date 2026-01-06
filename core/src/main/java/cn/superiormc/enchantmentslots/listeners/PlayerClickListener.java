@@ -20,7 +20,7 @@ public class PlayerClickListener implements Listener {
             return;
         }
         if (ConfigManager.configManager.getBoolean("debug", false)) {
-            Bukkit.getConsoleSender().sendMessage(TextUtil.pluginPrefix() + " §f" +
+            TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §f" +
                     "Found WindowsClick packet.");
         }
         if (!(event.getWhoClicked() instanceof Player player)) {
