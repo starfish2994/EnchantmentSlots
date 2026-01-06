@@ -1,6 +1,6 @@
 package cn.superiormc.enchantmentslots.objects.actions;
 
-import cn.superiormc.enchantmentslots.EnchantmentSlots;
+import cn.superiormc.enchantmentslots.utils.TextUtil;
 import org.bukkit.entity.Player;
 
 public class ActionMessage extends AbstractRunAction {
@@ -12,6 +12,6 @@ public class ActionMessage extends AbstractRunAction {
 
     @Override
     protected void onDoAction(ObjectSingleAction singleAction, Player player, int amount) {
-        EnchantmentSlots.methodUtil.sendChat(player, singleAction.getString("message", player, amount));
+        TextUtil.sendMessage(player, singleAction.getString("message", player, amount));
     }
 }

@@ -1,6 +1,7 @@
 package cn.superiormc.enchantmentslots.objects.actions;
 
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
+import cn.superiormc.enchantmentslots.utils.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -17,7 +18,7 @@ public class ActionAnnouncement extends AbstractRunAction {
     protected void onDoAction(ObjectSingleAction singleAction, Player player, int amount) {
         Collection<? extends Player> players = Bukkit.getOnlinePlayers();
         for (Player p : players) {
-            EnchantmentSlots.methodUtil.sendChat(p, singleAction.getString("message", player, amount));
+            TextUtil.sendMessage(p, singleAction.getString("message", player, amount));
         }
     }
 }
