@@ -208,3 +208,28 @@ enchant-gui:
       - 'player_head'
     mending:
       - 'player_head'
+
+deenchant-gui:
+  title: '{lang}'
+  size: 54
+  ench-item:
+    - ' '
+    - '&e{lang:click-to-remove}'
+
+common-deenchanter:
+  match-item:
+    has-enchants:
+      - '*'
+  material: BOOK
+  name: '{lang:common-deenchanter-name}'
+  lore:
+    - '{lang:common-deenchanter-lore}'
+
+advanced-deenchanter:
+  match-item:
+    has-enchants:
+      - '*'
+  material: BOOK
+  name: '{lang:advanced-deenchanter-name}'
+  lore:
+    - '{lang:advanced-deenchanter-lore}'

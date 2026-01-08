@@ -30,6 +30,10 @@ error-no-item: "&#98FB98[EnchantmentSlots] &c你的手上没有物品!"
 error-item-not-found: "&#98FB98[EnchantmentSlots] &c找不到这个名字的扩槽器!"
 error-player-not-found: "&#98FB98[EnchantmentSlots] &c找不到玩家 %player%!"
 error-creative-mode: "&#98FB98[EnchantmentSlots] &c这个功能目前不支持创造模式使用!"
+error-item-only-one: "&#98FB98[EnchantmentSlots] &c驱魔物品不能堆叠超过1个物品!"
+error-no-enchantment: "&#98FB98[EnchantmentSlots] &c此物品没附魔!"
+error-not-match: "&#98FB98[EnchantmentSlots] &c此物品不能使用驱魔物品!"
+deenchant-success: "&#98FB98[EnchantmentSlots] &a成功驱魔 %enchant%!"
 
 override-lang:
   settings:
@@ -105,7 +109,18 @@ override-lang:
   enchant-ui:
     title: '附魔界面'
 
+  deenchant-gui:
+    title: '选择要移除的附魔'
+
+  click-to-remove: '点击以移除'
+
   confirm-item-name: '&e确认'
   confirm-item-lore: '&7点击确认为物品进行附魔！'
   custom-item-1-name: '&b请将需要附魔的物品拖入下方'
   custom-item-2-name: '&b请将附魔书拖入下方'
+
+  common-deenchanter-name: '&f普通驱魔书'
+  common-deenchanter-lore: '&8将我拖拽到附魔物品上以去除其附魔'
+
+  advanced-deenchanter-name: '&b高级驱魔书'
+  advanced-deenchanter-lore: '&8可以指定去除的附魔'

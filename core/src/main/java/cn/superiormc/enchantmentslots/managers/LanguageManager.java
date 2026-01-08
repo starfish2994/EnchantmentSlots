@@ -50,7 +50,6 @@ public class LanguageManager {
             langFolder.mkdirs();
         }
 
-        // 加载默认 en_US.yml 作为临时文件
         InputStream is = EnchantmentSlots.instance.getResource("languages/en_US.yml");
         if (is != null) {
             try {
@@ -65,7 +64,6 @@ public class LanguageManager {
             tempMessageFile = new YamlConfiguration();
         }
 
-        // 加载 languages 下所有 yml 文件
         File[] files = langFolder.listFiles((dir, name) -> name.endsWith(".yml"));
         if (files != null) {
             for (File file : files) {
@@ -76,13 +74,15 @@ public class LanguageManager {
             }
         }
 
-        if (!languageFiles.containsKey("en_US")) {
+        if (!languageFiles.containsKey("en_US".toLowerCase())) {
             languageFiles.put("en_US".toLowerCase(), tempMessageFile);
         }
         serverLanguage = ConfigManager.configManager.getString("config-files.language", "en-US");
-        if (!languageFiles.containsKey(serverLanguage)) {
+        if (!languageFiles.containsKey(serverLanguage.toLowerCase())) {
+            ErrorManager.errorManager.sendErrorMessage("§cError: Can not found language file: " + serverLanguage + ".yml at languages folder!");
             serverLanguage = "en_US";
         }
+        TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §fDefault language being set to: " + serverLanguage + ".yml!");
     }
 
     private String getMessage(Player player, String key, String... args) {
@@ -111,11 +111,12 @@ public class LanguageManager {
         }
 
         for (int i = 1 ; i < args.length ; i += 2) {
-            String var = "{" + args[i] + "}";
+            String var1 = "{" + args[i] + "}";
+            String var2 = "%" + args[i] + "%";
             if (args[i + 1] == null) {
-                text = text.replace(var, "");
+                text = text.replace(var1, "").replace(var2, "");
             } else {
-                text = text.replace(var, args[i + 1]);
+                text = text.replace(var1, args[i + 1]).replace(var2, args[i + 1]);
             }
         }
         text = text.replace("{plugin_folder}", String.valueOf(EnchantmentSlots.instance.getDataFolder()));
@@ -151,8 +152,9 @@ public class LanguageManager {
 
         // 替换变量 {key}
         for (int i = 1; i < args.length; i += 2) {
-            String var = "{" + args[i] + "}";
-            text = text.replace(var, i + 1 < args.length ? (args[i + 1] == null ? "" : args[i + 1]) : "");
+            String var1 = "{" + args[i] + "}";
+            String var2 = "%" + args[i] + "%";
+            text = text.replace(var1, i + 1 < args.length ? (args[i + 1] == null ? "" : args[i + 1]) : "").replace(var2, i + 1 < args.length ? (args[i + 1] == null ? "" : args[i + 1]) : "");
         }
 
         if (!text.isEmpty()) {

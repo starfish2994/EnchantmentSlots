@@ -31,6 +31,10 @@ error-no-item: "&#98FB98[EnchantmentSlots] &cCan not get item in your main hand!
 error-item-not-found: "&#98FB98[EnchantmentSlots] &cCan not get extra slot item for this name!"
 error-player-not-found: "&#98FB98[EnchantmentSlots] &cWe can't find player %player%!"
 error-creative-mode: "&#98FB98[EnchantmentSlots] &cThis feature does not support creative mode for now!"
+error-item-only-one: "&#98FB98[EnchantmentSlots] &cYour deenchanter item can not be stacked to more than 1 amount!"
+error-no-enchantment: "&#98FB98[EnchantmentSlots] &cCan not find any enchantment in your item!"
+error-not-match: "&#98FB98[EnchantmentSlots] &cThis item can not use deenchanter item!"
+deenchant-success: "&#98FB98[EnchantmentSlots] &aSuccessfully deenchanted %enchant%!"
 
 override-lang:
   settings:
@@ -106,7 +110,18 @@ override-lang:
   enchant-ui:
     title: 'Enchant UI'
 
+  deenchant-gui:
+    title: 'Choose enchantments to remove'
+
+  click-to-remove: 'Click to remove'
+
   confirm-item-name: '&eConfirm'
   confirm-item-lore: '&7Click to confirm enchant the item!'
   custom-item-1-name: '&bDrag the item you want enchant below.'
   custom-item-2-name: '&bDrag the enchanted book below.'
+
+  common-deenchanter-name: '&fCommon Deenchanter'
+  common-deenchanter-lore: '&8Drag this item to deenchant item.'
+
+  advanced-deenchanter-name: '&bAdvanced Deenchanter'
+  advanced-deenchanter-lore: '&8Can choose which enchantments to remove.'

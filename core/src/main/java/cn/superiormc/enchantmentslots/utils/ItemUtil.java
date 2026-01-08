@@ -12,6 +12,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
@@ -121,6 +122,16 @@ public class ItemUtil {
         }
         item.setItemMeta(meta);
         return item;
+    }
+
+    public static ItemStack generateEnchantedBook(Enchantment enchantment, int level) {
+        ItemStack enchantedBook = new ItemStack(org.bukkit.Material.ENCHANTED_BOOK);
+        EnchantmentStorageMeta meta = (EnchantmentStorageMeta) enchantedBook.getItemMeta();
+
+        meta.addStoredEnchant(enchantment, level, true);
+
+        enchantedBook.setItemMeta(meta);
+        return enchantedBook;
     }
 
     public static boolean isValid(ItemStack item) {
