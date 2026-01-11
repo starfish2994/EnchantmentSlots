@@ -85,7 +85,7 @@ public class AddLore {
                 continue;
             }
             line = lorePrefix + line;
-            itemLore.add(index, CommonUtil.modifyString(line,
+            itemLore.add(index, CommonUtil.modifyString(player, line,
                     "slot_amount", String.valueOf(slot),
                     "enchant_amount", String.valueOf(enchantments.size()),
                     "used_slot_amount", String.valueOf(EnchantsUtil.getUsedSlot(enchantments.keySet()))));
@@ -151,7 +151,7 @@ public class AddLore {
                     }
                     continue;
                 }
-                newLore.add(CommonUtil.modifyString(str,
+                newLore.add(CommonUtil.modifyString(player, str,
                         "slot_amount", String.valueOf(slot),
                         "enchant_amount", String.valueOf(enchantments.size()),
                         "used_slot_amount", String.valueOf(EnchantsUtil.getUsedSlot(enchantments.keySet()))));

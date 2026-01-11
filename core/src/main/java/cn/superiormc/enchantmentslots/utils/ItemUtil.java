@@ -4,7 +4,6 @@ import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.managers.ErrorManager;
 import com.google.common.base.Enums;
 import com.google.common.collect.MultimapBuilder;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
@@ -16,8 +15,8 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 public class ItemUtil {
@@ -48,7 +47,7 @@ public class ItemUtil {
         // Name
         String displayNameKey = section.getString("name");
         if (displayNameKey != null) {
-            EnchantmentSlots.methodUtil.setItemName(meta, CommonUtil.modifyString(displayNameKey, args), player);
+            EnchantmentSlots.methodUtil.setItemName(meta, CommonUtil.modifyString(player, displayNameKey, args), player);
         }
 
         // Lore

@@ -1,6 +1,5 @@
 package cn.superiormc.enchantmentslots.objects.actions;
 
-import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.utils.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

@@ -17,7 +17,7 @@ public abstract class AbstractSingleRun {
     }
 
     protected String replacePlaceholder(String content, Player player, int amount) {
-        content = CommonUtil.modifyString(content
+        content = CommonUtil.modifyString(player, content
                 ,"world", player.getWorld().getName()
                 ,"amount", String.valueOf(amount)
                 ,"player_x", String.valueOf(player.getLocation().getX())
