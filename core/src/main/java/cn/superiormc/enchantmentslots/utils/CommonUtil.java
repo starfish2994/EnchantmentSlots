@@ -36,12 +36,16 @@ public class CommonUtil {
         }
     }
 
+    public static boolean getYearVersion(int year, int majorVersion, int minorVersion) {
+        return EnchantmentSlots.yearVersion > year || (EnchantmentSlots.yearVersion == year && EnchantmentSlots.majorVersion >= majorVersion && EnchantmentSlots.minorVersion >= minorVersion);
+    }
+
     public static boolean getMajorVersion(int version) {
-        return EnchantmentSlots.majorVersion >= version;
+        return EnchantmentSlots.yearVersion > 1 || EnchantmentSlots.majorVersion >= version;
     }
 
     public static boolean getMinorVersion(int majorVersion, int minorVersion) {
-        return EnchantmentSlots.majorVersion > majorVersion || (EnchantmentSlots.majorVersion == majorVersion &&
+        return EnchantmentSlots.yearVersion > 1 || EnchantmentSlots.majorVersion > majorVersion || (EnchantmentSlots.majorVersion == majorVersion &&
                 EnchantmentSlots.minorVersion >= minorVersion);
     }
 
