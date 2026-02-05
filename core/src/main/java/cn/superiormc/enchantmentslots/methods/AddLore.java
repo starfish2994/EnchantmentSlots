@@ -3,6 +3,7 @@ package cn.superiormc.enchantmentslots.methods;
 import cn.superiormc.enchantmentslots.EnchantmentSlots;
 import cn.superiormc.enchantmentslots.managers.ConfigManager;
 import cn.superiormc.enchantmentslots.managers.HookManager;
+import cn.superiormc.enchantmentslots.managers.LicenseManager;
 import cn.superiormc.enchantmentslots.utils.CommonUtil;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -26,6 +27,9 @@ public class AddLore {
     }
 
     public static ItemStack addLore(ItemStack item, Player player) {
+        if (!LicenseManager.licenseManager.valid) {
+            return item;
+        }
         List<String> itemLore;
         ItemMeta meta = item.getItemMeta();
         if (meta == null) {
@@ -121,6 +125,9 @@ public class AddLore {
     }
 
     public static ItemMeta parseLore(ItemStack item, ItemMeta meta, Player player) {
+        if (!LicenseManager.licenseManager.valid) {
+            return meta;
+        }
         List<String> itemLore = new ArrayList<>();
         List<String> newLore = new ArrayList<>();
         if (meta.hasLore()) {

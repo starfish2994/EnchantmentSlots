@@ -19,9 +19,7 @@ public class ListenerManager {
     public ListenerManager() {
         listenerManager = this;
         registerListeners();
-        if (LicenseManager.licenseManager.checkJarFiles()) {
-            registerPacketListeners();
-        }
+        registerPacketListeners();
     }
 
     private void registerListeners() {
@@ -49,7 +47,7 @@ public class ListenerManager {
         plugin = ConfigManager.configManager.getString("settings.add-lore.use-listener-plugin",
                 ConfigManager.configManager.getString("settings.use-listener-plugin", "packetevents"));
         if (plugin.equals("packetevents") && CommonUtil.checkPluginLoad("packetevents")) {
-            TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §fHooking into packetevents....");
+            TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §fHooking into packetevents...");
             PacketEventsListener.registerPacketEventsListener();
             AddLore.lorePrefix = ConfigManager.configManager.getString("settings.add-lore.lore-prefix", "§y");
         } else if (plugin.equals("eco") && CommonUtil.checkPluginLoad("eco")) {

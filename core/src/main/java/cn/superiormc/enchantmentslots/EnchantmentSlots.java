@@ -59,7 +59,6 @@ public final class EnchantmentSlots extends JavaPlugin {
         }
         new ErrorManager();
         new InitManager();
-        new LicenseManager();
         new ActionManager();
         new ConditionManager();
         new ConfigManager();
@@ -72,7 +71,7 @@ public final class EnchantmentSlots extends JavaPlugin {
             newSkullMethod = true;
             TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §fNew AuthLib found, enabled new skull get method!");
         }
-        new Metrics(this, 23653);
+        new LicenseManager();
         TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §fYour Minecraft version is: 1." + majorVersion + "." + minorVersion + "!");
         TextUtil.sendMessage(null, TextUtil.pluginPrefix() + " §fPlugin is loaded. Author: PQguanfang.");
     }

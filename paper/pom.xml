@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>cn.superiormc</groupId>
+        <groupId>cn.superiormc.enchantmentslots</groupId>
         <artifactId>EnchantmentSlots</artifactId>
-        <version>4.8.2</version>
+        <version>4.8.3</version>
     </parent>
 
     <artifactId>paper</artifactId>
@@ -37,9 +37,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>cn.superiormc</groupId>
+            <groupId>cn.superiormc.enchantmentslots</groupId>
             <artifactId>core</artifactId>
-            <version>4.8.2</version>
+            <version>4.8.3</version>
             <optional>true</optional>
         </dependency>
     </dependencies>
