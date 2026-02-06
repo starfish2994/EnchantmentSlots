@@ -1,0 +1,82 @@
+# Build and upload Minecraft plugin (Maven or Gradle)
+# Triggers: push to main, pull_request, workflow_dispatch (manual run with java-version input)
+name: Build and upload plugin
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      java-version:
+        description: 'Java version to use (e.g. 8, 11, 17)'
+        required: false
+        default: '17'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - id: detect
+        name: Detect build system
+        run: |
+          if [ -f pom.xml ]; then
+            echo "build-system=maven" >> $GITHUB_OUTPUT
+          elif [ -f gradlew ] || [ -f build.gradle ] || [ -f build.gradle.kts ]; then
+            echo "build-system=gradle" >> $GITHUB_OUTPUT
+          else
+            # default to maven if nothing obvious found
+            echo "build-system=maven" >> $GITHUB_OUTPUT
+          fi
+        outputs:
+          build-system: ${{ steps.detect.outputs.build-system }}
+
+      - name: Set up Java for Maven
+        if: ${{ steps.detect.outputs.build-system == 'maven' }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ github.event.inputs.java-version || '17' }}
+          cache: maven
+
+      - name: Build with Maven
+        if: ${{ steps.detect.outputs.build-system == 'maven' }}
+        run: mvn -B -DskipTests package
+
+      - name: Set up Java for Gradle
+        if: ${{ steps.detect.outputs.build-system == 'gradle' }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ github.event.inputs.java-version || '17' }}
+          cache: gradle
+
+      - name: Build with Gradle
+        if: ${{ steps.detect.outputs.build-system == 'gradle' }}
+        run: |
+          if [ -f gradlew ]; then
+            chmod +x ./gradlew
+            ./gradlew build -x test --no-daemon
+          else
+            # try system gradle if wrapper not present
+            gradle build -x test
+          fi
+
+      - name: Show built artifacts (debug)
+        run: |
+          echo "=== target ==="
+          ls -la target || true
+          echo "=== build/libs ==="
+          ls -la build/libs || true
+
+      - name: Upload built JAR(s)
+        uses: actions/upload-artifact@v4
+        with:
+          name: enchantmentslots-artifact
+          path: |
+            target/*.jar
+            build/libs/*.jar
+          retention-days: 7
