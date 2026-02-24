@@ -36,7 +36,7 @@
             <dependency>
                 <groupId>org.json</groupId>
                 <artifactId>json</artifactId>
-                <version>20230618</version>
+                <version>${json-java.version}</version>
                 <scope>compile</scope>
             </dependency>
             
@@ -54,7 +54,7 @@
                 </exclusions>
             </dependency>
         </dependencies>
-    </dependencies>
+    </dependencyManagement> <!-- 关键修正：这里之前写错成了</dependencies> -->
 
     <build>
         <plugins>
