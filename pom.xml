@@ -19,19 +19,53 @@
     <name>EnchantmentSlots</name>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>16</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- 版本锁定 -->
+        <mythicmobs.version>4.11.0</mythicmobs.version>
+        <json-java.version>20230618</json-java.version>
     </properties>
+
+    <!-- 依赖管理：统一管理子模块依赖版本，解决MythicMobs依赖冲突 -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- 修复JSON-java依赖坐标 -->
+            <dependency>
+                <groupId>org.json</groupId>
+                <artifactId>json</artifactId>
+                <version>20230618</version>
+                <scope>compile</scope>
+            </dependency>
+            
+            <!-- 处理MythicMobs依赖，排除有问题的system依赖 -->
+            <dependency>
+                <groupId>io.lumine.xikage</groupId>
+                <artifactId>MythicMobs</artifactId>
+                <version>${mythicmobs.version}</version>
+                <scope>provided</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+        </dependencies>
+    </dependencies>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.11.0</version> <!-- 更新到稳定版本 -->
                 <configuration>
-                    <source>16</source>
-                    <target>16</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
             <plugin>
@@ -44,7 +78,23 @@
                             <pattern>org.bstats</pattern>
                             <shadedPattern>cn.superiormc.enchantmentslots.bstats</shadedPattern>
                         </relocation>
+                        <!-- 新增JSON包重定位，避免冲突 -->
+                        <relocation>
+                            <pattern>org.json</pattern>
+                            <shadedPattern>cn.superiormc.enchantmentslots.json</shadedPattern>
+                        </relocation>
                     </relocations>
+                    <!-- 忽略system依赖的警告 -->
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
                 </configuration>
                 <executions>
                     <execution>
@@ -58,16 +108,49 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- 新增插件：解决system依赖问题 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.6.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-system-dependencies</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeScope>system</includeScope>
+                            <outputDirectory>${project.basedir}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <includes>
+                    <include>**/*</include>
+                </includes>
             </resource>
         </resources>
     </build>
 
     <repositories>
+        <!-- 补充中央仓库（关键：解决JSON-java依赖） -->
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
         <repository>
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
